@@ -1,0 +1,661 @@
+{
+	"info": {
+		"_postman_id": "accaacb8-0545-4a9e-8edd-d747202867e2",
+		"name": "dsp-native-basyx-test",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29870166"
+	},
+	"item": [
+		{
+			"name": "AAS",
+			"item": [
+				{
+					"name": "Obtain Admin Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const adminToken = pm.response.json()[\"access_token\"];",
+									"pm.collectionVariables.set(\"basyx_admin_token\", adminToken);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "client_id",
+									"value": "basyx-web-ui",
+									"type": "text"
+								},
+								{
+									"key": "grant_type",
+									"value": "password",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "john.doe",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "johndoe",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://keycloak:8080/realms/BaSyx/protocol/openid-connect/token",
+							"protocol": "http",
+							"host": [
+								"keycloak"
+							],
+							"port": "8080",
+							"path": [
+								"realms",
+								"BaSyx",
+								"protocol",
+								"openid-connect",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Submodel",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{basyx_admin_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"modelType\": \"Submodel\",\n  \"kind\": \"Instance\",\n  \"semanticId\": {\n    \"keys\": [\n      {\n        \"type\": \"ConceptDescription\",\n        \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#Vehicles\"\n      }\n    ],\n    \"type\": \"ModelReference\"\n  },\n  \"administration\": {},\n  \"id\": \"fe6229e6-abcd-4c6e-809b-db59e70f7c6e\",\n  \"description\": [\n    {\n      \"language\": \"en\",\n      \"text\": \"This aspect model was created in the Catena-X use case quality. The purpose of this aspect model is to transfer general information of a list/fleet of vehicles - primarily how the vehicles are equipped, when they were built and which engines are installed.\"\n    }\n  ],\n  \"idShort\": \"Vehicles\",\n  \"submodelElements\": [\n    {\n      \"modelType\": \"SubmodelElementList\",\n      \"description\": [\n        {\n          \"language\": \"en\",\n          \"text\": \"A list of vehicles.\"\n        }\n      ],\n      \"displayName\": [\n        {\n          \"language\": \"en\",\n          \"text\": \"Vehicles\"\n        }\n      ],\n      \"idShort\": \"vehicles\",\n      \"orderRelevant\": true,\n      \"typeValueListElement\": \"DataElement\",\n      \"value\": [\n        {\n          \"modelType\": \"SubmodelElementCollection\",\n          \"description\": [\n            {\n              \"language\": \"en\",\n              \"text\": \"Vehicle data that does not fit into one of the other entities.\"\n            }\n          ],\n          \"displayName\": [\n            {\n              \"language\": \"en\",\n              \"text\": \"Vehicle\"\n            }\n          ],\n          \"idShort\": \"Vehicle\",\n          \"value\": [\n            {\n              \"modelType\": \"Property\",\n              \"semanticId\": {\n                \"keys\": [\n                  {\n                    \"type\": \"ConceptDescription\",\n                    \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#recordStatus\"\n                  }\n                ],\n                \"type\": \"ExternalReference\"\n              },\n              \"value\": \"new\",\n              \"valueType\": \"xs:string\",\n              \"displayName\": [\n                {\n                  \"language\": \"en\",\n                  \"text\": \"Record status\"\n                }\n              ],\n              \"idShort\": \"recordStatus\"\n            },\n            {\n              \"modelType\": \"Property\",\n              \"semanticId\": {\n                \"keys\": [\n                  {\n                    \"type\": \"ConceptDescription\",\n                    \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#anonymizedVin\"\n                  }\n                ],\n                \"type\": \"ExternalReference\"\n              },\n              \"value\": \"3747429FGH382923974682\",\n              \"valueType\": \"xs:string\",\n              \"displayName\": [\n                {\n                  \"language\": \"en\",\n                  \"text\": \"Anonymized VIN\"\n                }\n              ],\n              \"idShort\": \"anonymizedVin\"\n            },\n            {\n              \"modelType\": \"Property\",\n              \"semanticId\": {\n                \"keys\": [\n                  {\n                    \"type\": \"ConceptDescription\",\n                    \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#catenaXVehicleId\"\n                  }\n                ],\n                \"type\": \"ExternalReference\"\n              },\n              \"value\": \"urn:uuid:580d3adf-1981-44a0-a214-13d6ceed9379\",\n              \"valueType\": \"xs:string\",\n              \"displayName\": [\n                {\n                  \"language\": \"en\",\n                  \"text\": \"Vehicle Catena-X Identifier\"\n                }\n              ],\n              \"idShort\": \"catenaXVehicleId\"\n            },\n            {\n              \"modelType\": \"Property\",\n              \"semanticId\": {\n                \"keys\": [\n                  {\n                    \"type\": \"ConceptDescription\",\n                    \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#class\"\n                  }\n                ],\n                \"type\": \"ExternalReference\"\n              },\n              \"value\": \"A\",\n              \"valueType\": \"xs:string\",\n              \"displayName\": [\n                {\n                  \"language\": \"en\",\n                  \"text\": \"Vehicle class\"\n                }\n              ],\n              \"idShort\": \"class\"\n            },\n            {\n              \"modelType\": \"Property\",\n              \"semanticId\": {\n                \"keys\": [\n                  {\n                    \"type\": \"ConceptDescription\",\n                    \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#driveSystemPower\"\n                  }\n                ],\n                \"type\": \"ExternalReference\"\n              },\n              \"value\": \"200\",\n              \"valueType\": \"xs:integer\",\n              \"displayName\": [\n                {\n                  \"language\": \"en\",\n                  \"text\": \"Complete system power\"\n                }\n              ],\n              \"idShort\": \"driveSystemPower\"\n            },\n            {\n              \"modelType\": \"Property\",\n              \"semanticId\": {\n                \"keys\": [\n                  {\n                    \"type\": \"ConceptDescription\",\n                    \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#driveType\"\n                  }\n                ],\n                \"type\": \"ExternalReference\"\n              },\n              \"value\": \"All-Wheel Drive\",\n              \"valueType\": \"xs:string\",\n              \"displayName\": [\n                {\n                  \"language\": \"en\",\n                  \"text\": \"Drive type\"\n                }\n              ],\n              \"idShort\": \"driveType\"\n            },\n            {\n              \"modelType\": \"Property\",\n              \"semanticId\": {\n                \"keys\": [\n                  {\n                    \"type\": \"ConceptDescription\",\n                    \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#powerTrainType\"\n                  }\n                ],\n                \"type\": \"ExternalReference\"\n              },\n              \"value\": \"BEV (Battery Electric Vehicle)\",\n              \"valueType\": \"xs:string\",\n              \"displayName\": [\n                {\n                  \"language\": \"en\",\n                  \"text\": \"Powertrain Type\"\n                }\n              ],\n              \"idShort\": \"powerTrainType\"\n            },\n            {\n              \"modelType\": \"Property\",\n              \"semanticId\": {\n                \"keys\": [\n                  {\n                    \"type\": \"ConceptDescription\",\n                    \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#modelDescription\"\n                  }\n                ],\n                \"type\": \"ExternalReference\"\n              },\n              \"value\": \"Golf VIII\",\n              \"valueType\": \"xs:string\",\n              \"displayName\": [\n                {\n                  \"language\": \"en\",\n                  \"text\": \"Vehicle model\"\n                }\n              ],\n              \"idShort\": \"modelDescription\"\n            },\n            {\n              \"modelType\": \"Property\",\n              \"semanticId\": {\n                \"keys\": [\n                  {\n                    \"type\": \"ConceptDescription\",\n                    \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#modelIdentifier\"\n                  }\n                ],\n                \"type\": \"ExternalReference\"\n              },\n              \"value\": \"689-G8\",\n              \"valueType\": \"xs:string\",\n              \"displayName\": [\n                {\n                  \"language\": \"en\",\n                  \"text\": \"Model identifier\"\n                }\n              ],\n              \"idShort\": \"modelIdentifier\"\n            },\n            {\n              \"modelType\": \"Property\",\n              \"semanticId\": {\n                \"keys\": [\n                  {\n                    \"type\": \"ConceptDescription\",\n                    \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#plantCatenaXId\"\n                  }\n                ],\n                \"type\": \"ExternalReference\"\n              },\n              \"value\": \"BPNS4444444444XX\",\n              \"valueType\": \"xs:string\",\n              \"displayName\": [\n                {\n                  \"language\": \"en\",\n                  \"text\": \"Plant Catena-X ID\"\n                }\n              ],\n              \"idShort\": \"plantCatenaXId\"\n            },\n            {\n              \"modelType\": \"Property\",\n              \"semanticId\": {\n                \"keys\": [\n                  {\n                    \"type\": \"ConceptDescription\",\n                    \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#plantCountryCode\"\n                  }\n                ],\n                \"type\": \"ExternalReference\"\n              },\n              \"value\": \"DEU\",\n              \"valueType\": \"xs:string\",\n              \"displayName\": [\n                {\n                  \"language\": \"en\",\n                  \"text\": \"Plant country\"\n                }\n              ],\n              \"idShort\": \"plantCountryCode\"\n            },\n            {\n              \"modelType\": \"Property\",\n              \"semanticId\": {\n                \"keys\": [\n                  {\n                    \"type\": \"ConceptDescription\",\n                    \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#plantDescription\"\n                  }\n                ],\n                \"type\": \"ExternalReference\"\n              },\n              \"value\": \"Wolfsburg\",\n              \"valueType\": \"xs:string\",\n              \"displayName\": [\n                {\n                  \"language\": \"en\",\n                  \"text\": \"Vehicle production plant name\"\n                }\n              ],\n              \"idShort\": \"plantDescription\"\n            },\n            {\n              \"modelType\": \"Property\",\n              \"semanticId\": {\n                \"keys\": [\n                  {\n                    \"type\": \"ConceptDescription\",\n                    \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#plantIdentifier\"\n                  }\n                ],\n                \"type\": \"ExternalReference\"\n              },\n              \"value\": \"4711\",\n              \"valueType\": \"xs:string\",\n              \"displayName\": [\n                {\n                  \"language\": \"en\",\n                  \"text\": \"Production plant id\"\n                }\n              ],\n              \"idShort\": \"plantIdentifier\"\n            },\n            {\n              \"modelType\": \"Property\",\n              \"semanticId\": {\n                \"keys\": [\n                  {\n                    \"type\": \"ConceptDescription\",\n                    \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#productionDate\"\n                  }\n                ],\n                \"type\": \"ExternalReference\"\n              },\n              \"value\": \"2018-01-15T00:00:00\",\n              \"valueType\": \"xs:dateTime\",\n              \"displayName\": [\n                {\n                  \"language\": \"en\",\n                  \"text\": \"Vehicle production Date\"\n                }\n              ],\n              \"idShort\": \"productionDate\"\n            },\n            {\n              \"modelType\": \"Property\",\n              \"semanticId\": {\n                \"keys\": [\n                  {\n                    \"type\": \"ConceptDescription\",\n                    \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#softwareCategory\"\n                  }\n                ],\n                \"type\": \"ExternalReference\"\n              },\n              \"value\": \"TZGH64738\",\n              \"valueType\": \"xs:string\",\n              \"displayName\": [\n                {\n                  \"language\": \"en\",\n                  \"text\": \"Software category\"\n                }\n              ],\n              \"idShort\": \"softwareCategory\"\n            },\n            {\n              \"modelType\": \"Property\",\n              \"semanticId\": {\n                \"keys\": [\n                  {\n                    \"type\": \"ConceptDescription\",\n                    \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#softwareVersion\"\n                  }\n                ],\n                \"type\": \"ExternalReference\"\n              },\n              \"value\": \"3.4.9837.567\",\n              \"valueType\": \"xs:string\",\n              \"displayName\": [\n                {\n                  \"language\": \"en\",\n                  \"text\": \"Software version\"\n                }\n              ],\n              \"idShort\": \"softwareVersion\"\n            },\n            {\n              \"modelType\": \"Property\",\n              \"semanticId\": {\n                \"keys\": [\n                  {\n                    \"type\": \"ConceptDescription\",\n                    \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#soldCountryCode\"\n                  }\n                ],\n                \"type\": \"ExternalReference\"\n              },\n              \"value\": \"DEU\",\n              \"valueType\": \"xs:string\",\n              \"displayName\": [\n                {\n                  \"language\": \"en\",\n                  \"text\": \"Sold country code\"\n                }\n              ],\n              \"idShort\": \"soldCountryCode\"\n            },\n            {\n              \"modelType\": \"Property\",\n              \"semanticId\": {\n                \"keys\": [\n                  {\n                    \"type\": \"ConceptDescription\",\n                    \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#soldCountryGroup\"\n                  }\n                ],\n                \"type\": \"ExternalReference\"\n              },\n              \"value\": \"Europe\",\n              \"valueType\": \"xs:string\",\n              \"displayName\": [\n                {\n                  \"language\": \"en\",\n                  \"text\": \"Vehicle sold region\"\n                }\n              ],\n              \"idShort\": \"soldCountryGroup\"\n            },\n            {\n              \"modelType\": \"Property\",\n              \"semanticId\": {\n                \"keys\": [\n                  {\n                    \"type\": \"ConceptDescription\",\n                    \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#soldDate\"\n                  }\n                ],\n                \"type\": \"ExternalReference\"\n              },\n              \"value\": \"2018-02-03T00:00:00\",\n              \"valueType\": \"xs:dateTime\",\n              \"displayName\": [\n                {\n                  \"language\": \"en\",\n                  \"text\": \"Vehicle sold date:\"\n                }\n              ],\n              \"idShort\": \"soldDate\"\n            },\n            {\n              \"modelType\": \"Property\",\n              \"semanticId\": {\n                \"keys\": [\n                  {\n                    \"type\": \"ConceptDescription\",\n                    \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#steeringPos\"\n                  }\n                ],\n                \"type\": \"ExternalReference\"\n              },\n              \"value\": \"Left-Hand Drive\",\n              \"valueType\": \"xs:string\",\n              \"displayName\": [\n                {\n                  \"language\": \"en\",\n                  \"text\": \"Vehicle steering position\"\n                }\n              ],\n              \"idShort\": \"steeringPos\"\n            },\n            {\n              \"modelType\": \"Property\",\n              \"semanticId\": {\n                \"keys\": [\n                  {\n                    \"type\": \"ConceptDescription\",\n                    \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#vehicleSeries\"\n                  }\n                ],\n                \"type\": \"ExternalReference\"\n              },\n              \"value\": \"Golf\",\n              \"valueType\": \"xs:string\",\n              \"displayName\": [\n                {\n                  \"language\": \"en\",\n                  \"text\": \"Vehicle series\"\n                }\n              ],\n              \"idShort\": \"vehicleSeries\"\n            },\n            {\n              \"modelType\": \"Property\",\n              \"semanticId\": {\n                \"keys\": [\n                  {\n                    \"type\": \"ConceptDescription\",\n                    \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#wmiCode\"\n                  }\n                ],\n                \"type\": \"ExternalReference\"\n              },\n              \"supplementalSemanticIds\": [\n                {\n                  \"keys\": [\n                    {\n                      \"type\": \"GlobalReference\",\n                      \"value\": \"https://vpic.nhtsa.dot.gov/\"\n                    }\n                  ],\n                  \"type\": \"ExternalReference\"\n                }\n              ],\n              \"value\": \"WVW\",\n              \"valueType\": \"xs:string\",\n              \"displayName\": [\n                {\n                  \"language\": \"en\",\n                  \"text\": \"WMI Code\"\n                }\n              ],\n              \"idShort\": \"wmiCode\"\n            },\n            {\n              \"modelType\": \"Property\",\n              \"semanticId\": {\n                \"keys\": [\n                  {\n                    \"type\": \"ConceptDescription\",\n                    \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#wmiNameNHTSA\"\n                  }\n                ],\n                \"type\": \"ExternalReference\"\n              },\n              \"supplementalSemanticIds\": [\n                {\n                  \"keys\": [\n                    {\n                      \"type\": \"GlobalReference\",\n                      \"value\": \"https://vpic.nhtsa.dot.gov/\"\n                    }\n                  ],\n                  \"type\": \"ExternalReference\"\n                }\n              ],\n              \"value\": \"Volkswagen\",\n              \"valueType\": \"xs:string\",\n              \"displayName\": [\n                {\n                  \"language\": \"en\",\n                  \"text\": \"WMI name according NHTSA\"\n                }\n              ],\n              \"idShort\": \"wmiNameNHTSA\"\n            },\n            {\n              \"modelType\": \"SubmodelElementList\",\n              \"description\": [\n                {\n                  \"language\": \"en\",\n                  \"text\": \"List of installed engines in the vehicle.\"\n                }\n              ],\n              \"displayName\": [\n                {\n                  \"language\": \"en\",\n                  \"text\": \"Engines\"\n                }\n              ],\n              \"idShort\": \"engines\",\n              \"orderRelevant\": true,\n              \"typeValueListElement\": \"DataElement\",\n              \"value\": [\n                {\n                  \"modelType\": \"SubmodelElementCollection\",\n                  \"description\": [\n                    {\n                      \"language\": \"en\",\n                      \"text\": \"Describing one installed engine\"\n                    }\n                  ],\n                  \"displayName\": [\n                    {\n                      \"language\": \"en\",\n                      \"text\": \"Engine Entity\"\n                    }\n                  ],\n                  \"idShort\": \"Engine\",\n                  \"value\": [\n                    {\n                      \"modelType\": \"Property\",\n                      \"semanticId\": {\n                        \"keys\": [\n                          {\n                            \"type\": \"ConceptDescription\",\n                            \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#engineId\"\n                          }\n                        ],\n                        \"type\": \"ExternalReference\"\n                      },\n                      \"value\": \"CKBY\",\n                      \"valueType\": \"xs:string\",\n                      \"displayName\": [\n                        {\n                          \"language\": \"en\",\n                          \"text\": \"Engine ID:\"\n                        }\n                      ],\n                      \"idShort\": \"engineId\"\n                    },\n                    {\n                      \"modelType\": \"Property\",\n                      \"semanticId\": {\n                        \"keys\": [\n                          {\n                            \"type\": \"ConceptDescription\",\n                            \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#engineDescription\"\n                          }\n                        ],\n                        \"type\": \"ExternalReference\"\n                      },\n                      \"value\": \"2.0 TDI\",\n                      \"valueType\": \"xs:string\",\n                      \"displayName\": [\n                        {\n                          \"language\": \"en\",\n                          \"text\": \"Engine Description\"\n                        }\n                      ],\n                      \"idShort\": \"engineDescription\"\n                    },\n                    {\n                      \"modelType\": \"Property\",\n                      \"semanticId\": {\n                        \"keys\": [\n                          {\n                            \"type\": \"ConceptDescription\",\n                            \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#engineSeries\"\n                          }\n                        ],\n                        \"type\": \"ExternalReference\"\n                      },\n                      \"value\": \"EA189\",\n                      \"valueType\": \"xs:string\",\n                      \"displayName\": [\n                        {\n                          \"language\": \"en\",\n                          \"text\": \"Vehicle engine series\"\n                        }\n                      ],\n                      \"idShort\": \"engineSeries\"\n                    },\n                    {\n                      \"modelType\": \"Property\",\n                      \"semanticId\": {\n                        \"keys\": [\n                          {\n                            \"type\": \"ConceptDescription\",\n                            \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#serialNumber\"\n                          }\n                        ],\n                        \"type\": \"ExternalReference\"\n                      },\n                      \"value\": \"ENG5556\",\n                      \"valueType\": \"xs:string\",\n                      \"displayName\": [\n                        {\n                          \"language\": \"en\",\n                          \"text\": \"Serial number\"\n                        }\n                      ],\n                      \"idShort\": \"serialNumber\"\n                    },\n                    {\n                      \"modelType\": \"Property\",\n                      \"semanticId\": {\n                        \"keys\": [\n                          {\n                            \"type\": \"ConceptDescription\",\n                            \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#size\"\n                          }\n                        ],\n                        \"type\": \"ExternalReference\"\n                      },\n                      \"value\": \"1968\",\n                      \"valueType\": \"xs:integer\",\n                      \"displayName\": [\n                        {\n                          \"language\": \"en\",\n                          \"text\": \"Engine size\"\n                        }\n                      ],\n                      \"idShort\": \"size\"\n                    },\n                    {\n                      \"modelType\": \"Property\",\n                      \"semanticId\": {\n                        \"keys\": [\n                          {\n                            \"type\": \"ConceptDescription\",\n                            \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#power\"\n                          }\n                        ],\n                        \"type\": \"ExternalReference\"\n                      },\n                      \"value\": \"110\",\n                      \"valueType\": \"xs:integer\",\n                      \"displayName\": [\n                        {\n                          \"language\": \"en\",\n                          \"text\": \"Engine power\"\n                        }\n                      ],\n                      \"idShort\": \"power\"\n                    },\n                    {\n                      \"modelType\": \"Property\",\n                      \"semanticId\": {\n                        \"keys\": [\n                          {\n                            \"type\": \"ConceptDescription\",\n                            \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#engineProductionDate\"\n                          }\n                        ],\n                        \"type\": \"ExternalReference\"\n                      },\n                      \"value\": \"2017-10-20T00:00:00\",\n                      \"valueType\": \"xs:dateTime\",\n                      \"displayName\": [\n                        {\n                          \"language\": \"en\",\n                          \"text\": \"Engine production date\"\n                        }\n                      ],\n                      \"idShort\": \"engineProductionDate\"\n                    },\n                    {\n                      \"modelType\": \"Property\",\n                      \"semanticId\": {\n                        \"keys\": [\n                          {\n                            \"type\": \"ConceptDescription\",\n                            \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#installDate\"\n                          }\n                        ],\n                        \"type\": \"ExternalReference\"\n                      },\n                      \"value\": \"2018-01-10T00:00:00\",\n                      \"valueType\": \"xs:dateTime\",\n                      \"displayName\": [\n                        {\n                          \"language\": \"en\",\n                          \"text\": \"Engine install date\"\n                        }\n                      ],\n                      \"idShort\": \"installDate\"\n                    },\n                    {\n                      \"modelType\": \"Property\",\n                      \"semanticId\": {\n                        \"keys\": [\n                          {\n                            \"type\": \"ConceptDescription\",\n                            \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#nhtsaFuelType\"\n                          }\n                        ],\n                        \"type\": \"ExternalReference\"\n                      },\n                      \"value\": \"Compressed Hydrogen/Hydrogen\",\n                      \"valueType\": \"xs:string\",\n                      \"displayName\": [\n                        {\n                          \"language\": \"en\",\n                          \"text\": \"Fuel type(NHTSA)\"\n                        }\n                      ],\n                      \"idShort\": \"nhtsaFuelType\"\n                    }\n                  ]\n                }\n              ]\n            },\n            {\n              \"modelType\": \"SubmodelElementList\",\n              \"description\": [\n                {\n                  \"language\": \"en\",\n                  \"text\": \"Equipments.\"\n                }\n              ],\n              \"displayName\": [\n                {\n                  \"language\": \"en\",\n                  \"text\": \"Equipments\"\n                }\n              ],\n              \"idShort\": \"equipments\",\n              \"orderRelevant\": true,\n              \"typeValueListElement\": \"DataElement\",\n              \"value\": [\n                {\n                  \"modelType\": \"SubmodelElementCollection\",\n                  \"description\": [\n                    {\n                      \"language\": \"en\",\n                      \"text\": \"One equipment of the vehicle.\"\n                    }\n                  ],\n                  \"displayName\": [\n                    {\n                      \"language\": \"en\",\n                      \"text\": \"Equipment\"\n                    }\n                  ],\n                  \"idShort\": \"Equipment\",\n                  \"value\": [\n                    {\n                      \"modelType\": \"Property\",\n                      \"semanticId\": {\n                        \"keys\": [\n                          {\n                            \"type\": \"ConceptDescription\",\n                            \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#equipmentIdentifier\"\n                          }\n                        ],\n                        \"type\": \"ExternalReference\"\n                      },\n                      \"value\": \"S248A\",\n                      \"valueType\": \"xs:string\",\n                      \"displayName\": [\n                        {\n                          \"language\": \"en\",\n                          \"text\": \"Equipment Id\"\n                        }\n                      ],\n                      \"idShort\": \"equipmentIdentifier\"\n                    },\n                    {\n                      \"modelType\": \"Property\",\n                      \"semanticId\": {\n                        \"keys\": [\n                          {\n                            \"type\": \"ConceptDescription\",\n                            \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#equipmentDescription\"\n                          }\n                        ],\n                        \"type\": \"ExternalReference\"\n                      },\n                      \"value\": \"Seat heating front\",\n                      \"valueType\": \"xs:string\",\n                      \"displayName\": [\n                        {\n                          \"language\": \"en\",\n                          \"text\": \"Equipment description\"\n                        }\n                      ],\n                      \"idShort\": \"equipmentDescription\"\n                    },\n                    {\n                      \"modelType\": \"Property\",\n                      \"semanticId\": {\n                        \"keys\": [\n                          {\n                            \"type\": \"ConceptDescription\",\n                            \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#group\"\n                          }\n                        ],\n                        \"type\": \"ExternalReference\"\n                      },\n                      \"value\": \"Interior\",\n                      \"valueType\": \"xs:string\",\n                      \"displayName\": [\n                        {\n                          \"language\": \"en\",\n                          \"text\": \"Equipment group\"\n                        }\n                      ],\n                      \"idShort\": \"group\"\n                    }\n                  ]\n                }\n              ]\n            },\n            {\n              \"modelType\": \"SubmodelElementList\",\n              \"description\": [\n                {\n                  \"language\": \"en\",\n                  \"text\": \"Focus components that should be analysed during the qualityTask.\"\n                }\n              ],\n              \"displayName\": [\n                {\n                  \"language\": \"en\",\n                  \"text\": \"Components\"\n                }\n              ],\n              \"idShort\": \"components\",\n              \"orderRelevant\": true,\n              \"typeValueListElement\": \"DataElement\",\n              \"value\": [\n                {\n                  \"modelType\": \"SubmodelElementCollection\",\n                  \"description\": [\n                    {\n                      \"language\": \"en\",\n                      \"text\": \"One component in the car\"\n                    }\n                  ],\n                  \"displayName\": [\n                    {\n                      \"language\": \"en\",\n                      \"text\": \"Component\"\n                    }\n                  ],\n                  \"idShort\": \"Component\",\n                  \"value\": [\n                    {\n                      \"modelType\": \"Property\",\n                      \"semanticId\": {\n                        \"keys\": [\n                          {\n                            \"type\": \"ConceptDescription\",\n                            \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#catenaXPartId\"\n                          }\n                        ],\n                        \"type\": \"ExternalReference\"\n                      },\n                      \"value\": \"urn:uuid:c5162db2-57ab-4728-a02a-7831be99d95b\",\n                      \"valueType\": \"xs:string\",\n                      \"displayName\": [\n                        {\n                          \"language\": \"en\",\n                          \"text\": \"Catena-X Identifier of this part\"\n                        }\n                      ],\n                      \"idShort\": \"catenaXPartId\"\n                    },\n                    {\n                      \"modelType\": \"Property\",\n                      \"semanticId\": {\n                        \"keys\": [\n                          {\n                            \"type\": \"ConceptDescription\",\n                            \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#componentName\"\n                          }\n                        ],\n                        \"type\": \"ExternalReference\"\n                      },\n                      \"value\": \"Control Unit\",\n                      \"valueType\": \"xs:string\",\n                      \"displayName\": [\n                        {\n                          \"language\": \"en\",\n                          \"text\": \"Component name\"\n                        }\n                      ],\n                      \"idShort\": \"componentName\"\n                    },\n                    {\n                      \"modelType\": \"Property\",\n                      \"semanticId\": {\n                        \"keys\": [\n                          {\n                            \"type\": \"ConceptDescription\",\n                            \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#partNumber\"\n                          }\n                        ],\n                        \"type\": \"ExternalReference\"\n                      },\n                      \"value\": \"ECU4711\",\n                      \"valueType\": \"xs:string\",\n                      \"displayName\": [\n                        {\n                          \"language\": \"en\",\n                          \"text\": \"Part number\"\n                        }\n                      ],\n                      \"idShort\": \"partNumber\"\n                    },\n                    {\n                      \"modelType\": \"Property\",\n                      \"semanticId\": {\n                        \"keys\": [\n                          {\n                            \"type\": \"ConceptDescription\",\n                            \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#manufacturerSerialNumber\"\n                          }\n                        ],\n                        \"type\": \"ExternalReference\"\n                      },\n                      \"value\": \"ECU20646005020221\",\n                      \"valueType\": \"xs:string\",\n                      \"displayName\": [\n                        {\n                          \"language\": \"en\",\n                          \"text\": \"Manufacturer serial number\"\n                        }\n                      ],\n                      \"idShort\": \"manufacturerSerialNumber\"\n                    },\n                    {\n                      \"modelType\": \"Property\",\n                      \"semanticId\": {\n                        \"keys\": [\n                          {\n                            \"type\": \"ConceptDescription\",\n                            \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#manufacturerPartNumber\"\n                          }\n                        ],\n                        \"type\": \"ExternalReference\"\n                      },\n                      \"value\": \"ECU-2025.02\",\n                      \"valueType\": \"xs:string\",\n                      \"displayName\": [\n                        {\n                          \"language\": \"en\",\n                          \"text\": \"Manufacturer part number\"\n                        }\n                      ],\n                      \"idShort\": \"manufacturerPartNumber\"\n                    },\n                    {\n                      \"modelType\": \"Property\",\n                      \"semanticId\": {\n                        \"keys\": [\n                          {\n                            \"type\": \"ConceptDescription\",\n                            \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#serialNumber\"\n                          }\n                        ],\n                        \"type\": \"ExternalReference\"\n                      },\n                      \"value\": \"ECU20646005020221\",\n                      \"valueType\": \"xs:string\",\n                      \"displayName\": [\n                        {\n                          \"language\": \"en\",\n                          \"text\": \"Serial number\"\n                        }\n                      ],\n                      \"idShort\": \"serialNumber\"\n                    }\n                  ]\n                }\n              ]\n            }\n          ]\n        }\n      ]\n    },\n    {\n      \"modelType\": \"SubmodelElementCollection\",\n      \"description\": [\n        {\n          \"language\": \"en\",\n          \"text\": \"This entity groups all meta information properties. Meta information properties give hints for a Catena-X data consumer to better understand, how this data set was created on the Catena-X data provider side.\"\n        }\n      ],\n      \"displayName\": [\n        {\n          \"language\": \"en\",\n          \"text\": \"Meta Information\"\n        }\n      ],\n      \"idShort\": \"MetaInformation\",\n      \"value\": [\n        {\n          \"modelType\": \"Property\",\n          \"semanticId\": {\n            \"keys\": [\n              {\n                \"type\": \"ConceptDescription\",\n                \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#selectionCriteria\"\n              }\n            ],\n            \"type\": \"ExternalReference\"\n          },\n          \"value\": \"2023-12-31T23:59:59\",\n          \"valueType\": \"xs:string\",\n          \"displayName\": [\n            {\n              \"language\": \"en\",\n              \"text\": \"Selection criteria\"\n            }\n          ],\n          \"idShort\": \"selectionCriteria\"\n        },\n        {\n          \"modelType\": \"Property\",\n          \"semanticId\": {\n            \"keys\": [\n              {\n                \"type\": \"ConceptDescription\",\n                \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#selectionStart\"\n              }\n            ],\n            \"type\": \"ExternalReference\"\n          },\n          \"value\": \"2023-01-01T00:00:00\",\n          \"valueType\": \"xs:string\",\n          \"displayName\": [\n            {\n              \"language\": \"en\",\n              \"text\": \"Selection start\"\n            }\n          ],\n          \"idShort\": \"selectionStart\"\n        },\n        {\n          \"modelType\": \"Property\",\n          \"semanticId\": {\n            \"keys\": [\n              {\n                \"type\": \"ConceptDescription\",\n                \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#selectionEnd\"\n              }\n            ],\n            \"type\": \"ExternalReference\"\n          },\n          \"value\": \"Export of vehicles that are involved in the linked qualityTask and FleetClaim list.\",\n          \"valueType\": \"xs:string\",\n          \"displayName\": [\n            {\n              \"language\": \"en\",\n              \"text\": \"Selection end\"\n            }\n          ],\n          \"idShort\": \"selectionEnd\"\n        }\n      ]\n    }\n  ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{basyx-dsp-base-url}}/submodels",
+							"host": [
+								"{{basyx-dsp-base-url}}"
+							],
+							"path": [
+								"submodels"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New AAS",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{basyx_admin_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"modelType\": \"AssetAdministrationShell\",\n  \"assetInformation\": {\n    \"assetKind\": \"Instance\",\n    \"assetType\": \"Car\",\n    \"defaultThumbnail\": {\n      \"contentType\": \"\",\n      \"path\": \"\"\n    },\n    \"globalAssetId\": \"urn:uuid:580d3adf-1981-44a0-a214-13d6ceed9379\"\n  },\n  \"submodels\": [\n    {\n      \"keys\": [\n        {\n          \"type\": \"Submodel\",\n          \"value\": \"fe6229e6-abcd-4c6e-809b-db59e70f7c6e\"\n        }\n      ],\n      \"type\": \"ExternalReference\"\n    }\n  ],\n  \"id\": \"e38a0f92-4ee8-436c-a535-0f9cdad4c3c8\",\n  \"idShort\": \"Car\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{basyx-dsp-base-url}}/shells",
+							"host": [
+								"{{basyx-dsp-base-url}}"
+							],
+							"path": [
+								"shells"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "False Token rejected",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJkQlBOaUxQTUE0WDdNZ3ROa0JFbWJfeTh4N1JzRVoyNXZhSG5PMjc0R3ZRIn0.eyJleHAiOjE3NDgyMzkxMzYsImlhdCI6MTc0ODIzODgzNiwianRpIjoib25ydHJvOmUzZTE5ZTk4LWIyNmItNGFhMC1iZjM4LWJlMjdiODk3Nzg4NCIsImlzcyI6Imh0dHA6Ly9rZXljbG9hazo4MDgwL3JlYWxtcy9CYVN5eCIsImF1ZCI6WyJiYXN5eC1jbGllbnQtYXBpIiwiYWNjb3VudCJdLCJzdWIiOiJmYjgzM2MxYi0zYTdkLTQyMjQtOWFiMS02NzJlNzIwM2JhYjUiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJiYXN5eC13ZWItdWkiLCJzaWQiOiI4Y2FhNWJjMi02ZDBiLTQ4NTYtOGZmYy1jZDJiOWI1YjhmNGQiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbImh0dHA6Ly9sb2NhbGhvc3Q6MzAwMCJdLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsib2ZmbGluZV9hY2Nlc3MiLCJkZWZhdWx0LXJvbGVzLWJhc3l4IiwiYWRtaW4iLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImJhc3l4LWNsaWVudC1hcGkiOnsicm9sZXMiOlsiYmFzeXgtYWRtaW4iXX0sImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoicm9sZXMgZW1haWwgcHJvZmlsZSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwibmFtZSI6IkpvaG4gRG9lIiwicHJlZmVycmVkX3VzZXJuYW1lIjoiam9obi5kb2UiLCJnaXZlbl9uYW1lIjoiSm9obiIsImZhbWlseV9uYW1lIjoiRG9lIn0.KJmuoLNI7s0DC-GqTnzBaM59_4BtQfj7r2y6bGi98DevCVCjKRP3V7LMEqFfJPB8fdd6vibbQoi6D9MumGPAIaSgn05Pl43bD5ijN5lPKZOX5d5XFZC1UFXyjWAKODAePbE3QthRQcLN_rfDyFjO6VTZEmK96aZXHvJCxf6lZ_4kBO1h5ICoRobLeGxNC7Yog4SlraERrLJYPzc6uN-kbBbHIdqY22gYKdS9mq1p2PMeMPWQK2DPnd46kaO7WDYwFizMYqgKWBpY-TthFGaku5ImVJpXRe8jBivnXKDQgeZVwxEBx4fP0DRAh3eFllEg5PvIUssL4z4jDYfWb9L5DQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"modelType\": \"Submodel\",\n  \"kind\": \"Instance\",\n  \"semanticId\": {\n    \"keys\": [\n      {\n        \"type\": \"ConceptDescription\",\n        \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#Vehicles\"\n      }\n    ],\n    \"type\": \"ModelReference\"\n  },\n  \"administration\": {},\n  \"id\": \"fe6229e6-abcd-4c6e-809b-db59e70f7c6e\",\n  \"description\": [\n    {\n      \"language\": \"en\",\n      \"text\": \"This aspect model was created in the Catena-X use case quality. The purpose of this aspect model is to transfer general information of a list/fleet of vehicles - primarily how the vehicles are equipped, when they were built and which engines are installed.\"\n    }\n  ],\n  \"idShort\": \"Vehicles\",\n  \"submodelElements\": [\n    {\n      \"modelType\": \"SubmodelElementList\",\n      \"description\": [\n        {\n          \"language\": \"en\",\n          \"text\": \"A list of vehicles.\"\n        }\n      ],\n      \"displayName\": [\n        {\n          \"language\": \"en\",\n          \"text\": \"Vehicles\"\n        }\n      ],\n      \"idShort\": \"vehicles\",\n      \"orderRelevant\": true,\n      \"typeValueListElement\": \"DataElement\",\n      \"value\": [\n        {\n          \"modelType\": \"SubmodelElementCollection\",\n          \"description\": [\n            {\n              \"language\": \"en\",\n              \"text\": \"Vehicle data that does not fit into one of the other entities.\"\n            }\n          ],\n          \"displayName\": [\n            {\n              \"language\": \"en\",\n              \"text\": \"Vehicle\"\n            }\n          ],\n          \"idShort\": \"Vehicle\",\n          \"value\": [\n            {\n              \"modelType\": \"Property\",\n              \"semanticId\": {\n                \"keys\": [\n                  {\n                    \"type\": \"ConceptDescription\",\n                    \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#recordStatus\"\n                  }\n                ],\n                \"type\": \"ExternalReference\"\n              },\n              \"value\": \"new\",\n              \"valueType\": \"xs:string\",\n              \"displayName\": [\n                {\n                  \"language\": \"en\",\n                  \"text\": \"Record status\"\n                }\n              ],\n              \"idShort\": \"recordStatus\"\n            },\n            {\n              \"modelType\": \"Property\",\n              \"semanticId\": {\n                \"keys\": [\n                  {\n                    \"type\": \"ConceptDescription\",\n                    \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#anonymizedVin\"\n                  }\n                ],\n                \"type\": \"ExternalReference\"\n              },\n              \"value\": \"3747429FGH382923974682\",\n              \"valueType\": \"xs:string\",\n              \"displayName\": [\n                {\n                  \"language\": \"en\",\n                  \"text\": \"Anonymized VIN\"\n                }\n              ],\n              \"idShort\": \"anonymizedVin\"\n            },\n            {\n              \"modelType\": \"Property\",\n              \"semanticId\": {\n                \"keys\": [\n                  {\n                    \"type\": \"ConceptDescription\",\n                    \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#catenaXVehicleId\"\n                  }\n                ],\n                \"type\": \"ExternalReference\"\n              },\n              \"value\": \"urn:uuid:580d3adf-1981-44a0-a214-13d6ceed9379\",\n              \"valueType\": \"xs:string\",\n              \"displayName\": [\n                {\n                  \"language\": \"en\",\n                  \"text\": \"Vehicle Catena-X Identifier\"\n                }\n              ],\n              \"idShort\": \"catenaXVehicleId\"\n            },\n            {\n              \"modelType\": \"Property\",\n              \"semanticId\": {\n                \"keys\": [\n                  {\n                    \"type\": \"ConceptDescription\",\n                    \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#class\"\n                  }\n                ],\n                \"type\": \"ExternalReference\"\n              },\n              \"value\": \"A\",\n              \"valueType\": \"xs:string\",\n              \"displayName\": [\n                {\n                  \"language\": \"en\",\n                  \"text\": \"Vehicle class\"\n                }\n              ],\n              \"idShort\": \"class\"\n            },\n            {\n              \"modelType\": \"Property\",\n              \"semanticId\": {\n                \"keys\": [\n                  {\n                    \"type\": \"ConceptDescription\",\n                    \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#driveSystemPower\"\n                  }\n                ],\n                \"type\": \"ExternalReference\"\n              },\n              \"value\": \"200\",\n              \"valueType\": \"xs:integer\",\n              \"displayName\": [\n                {\n                  \"language\": \"en\",\n                  \"text\": \"Complete system power\"\n                }\n              ],\n              \"idShort\": \"driveSystemPower\"\n            },\n            {\n              \"modelType\": \"Property\",\n              \"semanticId\": {\n                \"keys\": [\n                  {\n                    \"type\": \"ConceptDescription\",\n                    \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#driveType\"\n                  }\n                ],\n                \"type\": \"ExternalReference\"\n              },\n              \"value\": \"All-Wheel Drive\",\n              \"valueType\": \"xs:string\",\n              \"displayName\": [\n                {\n                  \"language\": \"en\",\n                  \"text\": \"Drive type\"\n                }\n              ],\n              \"idShort\": \"driveType\"\n            },\n            {\n              \"modelType\": \"Property\",\n              \"semanticId\": {\n                \"keys\": [\n                  {\n                    \"type\": \"ConceptDescription\",\n                    \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#powerTrainType\"\n                  }\n                ],\n                \"type\": \"ExternalReference\"\n              },\n              \"value\": \"BEV (Battery Electric Vehicle)\",\n              \"valueType\": \"xs:string\",\n              \"displayName\": [\n                {\n                  \"language\": \"en\",\n                  \"text\": \"Powertrain Type\"\n                }\n              ],\n              \"idShort\": \"powerTrainType\"\n            },\n            {\n              \"modelType\": \"Property\",\n              \"semanticId\": {\n                \"keys\": [\n                  {\n                    \"type\": \"ConceptDescription\",\n                    \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#modelDescription\"\n                  }\n                ],\n                \"type\": \"ExternalReference\"\n              },\n              \"value\": \"Golf VIII\",\n              \"valueType\": \"xs:string\",\n              \"displayName\": [\n                {\n                  \"language\": \"en\",\n                  \"text\": \"Vehicle model\"\n                }\n              ],\n              \"idShort\": \"modelDescription\"\n            },\n            {\n              \"modelType\": \"Property\",\n              \"semanticId\": {\n                \"keys\": [\n                  {\n                    \"type\": \"ConceptDescription\",\n                    \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#modelIdentifier\"\n                  }\n                ],\n                \"type\": \"ExternalReference\"\n              },\n              \"value\": \"689-G8\",\n              \"valueType\": \"xs:string\",\n              \"displayName\": [\n                {\n                  \"language\": \"en\",\n                  \"text\": \"Model identifier\"\n                }\n              ],\n              \"idShort\": \"modelIdentifier\"\n            },\n            {\n              \"modelType\": \"Property\",\n              \"semanticId\": {\n                \"keys\": [\n                  {\n                    \"type\": \"ConceptDescription\",\n                    \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#plantCatenaXId\"\n                  }\n                ],\n                \"type\": \"ExternalReference\"\n              },\n              \"value\": \"BPNS4444444444XX\",\n              \"valueType\": \"xs:string\",\n              \"displayName\": [\n                {\n                  \"language\": \"en\",\n                  \"text\": \"Plant Catena-X ID\"\n                }\n              ],\n              \"idShort\": \"plantCatenaXId\"\n            },\n            {\n              \"modelType\": \"Property\",\n              \"semanticId\": {\n                \"keys\": [\n                  {\n                    \"type\": \"ConceptDescription\",\n                    \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#plantCountryCode\"\n                  }\n                ],\n                \"type\": \"ExternalReference\"\n              },\n              \"value\": \"DEU\",\n              \"valueType\": \"xs:string\",\n              \"displayName\": [\n                {\n                  \"language\": \"en\",\n                  \"text\": \"Plant country\"\n                }\n              ],\n              \"idShort\": \"plantCountryCode\"\n            },\n            {\n              \"modelType\": \"Property\",\n              \"semanticId\": {\n                \"keys\": [\n                  {\n                    \"type\": \"ConceptDescription\",\n                    \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#plantDescription\"\n                  }\n                ],\n                \"type\": \"ExternalReference\"\n              },\n              \"value\": \"Wolfsburg\",\n              \"valueType\": \"xs:string\",\n              \"displayName\": [\n                {\n                  \"language\": \"en\",\n                  \"text\": \"Vehicle production plant name\"\n                }\n              ],\n              \"idShort\": \"plantDescription\"\n            },\n            {\n              \"modelType\": \"Property\",\n              \"semanticId\": {\n                \"keys\": [\n                  {\n                    \"type\": \"ConceptDescription\",\n                    \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#plantIdentifier\"\n                  }\n                ],\n                \"type\": \"ExternalReference\"\n              },\n              \"value\": \"4711\",\n              \"valueType\": \"xs:string\",\n              \"displayName\": [\n                {\n                  \"language\": \"en\",\n                  \"text\": \"Production plant id\"\n                }\n              ],\n              \"idShort\": \"plantIdentifier\"\n            },\n            {\n              \"modelType\": \"Property\",\n              \"semanticId\": {\n                \"keys\": [\n                  {\n                    \"type\": \"ConceptDescription\",\n                    \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#productionDate\"\n                  }\n                ],\n                \"type\": \"ExternalReference\"\n              },\n              \"value\": \"2018-01-15T00:00:00\",\n              \"valueType\": \"xs:dateTime\",\n              \"displayName\": [\n                {\n                  \"language\": \"en\",\n                  \"text\": \"Vehicle production Date\"\n                }\n              ],\n              \"idShort\": \"productionDate\"\n            },\n            {\n              \"modelType\": \"Property\",\n              \"semanticId\": {\n                \"keys\": [\n                  {\n                    \"type\": \"ConceptDescription\",\n                    \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#softwareCategory\"\n                  }\n                ],\n                \"type\": \"ExternalReference\"\n              },\n              \"value\": \"TZGH64738\",\n              \"valueType\": \"xs:string\",\n              \"displayName\": [\n                {\n                  \"language\": \"en\",\n                  \"text\": \"Software category\"\n                }\n              ],\n              \"idShort\": \"softwareCategory\"\n            },\n            {\n              \"modelType\": \"Property\",\n              \"semanticId\": {\n                \"keys\": [\n                  {\n                    \"type\": \"ConceptDescription\",\n                    \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#softwareVersion\"\n                  }\n                ],\n                \"type\": \"ExternalReference\"\n              },\n              \"value\": \"3.4.9837.567\",\n              \"valueType\": \"xs:string\",\n              \"displayName\": [\n                {\n                  \"language\": \"en\",\n                  \"text\": \"Software version\"\n                }\n              ],\n              \"idShort\": \"softwareVersion\"\n            },\n            {\n              \"modelType\": \"Property\",\n              \"semanticId\": {\n                \"keys\": [\n                  {\n                    \"type\": \"ConceptDescription\",\n                    \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#soldCountryCode\"\n                  }\n                ],\n                \"type\": \"ExternalReference\"\n              },\n              \"value\": \"DEU\",\n              \"valueType\": \"xs:string\",\n              \"displayName\": [\n                {\n                  \"language\": \"en\",\n                  \"text\": \"Sold country code\"\n                }\n              ],\n              \"idShort\": \"soldCountryCode\"\n            },\n            {\n              \"modelType\": \"Property\",\n              \"semanticId\": {\n                \"keys\": [\n                  {\n                    \"type\": \"ConceptDescription\",\n                    \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#soldCountryGroup\"\n                  }\n                ],\n                \"type\": \"ExternalReference\"\n              },\n              \"value\": \"Europe\",\n              \"valueType\": \"xs:string\",\n              \"displayName\": [\n                {\n                  \"language\": \"en\",\n                  \"text\": \"Vehicle sold region\"\n                }\n              ],\n              \"idShort\": \"soldCountryGroup\"\n            },\n            {\n              \"modelType\": \"Property\",\n              \"semanticId\": {\n                \"keys\": [\n                  {\n                    \"type\": \"ConceptDescription\",\n                    \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#soldDate\"\n                  }\n                ],\n                \"type\": \"ExternalReference\"\n              },\n              \"value\": \"2018-02-03T00:00:00\",\n              \"valueType\": \"xs:dateTime\",\n              \"displayName\": [\n                {\n                  \"language\": \"en\",\n                  \"text\": \"Vehicle sold date:\"\n                }\n              ],\n              \"idShort\": \"soldDate\"\n            },\n            {\n              \"modelType\": \"Property\",\n              \"semanticId\": {\n                \"keys\": [\n                  {\n                    \"type\": \"ConceptDescription\",\n                    \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#steeringPos\"\n                  }\n                ],\n                \"type\": \"ExternalReference\"\n              },\n              \"value\": \"Left-Hand Drive\",\n              \"valueType\": \"xs:string\",\n              \"displayName\": [\n                {\n                  \"language\": \"en\",\n                  \"text\": \"Vehicle steering position\"\n                }\n              ],\n              \"idShort\": \"steeringPos\"\n            },\n            {\n              \"modelType\": \"Property\",\n              \"semanticId\": {\n                \"keys\": [\n                  {\n                    \"type\": \"ConceptDescription\",\n                    \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#vehicleSeries\"\n                  }\n                ],\n                \"type\": \"ExternalReference\"\n              },\n              \"value\": \"Golf\",\n              \"valueType\": \"xs:string\",\n              \"displayName\": [\n                {\n                  \"language\": \"en\",\n                  \"text\": \"Vehicle series\"\n                }\n              ],\n              \"idShort\": \"vehicleSeries\"\n            },\n            {\n              \"modelType\": \"Property\",\n              \"semanticId\": {\n                \"keys\": [\n                  {\n                    \"type\": \"ConceptDescription\",\n                    \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#wmiCode\"\n                  }\n                ],\n                \"type\": \"ExternalReference\"\n              },\n              \"supplementalSemanticIds\": [\n                {\n                  \"keys\": [\n                    {\n                      \"type\": \"GlobalReference\",\n                      \"value\": \"https://vpic.nhtsa.dot.gov/\"\n                    }\n                  ],\n                  \"type\": \"ExternalReference\"\n                }\n              ],\n              \"value\": \"WVW\",\n              \"valueType\": \"xs:string\",\n              \"displayName\": [\n                {\n                  \"language\": \"en\",\n                  \"text\": \"WMI Code\"\n                }\n              ],\n              \"idShort\": \"wmiCode\"\n            },\n            {\n              \"modelType\": \"Property\",\n              \"semanticId\": {\n                \"keys\": [\n                  {\n                    \"type\": \"ConceptDescription\",\n                    \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#wmiNameNHTSA\"\n                  }\n                ],\n                \"type\": \"ExternalReference\"\n              },\n              \"supplementalSemanticIds\": [\n                {\n                  \"keys\": [\n                    {\n                      \"type\": \"GlobalReference\",\n                      \"value\": \"https://vpic.nhtsa.dot.gov/\"\n                    }\n                  ],\n                  \"type\": \"ExternalReference\"\n                }\n              ],\n              \"value\": \"Volkswagen\",\n              \"valueType\": \"xs:string\",\n              \"displayName\": [\n                {\n                  \"language\": \"en\",\n                  \"text\": \"WMI name according NHTSA\"\n                }\n              ],\n              \"idShort\": \"wmiNameNHTSA\"\n            },\n            {\n              \"modelType\": \"SubmodelElementList\",\n              \"description\": [\n                {\n                  \"language\": \"en\",\n                  \"text\": \"List of installed engines in the vehicle.\"\n                }\n              ],\n              \"displayName\": [\n                {\n                  \"language\": \"en\",\n                  \"text\": \"Engines\"\n                }\n              ],\n              \"idShort\": \"engines\",\n              \"orderRelevant\": true,\n              \"typeValueListElement\": \"DataElement\",\n              \"value\": [\n                {\n                  \"modelType\": \"SubmodelElementCollection\",\n                  \"description\": [\n                    {\n                      \"language\": \"en\",\n                      \"text\": \"Describing one installed engine\"\n                    }\n                  ],\n                  \"displayName\": [\n                    {\n                      \"language\": \"en\",\n                      \"text\": \"Engine Entity\"\n                    }\n                  ],\n                  \"idShort\": \"Engine\",\n                  \"value\": [\n                    {\n                      \"modelType\": \"Property\",\n                      \"semanticId\": {\n                        \"keys\": [\n                          {\n                            \"type\": \"ConceptDescription\",\n                            \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#engineId\"\n                          }\n                        ],\n                        \"type\": \"ExternalReference\"\n                      },\n                      \"value\": \"CKBY\",\n                      \"valueType\": \"xs:string\",\n                      \"displayName\": [\n                        {\n                          \"language\": \"en\",\n                          \"text\": \"Engine ID:\"\n                        }\n                      ],\n                      \"idShort\": \"engineId\"\n                    },\n                    {\n                      \"modelType\": \"Property\",\n                      \"semanticId\": {\n                        \"keys\": [\n                          {\n                            \"type\": \"ConceptDescription\",\n                            \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#engineDescription\"\n                          }\n                        ],\n                        \"type\": \"ExternalReference\"\n                      },\n                      \"value\": \"2.0 TDI\",\n                      \"valueType\": \"xs:string\",\n                      \"displayName\": [\n                        {\n                          \"language\": \"en\",\n                          \"text\": \"Engine Description\"\n                        }\n                      ],\n                      \"idShort\": \"engineDescription\"\n                    },\n                    {\n                      \"modelType\": \"Property\",\n                      \"semanticId\": {\n                        \"keys\": [\n                          {\n                            \"type\": \"ConceptDescription\",\n                            \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#engineSeries\"\n                          }\n                        ],\n                        \"type\": \"ExternalReference\"\n                      },\n                      \"value\": \"EA189\",\n                      \"valueType\": \"xs:string\",\n                      \"displayName\": [\n                        {\n                          \"language\": \"en\",\n                          \"text\": \"Vehicle engine series\"\n                        }\n                      ],\n                      \"idShort\": \"engineSeries\"\n                    },\n                    {\n                      \"modelType\": \"Property\",\n                      \"semanticId\": {\n                        \"keys\": [\n                          {\n                            \"type\": \"ConceptDescription\",\n                            \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#serialNumber\"\n                          }\n                        ],\n                        \"type\": \"ExternalReference\"\n                      },\n                      \"value\": \"ENG5556\",\n                      \"valueType\": \"xs:string\",\n                      \"displayName\": [\n                        {\n                          \"language\": \"en\",\n                          \"text\": \"Serial number\"\n                        }\n                      ],\n                      \"idShort\": \"serialNumber\"\n                    },\n                    {\n                      \"modelType\": \"Property\",\n                      \"semanticId\": {\n                        \"keys\": [\n                          {\n                            \"type\": \"ConceptDescription\",\n                            \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#size\"\n                          }\n                        ],\n                        \"type\": \"ExternalReference\"\n                      },\n                      \"value\": \"1968\",\n                      \"valueType\": \"xs:integer\",\n                      \"displayName\": [\n                        {\n                          \"language\": \"en\",\n                          \"text\": \"Engine size\"\n                        }\n                      ],\n                      \"idShort\": \"size\"\n                    },\n                    {\n                      \"modelType\": \"Property\",\n                      \"semanticId\": {\n                        \"keys\": [\n                          {\n                            \"type\": \"ConceptDescription\",\n                            \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#power\"\n                          }\n                        ],\n                        \"type\": \"ExternalReference\"\n                      },\n                      \"value\": \"110\",\n                      \"valueType\": \"xs:integer\",\n                      \"displayName\": [\n                        {\n                          \"language\": \"en\",\n                          \"text\": \"Engine power\"\n                        }\n                      ],\n                      \"idShort\": \"power\"\n                    },\n                    {\n                      \"modelType\": \"Property\",\n                      \"semanticId\": {\n                        \"keys\": [\n                          {\n                            \"type\": \"ConceptDescription\",\n                            \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#engineProductionDate\"\n                          }\n                        ],\n                        \"type\": \"ExternalReference\"\n                      },\n                      \"value\": \"2017-10-20T00:00:00\",\n                      \"valueType\": \"xs:dateTime\",\n                      \"displayName\": [\n                        {\n                          \"language\": \"en\",\n                          \"text\": \"Engine production date\"\n                        }\n                      ],\n                      \"idShort\": \"engineProductionDate\"\n                    },\n                    {\n                      \"modelType\": \"Property\",\n                      \"semanticId\": {\n                        \"keys\": [\n                          {\n                            \"type\": \"ConceptDescription\",\n                            \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#installDate\"\n                          }\n                        ],\n                        \"type\": \"ExternalReference\"\n                      },\n                      \"value\": \"2018-01-10T00:00:00\",\n                      \"valueType\": \"xs:dateTime\",\n                      \"displayName\": [\n                        {\n                          \"language\": \"en\",\n                          \"text\": \"Engine install date\"\n                        }\n                      ],\n                      \"idShort\": \"installDate\"\n                    },\n                    {\n                      \"modelType\": \"Property\",\n                      \"semanticId\": {\n                        \"keys\": [\n                          {\n                            \"type\": \"ConceptDescription\",\n                            \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#nhtsaFuelType\"\n                          }\n                        ],\n                        \"type\": \"ExternalReference\"\n                      },\n                      \"value\": \"Compressed Hydrogen/Hydrogen\",\n                      \"valueType\": \"xs:string\",\n                      \"displayName\": [\n                        {\n                          \"language\": \"en\",\n                          \"text\": \"Fuel type(NHTSA)\"\n                        }\n                      ],\n                      \"idShort\": \"nhtsaFuelType\"\n                    }\n                  ]\n                }\n              ]\n            },\n            {\n              \"modelType\": \"SubmodelElementList\",\n              \"description\": [\n                {\n                  \"language\": \"en\",\n                  \"text\": \"Equipments.\"\n                }\n              ],\n              \"displayName\": [\n                {\n                  \"language\": \"en\",\n                  \"text\": \"Equipments\"\n                }\n              ],\n              \"idShort\": \"equipments\",\n              \"orderRelevant\": true,\n              \"typeValueListElement\": \"DataElement\",\n              \"value\": [\n                {\n                  \"modelType\": \"SubmodelElementCollection\",\n                  \"description\": [\n                    {\n                      \"language\": \"en\",\n                      \"text\": \"One equipment of the vehicle.\"\n                    }\n                  ],\n                  \"displayName\": [\n                    {\n                      \"language\": \"en\",\n                      \"text\": \"Equipment\"\n                    }\n                  ],\n                  \"idShort\": \"Equipment\",\n                  \"value\": [\n                    {\n                      \"modelType\": \"Property\",\n                      \"semanticId\": {\n                        \"keys\": [\n                          {\n                            \"type\": \"ConceptDescription\",\n                            \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#equipmentIdentifier\"\n                          }\n                        ],\n                        \"type\": \"ExternalReference\"\n                      },\n                      \"value\": \"S248A\",\n                      \"valueType\": \"xs:string\",\n                      \"displayName\": [\n                        {\n                          \"language\": \"en\",\n                          \"text\": \"Equipment Id\"\n                        }\n                      ],\n                      \"idShort\": \"equipmentIdentifier\"\n                    },\n                    {\n                      \"modelType\": \"Property\",\n                      \"semanticId\": {\n                        \"keys\": [\n                          {\n                            \"type\": \"ConceptDescription\",\n                            \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#equipmentDescription\"\n                          }\n                        ],\n                        \"type\": \"ExternalReference\"\n                      },\n                      \"value\": \"Seat heating front\",\n                      \"valueType\": \"xs:string\",\n                      \"displayName\": [\n                        {\n                          \"language\": \"en\",\n                          \"text\": \"Equipment description\"\n                        }\n                      ],\n                      \"idShort\": \"equipmentDescription\"\n                    },\n                    {\n                      \"modelType\": \"Property\",\n                      \"semanticId\": {\n                        \"keys\": [\n                          {\n                            \"type\": \"ConceptDescription\",\n                            \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#group\"\n                          }\n                        ],\n                        \"type\": \"ExternalReference\"\n                      },\n                      \"value\": \"Interior\",\n                      \"valueType\": \"xs:string\",\n                      \"displayName\": [\n                        {\n                          \"language\": \"en\",\n                          \"text\": \"Equipment group\"\n                        }\n                      ],\n                      \"idShort\": \"group\"\n                    }\n                  ]\n                }\n              ]\n            },\n            {\n              \"modelType\": \"SubmodelElementList\",\n              \"description\": [\n                {\n                  \"language\": \"en\",\n                  \"text\": \"Focus components that should be analysed during the qualityTask.\"\n                }\n              ],\n              \"displayName\": [\n                {\n                  \"language\": \"en\",\n                  \"text\": \"Components\"\n                }\n              ],\n              \"idShort\": \"components\",\n              \"orderRelevant\": true,\n              \"typeValueListElement\": \"DataElement\",\n              \"value\": [\n                {\n                  \"modelType\": \"SubmodelElementCollection\",\n                  \"description\": [\n                    {\n                      \"language\": \"en\",\n                      \"text\": \"One component in the car\"\n                    }\n                  ],\n                  \"displayName\": [\n                    {\n                      \"language\": \"en\",\n                      \"text\": \"Component\"\n                    }\n                  ],\n                  \"idShort\": \"Component\",\n                  \"value\": [\n                    {\n                      \"modelType\": \"Property\",\n                      \"semanticId\": {\n                        \"keys\": [\n                          {\n                            \"type\": \"ConceptDescription\",\n                            \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#catenaXPartId\"\n                          }\n                        ],\n                        \"type\": \"ExternalReference\"\n                      },\n                      \"value\": \"urn:uuid:c5162db2-57ab-4728-a02a-7831be99d95b\",\n                      \"valueType\": \"xs:string\",\n                      \"displayName\": [\n                        {\n                          \"language\": \"en\",\n                          \"text\": \"Catena-X Identifier of this part\"\n                        }\n                      ],\n                      \"idShort\": \"catenaXPartId\"\n                    },\n                    {\n                      \"modelType\": \"Property\",\n                      \"semanticId\": {\n                        \"keys\": [\n                          {\n                            \"type\": \"ConceptDescription\",\n                            \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#componentName\"\n                          }\n                        ],\n                        \"type\": \"ExternalReference\"\n                      },\n                      \"value\": \"Control Unit\",\n                      \"valueType\": \"xs:string\",\n                      \"displayName\": [\n                        {\n                          \"language\": \"en\",\n                          \"text\": \"Component name\"\n                        }\n                      ],\n                      \"idShort\": \"componentName\"\n                    },\n                    {\n                      \"modelType\": \"Property\",\n                      \"semanticId\": {\n                        \"keys\": [\n                          {\n                            \"type\": \"ConceptDescription\",\n                            \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#partNumber\"\n                          }\n                        ],\n                        \"type\": \"ExternalReference\"\n                      },\n                      \"value\": \"ECU4711\",\n                      \"valueType\": \"xs:string\",\n                      \"displayName\": [\n                        {\n                          \"language\": \"en\",\n                          \"text\": \"Part number\"\n                        }\n                      ],\n                      \"idShort\": \"partNumber\"\n                    },\n                    {\n                      \"modelType\": \"Property\",\n                      \"semanticId\": {\n                        \"keys\": [\n                          {\n                            \"type\": \"ConceptDescription\",\n                            \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#manufacturerSerialNumber\"\n                          }\n                        ],\n                        \"type\": \"ExternalReference\"\n                      },\n                      \"value\": \"ECU20646005020221\",\n                      \"valueType\": \"xs:string\",\n                      \"displayName\": [\n                        {\n                          \"language\": \"en\",\n                          \"text\": \"Manufacturer serial number\"\n                        }\n                      ],\n                      \"idShort\": \"manufacturerSerialNumber\"\n                    },\n                    {\n                      \"modelType\": \"Property\",\n                      \"semanticId\": {\n                        \"keys\": [\n                          {\n                            \"type\": \"ConceptDescription\",\n                            \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#manufacturerPartNumber\"\n                          }\n                        ],\n                        \"type\": \"ExternalReference\"\n                      },\n                      \"value\": \"ECU-2025.02\",\n                      \"valueType\": \"xs:string\",\n                      \"displayName\": [\n                        {\n                          \"language\": \"en\",\n                          \"text\": \"Manufacturer part number\"\n                        }\n                      ],\n                      \"idShort\": \"manufacturerPartNumber\"\n                    },\n                    {\n                      \"modelType\": \"Property\",\n                      \"semanticId\": {\n                        \"keys\": [\n                          {\n                            \"type\": \"ConceptDescription\",\n                            \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#serialNumber\"\n                          }\n                        ],\n                        \"type\": \"ExternalReference\"\n                      },\n                      \"value\": \"ECU20646005020221\",\n                      \"valueType\": \"xs:string\",\n                      \"displayName\": [\n                        {\n                          \"language\": \"en\",\n                          \"text\": \"Serial number\"\n                        }\n                      ],\n                      \"idShort\": \"serialNumber\"\n                    }\n                  ]\n                }\n              ]\n            }\n          ]\n        }\n      ]\n    },\n    {\n      \"modelType\": \"SubmodelElementCollection\",\n      \"description\": [\n        {\n          \"language\": \"en\",\n          \"text\": \"This entity groups all meta information properties. Meta information properties give hints for a Catena-X data consumer to better understand, how this data set was created on the Catena-X data provider side.\"\n        }\n      ],\n      \"displayName\": [\n        {\n          \"language\": \"en\",\n          \"text\": \"Meta Information\"\n        }\n      ],\n      \"idShort\": \"MetaInformation\",\n      \"value\": [\n        {\n          \"modelType\": \"Property\",\n          \"semanticId\": {\n            \"keys\": [\n              {\n                \"type\": \"ConceptDescription\",\n                \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#selectionCriteria\"\n              }\n            ],\n            \"type\": \"ExternalReference\"\n          },\n          \"value\": \"2023-12-31T23:59:59\",\n          \"valueType\": \"xs:string\",\n          \"displayName\": [\n            {\n              \"language\": \"en\",\n              \"text\": \"Selection criteria\"\n            }\n          ],\n          \"idShort\": \"selectionCriteria\"\n        },\n        {\n          \"modelType\": \"Property\",\n          \"semanticId\": {\n            \"keys\": [\n              {\n                \"type\": \"ConceptDescription\",\n                \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#selectionStart\"\n              }\n            ],\n            \"type\": \"ExternalReference\"\n          },\n          \"value\": \"2023-01-01T00:00:00\",\n          \"valueType\": \"xs:string\",\n          \"displayName\": [\n            {\n              \"language\": \"en\",\n              \"text\": \"Selection start\"\n            }\n          ],\n          \"idShort\": \"selectionStart\"\n        },\n        {\n          \"modelType\": \"Property\",\n          \"semanticId\": {\n            \"keys\": [\n              {\n                \"type\": \"ConceptDescription\",\n                \"value\": \"urn:samm:io.catenax.fleet.vehicles:3.0.0#selectionEnd\"\n              }\n            ],\n            \"type\": \"ExternalReference\"\n          },\n          \"value\": \"Export of vehicles that are involved in the linked qualityTask and FleetClaim list.\",\n          \"valueType\": \"xs:string\",\n          \"displayName\": [\n            {\n              \"language\": \"en\",\n              \"text\": \"Selection end\"\n            }\n          ],\n          \"idShort\": \"selectionEnd\"\n        }\n      ]\n    }\n  ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{basyx-dsp-base-url}}/submodels",
+							"host": [
+								"{{basyx-dsp-base-url}}"
+							],
+							"path": [
+								"submodels"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "ConsumerEdc",
+			"item": [
+				{
+					"name": "Get provider catalog",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const dcat = pm.response.json()[\"dcat:dataset\"];",
+									"",
+									"// use first asset found in the catalog, fails if catalog is empty",
+									"let assetId = dcat[\"@id\"];",
+									"if (typeof(assetId) == \"undefined\") {",
+									"    assetId = dcat[0][\"@id\"];",
+									"}",
+									"",
+									"pm.collectionVariables.set(\"target-asset\", assetId);",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"@context\": {\n        \"edc\": \"https://w3id.org/edc/v0.0.1/ns/\"\n    },\n    \"@type\": \"CatalogRequest\",\n    \"protocol\": \"dataspace-protocol-http\",\n    \"counterPartyAddress\": \"{{basyx-dsp-protocol-url}}\", \n    \"counterPartyId\": \"{{basyx-dsp-id}}\"\n}"
+						},
+						"url": {
+							"raw": "{{cons-cplane-management}}/v3/catalog/request",
+							"host": [
+								"{{cons-cplane-management}}"
+							],
+							"path": [
+								"v3",
+								"catalog",
+								"request"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Initiate negotiation",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"negotiation-id\", pm.response.json()['@id']);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"@context\": {\n        \"edc\": \"https://w3id.org/edc/v0.0.1/ns/\"\n    },\n    \"@type\": \"ContractRequest\",\n    \"connectorId\": \"{{basyx-dsp-id}}\",\n    \"counterPartyAddress\": \"{{basyx-dsp-protocol-url}}\",\n    \"protocol\": \"dataspace-protocol-http\",\n    \"policy\": {\n        \"@context\" : \"http://www.w3.org/ns/odrl.jsonld\",\n        \"@id\": \"some-id\",\n        \"@type\": \"Offer\",\n        \"assigner\": \"{{basyx-dsp-id}}\",\n        \"assignee\": \"consumer\",\n        \"target\": \"{{target-asset}}\",\n        \"permission\": [],\n        \"prohibition\": [],\n        \"obligation\": []\n    }\n}"
+						},
+						"url": {
+							"raw": "{{cons-cplane-management}}/v3/contractnegotiations",
+							"host": [
+								"{{cons-cplane-management}}"
+							],
+							"path": [
+								"v3",
+								"contractnegotiations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get negotiation result",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"agreement-id\", pm.response.json()['contractAgreementId']);",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"//setTimeout(function(){}, 5000) // Wait until contract is agreed."
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{cons-cplane-management}}/v3/contractnegotiations/{{negotiation-id}}",
+							"host": [
+								"{{cons-cplane-management}}"
+							],
+							"path": [
+								"v3",
+								"contractnegotiations",
+								"{{negotiation-id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Initiate Consumer Pull transfer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"transfer-id\", pm.response.json()['@id']);",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "X-Api-Key",
+								"value": "password"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"@context\": {\n        \"edc\": \"https://w3id.org/edc/v0.0.1/ns/\"\n    },\n    \"@type\": \"TransferRequestDto\",\n    \"protocol\": \"dataspace-protocol-http\",\n    \"assetId\": \"{{target-asset}}\",\n    \"contractId\": \"{{agreement-id}}\",\n    \"counterPartyAddress\": \"http://basyx-starter-app:8090/dsp\",\n    \"connectorId\": \"provider\",\n    \"transferType\": \"HttpData-PULL\"\n}"
+						},
+						"url": {
+							"raw": "{{cons-cplane-management}}/v3/transferprocesses",
+							"host": [
+								"{{cons-cplane-management}}"
+							],
+							"path": [
+								"v3",
+								"transferprocesses"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fetch EDR token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json()",
+									"const endpoint = response[\"endpoint\"]",
+									"const auth = response[\"authorization\"]",
+									"pm.collectionVariables.set(\"asset-endpoint\", endpoint)",
+									"pm.collectionVariables.set(\"asset-auth-token\", \"Bearer \" + auth)"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{cons-cplane-management}}/v3/edrs/{{transfer-id}}/dataaddress",
+							"host": [
+								"{{cons-cplane-management}}"
+							],
+							"path": [
+								"v3",
+								"edrs",
+								"{{transfer-id}}",
+								"dataaddress"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Pull asset data",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Data GET request successful\", function() {",
+									"   pm.expect(pm.response.code).to.equal(200);",
+									"   const response = pm.response.json();",
+									"   pm.expect(response.id.toString()).to.equal(pm.collectionVariables.get(\"target-asset\").toString());",
+									"   pm.expect(response.timestamp != null).to.equal(true);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{asset-auth-token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{asset-endpoint}}",
+							"host": [
+								"{{asset-endpoint}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Pull other asset data should fail",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Data GET request for other asset-id denied\", function() {",
+									"   pm.expect(pm.response.code>400).to.equal(true)",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{asset-auth-token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{basyx-dsp-base-url}}/data-assets/ea0ceaa8-0c7f-4c64-8166-9cc3d542bfc7",
+							"host": [
+								"{{basyx-dsp-base-url}}"
+							],
+							"path": [
+								"data-assets",
+								"ea0ceaa8-0c7f-4c64-8166-9cc3d542bfc7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete should fail",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"DELETE request denied\", function() {",
+									"    pm.expect(pm.response.code>400).to.equal(true)",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{asset-auth-token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{asset-endpoint}}",
+							"host": [
+								"{{asset-endpoint}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "DevTest",
+			"item": [
+				{
+					"name": "all_aas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{basyx-dsp-base-url}}/all_aas",
+							"host": [
+								"{{basyx-dsp-base-url}}"
+							],
+							"path": [
+								"all_aas"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "all_submodels",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{basyx-dsp-base-url}}/all_submodels",
+							"host": [
+								"{{basyx-dsp-base-url}}"
+							],
+							"path": [
+								"all_submodels"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "all_rules",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{basyx-dsp-base-url}}/all_rules",
+							"host": [
+								"{{basyx-dsp-base-url}}"
+							],
+							"path": [
+								"all_rules"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "cons-cplane-management",
+			"value": "http://consumer-controlplane:9010/management",
+			"type": "default"
+		},
+		{
+			"key": "negotiation-id",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "agreement-id",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "transfer-id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "basyx-dsp-protocol-url",
+			"value": "http://basyx-starter-app:8090/dsp",
+			"type": "string"
+		},
+		{
+			"key": "basyx-dsp-base-url",
+			"value": "http://basyx-starter-app:8090",
+			"type": "string"
+		},
+		{
+			"key": "basyx-dsp-id",
+			"value": "provider",
+			"type": "string"
+		},
+		{
+			"key": "target-asset",
+			"value": ""
+		},
+		{
+			"key": "asset-endpoint",
+			"value": ""
+		},
+		{
+			"key": "asset-auth-token",
+			"value": ""
+		},
+		{
+			"key": "basyx_admin_token",
+			"value": ""
+		}
+	]
+}

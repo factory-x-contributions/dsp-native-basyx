@@ -1,0 +1,88 @@
+services:
+
+  basyx-starter-app:
+    container_name: basyx-starter-app
+    image: basyxstarterapp:latest
+    environment:
+      - basyx.feature.authorization.rbac.file=file:/app/rules.json
+      - spring.security.oauth2.resourceserver.jwt.issuer-uri=http://keycloak:8080/realms/BaSyx
+      - org.factoryx.library.hostname=basyx-starter-app
+#      - logging.level.org.springframework=TRACE
+    ports:
+      - 8090:8090
+      - 5005:5005
+    networks:
+      - dsp-native-basyx
+
+  consumer-controlplane:
+    container_name: consumer-controlplane
+    image: ghcr.io/factory-x-contributions/basicedc:0.11.1
+    pull_policy: missing
+
+    env_file:
+      - consumer-controlplane.env
+    depends_on:
+      - consumer-postgres-controlplane
+    ports:
+      - 9000:9000 # Default port
+      - 9010:9010 # Data management API
+      - 9020:9020 # DSP API
+      - 9030:9030 # Validation API
+      - 9040:9040 # API for data plane registration
+      - 9050:9050 # Control API
+      - 9060:9060 # Information API
+    networks:
+      - dsp-native-basyx
+
+
+  consumer-postgres-controlplane:
+    container_name: consumer-postgres-controlplane
+    image: postgres:16.4-alpine
+    ports:
+      - 5433:5432
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=edc-controlplane
+    networks:
+      - dsp-native-basyx
+
+  keycloak:
+    image: keycloak/keycloak:26.2
+    container_name: keycloak
+    environment:
+      KC_HOSTNAME: keycloak
+      KC_SPI_INITIALIZER_ISSUER_BASE_URI: http://localhost:8080
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: keycloak-admin
+      KC_HEALTH_ENABLED: true
+    command: ["start-dev", "--import-realm"]
+    ports:
+      - 8080:8080
+
+    volumes:
+      - keycloak_data:/opt/jboss/keycloak/standalone/data
+      - ./keycloak/realm:/opt/keycloak/data/import
+    healthcheck:
+      test: ['CMD-SHELL', '[ -f /tmp/HealthCheck.java ] || echo "public class HealthCheck { public static void main(String[] args) throws java.lang.Throwable { System.exit(java.net.HttpURLConnection.HTTP_OK == ((java.net.HttpURLConnection)new java.net.URL(args[0]).openConnection()).getResponseCode() ? 0 : 1); } }" > /tmp/HealthCheck.java && java /tmp/HealthCheck.java http://localhost:8080/health/live']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+    networks:
+      - dsp-native-basyx
+
+  dsp-native-basyx-dns-host-resolver:
+    container_name: resolver
+    image: dvdarias/docker-hoster:latest
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock
+      - /etc/hosts:/tmp/hosts
+
+volumes:
+  keycloak_data:
+
+networks:
+  dsp-native-basyx:
+    name: dsp-native-basyx
+    driver: bridge
