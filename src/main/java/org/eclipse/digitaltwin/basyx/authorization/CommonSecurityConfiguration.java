@@ -25,27 +25,22 @@
 
 package org.eclipse.digitaltwin.basyx.authorization;
 
-import lombok.extern.slf4j.Slf4j;
-import org.eclipse.digitaltwin.basyx.aasrepository.feature.authorization.AuthorizedAasRepository;
-import org.factoryx.library.connector.embedded.provider.service.helpers.EnvService;
+import org.eclipse.digitaltwin.basyx.http.CorsPathPatternProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
 
-import java.net.URI;
-import java.util.Arrays;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Common configurations for security
@@ -58,19 +53,40 @@ public class CommonSecurityConfiguration {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CommonSecurityConfiguration.class);
 
+    /**
+     * This method was refactored in way, that the security filter chain which is created here, behaves exactly like
+     * in the original implementation from the BaSyx project, as long as the property
+     * <p>
+     * basyx.feature.authorization.narrowsecuritymatcher
+     * <p>
+     * is set to the default value ("false").
+     * <p>
+     * But if this is set to "true", then a httpSecurity matcher will be applied that makes sure, that this
+     * security filter chain will only be applied to the endpoints that are related to the specific BaSyx REST api.
+     *
+     * @param http
+     * @param narrowSecurityMatcher
+     * @return
+     * @throws Exception
+     */
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http,
+    public SecurityFilterChain filterChain(HttpSecurity http, List<CorsPathPatternProvider> configurationUrlProviders,
                                            @Value("${basyx.feature.authorization.narrowsecuritymatcher:false}")
                                            boolean narrowSecurityMatcher) throws Exception {
-        String[] matchers = {"/**", "/shells/**", "/submodels/**", "/lookup/**", "/actuator/health/**",
-                "/swagger-ui/**", "/v3/**", "/api-docs/**", "/api-docs/swagger-config/**", "/description"};
-        if (narrowSecurityMatcher) {
-            LOGGER.info("Narrow Security Matcher enabled");
-            // remove wildcard ("/**") at index 0
-            matchers = Arrays.copyOfRange(matchers, 1, matchers.length);
-            http.securityMatcher(matchers);
+        String [] initialMatchers = {"/**"};
+        if(narrowSecurityMatcher){
+            Set<String> matcherSet = new HashSet<>(Set.of("/actuator/health/**", "/swagger-ui/**", "/v3/**",
+                    "/api-docs/**", "/api-docs/swagger-config/**", "/description"));
+
+            configurationUrlProviders.forEach(provider -> matcherSet.add(provider.getPathPattern()));
+            initialMatchers = matcherSet.toArray(new String[0]);
+
+            http.securityMatcher(initialMatchers);
+            LOGGER.info("Narrow Security Matcher enabled for patterns: {}", matcherSet);
         }
-        final String[] finalMatchers = matchers;
+
+        final String[] finalMatchers = initialMatchers;
+
         http
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/actuator/health/**").permitAll()

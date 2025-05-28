@@ -7,17 +7,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.core.annotation.Order;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.web.SecurityFilterChain;
-
-import java.net.URI;
-import java.util.Arrays;
 
 
 /**
@@ -32,8 +23,7 @@ import java.util.Arrays;
 @Slf4j
 @EntityScan(basePackages = {"org.factoryx.library"})
 @EnableJpaRepositories(basePackages = {"org.factoryx.library"})
-@ComponentScan(basePackages = {"org.factoryx.dspnativebasyx", "org.factoryx.library", "org.eclipse.digitaltwin.basyx",
-        "org.factoryx.library.connector.embedded.provider.controller"})
+@ComponentScan(basePackages = {"org.factoryx.dspnativebasyx", "org.factoryx.library", "org.eclipse.digitaltwin.basyx"})
 public class BaSyxStarterApplication implements CommandLineRunner {
 
     private final RbacStorage rbacStorage;
@@ -63,24 +53,4 @@ public class BaSyxStarterApplication implements CommandLineRunner {
         }
     }
 
-    @Bean
-    @Order(2)
-    public SecurityFilterChain openSecurityFilterchain(HttpSecurity http, EnvService envService) throws Exception {
-        String dspPath = URI.create(envService.getOwnDspUrl()).getPath() + "/**";
-        String[] openPaths = {dspPath, "/all_rules", "/all_aas", "/all_submodels"};
-
-        log.info("Initializing Open SecurityFilterChain for dsp-protocol-lib: {}", Arrays.toString(openPaths));
-
-        http.securityMatcher(openPaths);
-
-        http.sessionManagement(sessions -> {
-            sessions.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        }).csrf(AbstractHttpConfigurer::disable);
-
-        http.authorizeHttpRequests(requests -> {
-            requests.requestMatchers(openPaths).permitAll();
-        });
-
-        return http.build();
-    }
 }
