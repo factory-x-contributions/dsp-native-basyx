@@ -3,10 +3,7 @@
 ### What is does
 
 This is pretty much a standard Spring Boot Project, that has dependencies on the dsp-protocol-library as well as some 
-components of the [Basyx framework](https://mvnrepository.com/artifact/org.eclipse.digitaltwin.basyx).  
-We had to import the basyx.authorization module as source code, because some refactoring in the default security filter
-chain of BaSyx was necessary in order to make sure that the BaSyx endpoints get authenticated via keycloak as expected 
-while also not interfering with the dsp-related endpoints. 
+components of the [Basyx framework](https://mvnrepository.com/artifact/org.eclipse.digitaltwin.basyx).
 
 ### Build it
 
