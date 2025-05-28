@@ -53,68 +53,24 @@
             <groupId>org.eclipse.digitaltwin.basyx</groupId>
             <artifactId>basyx.aasrepository.component</artifactId>
             <version>2.0.0-milestone-05</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.eclipse.digitaltwin.basyx</groupId>
-                    <artifactId>basyx.authorization</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <dependency>
             <groupId>org.eclipse.digitaltwin.basyx</groupId>
             <artifactId>basyx.submodelrepository.component</artifactId>
             <version>2.0.0-milestone-05</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.eclipse.digitaltwin.basyx</groupId>
-                    <artifactId>basyx.authorization</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.eclipse.digitaltwin.basyx</groupId>
             <artifactId>basyx.aasdiscoveryservice.component</artifactId>
             <version>2.0.0-milestone-05</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.eclipse.digitaltwin.basyx</groupId>
-                    <artifactId>basyx.authorization</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <dependency>
             <groupId>org.eclipse.digitaltwin.basyx</groupId>
             <artifactId>basyx.authorization.rules.rbac.backend.inmemory</artifactId>
             <version>2.0.0-milestone-05</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.eclipse.digitaltwin.basyx</groupId>
-                    <artifactId>basyx.authorization</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
-
-        <!-- Dependencies for local version basyx.authorization-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-actuator-autoconfigure</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.reflections</groupId>
-            <artifactId>reflections</artifactId>
-            <version>0.10.2</version>
-        </dependency>
-
 
 
 
