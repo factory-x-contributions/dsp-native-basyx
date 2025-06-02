@@ -46,4 +46,8 @@ public class SubmodelDataAsset implements DataAsset {
         }
     }
 
+    public String getSubmodelId() {
+        return submodel.getId();
+    }
+
 }

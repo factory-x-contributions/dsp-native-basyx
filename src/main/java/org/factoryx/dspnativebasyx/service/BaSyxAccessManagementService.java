@@ -22,6 +22,7 @@ public class BaSyxAccessManagementService implements DataAssetManagementService 
 
     private final AasBackend aasBackend;
     private final SubmodelBackend submodelBackend;
+    private final RbacDCPValidationService rbacDCPValidationService;
 
     // provisional mapping helpers in order to cope with the fact that the dsp-protocol-lib
     // currently works with UUID typed identfiers and BaSyx with Strings.
@@ -30,17 +31,35 @@ public class BaSyxAccessManagementService implements DataAssetManagementService 
     private Map<UUID, String> aasIdsToUuidMapping = new ConcurrentHashMap<>();
 
 
-    public BaSyxAccessManagementService(AasBackend aasBackend, SubmodelBackend submodelBackend) {
+    public BaSyxAccessManagementService(AasBackend aasBackend, SubmodelBackend submodelBackend,
+                                        RbacDCPValidationService rbacDCPValidationService) {
         this.aasBackend = aasBackend;
         this.submodelBackend = submodelBackend;
+        this.rbacDCPValidationService = rbacDCPValidationService;
     }
 
 
     @Override
     public DataAsset getById(UUID id) {
-        // TODO: we should modify the dsp-protocol-lib so that this method also gets credential
-        // information (passed on from the DspValidationService) as a parameter in order to allow us here
-        // implement a mapping from these credential findings to the roles
+        if (aasIdsToUuidMapping.containsKey(id)) {
+            var aasOptional = aasBackend.findById(aasIdsToUuidMapping.get(id));
+            if (aasOptional.isPresent()) {
+                return new AasDataAsset(aasOptional.get(), id);
+            }
+        } else if (submodelIdsToUuidMapping.containsKey(id)) {
+            var submodelOptional = submodelBackend.findById(submodelIdsToUuidMapping.get(id));
+            if (submodelOptional.isPresent()) {
+                return new SubmodelDataAsset(submodelOptional.get(), id);
+            }
+        }
+        log.warn("No such id {}", id);
+        return null;
+    }
+
+
+    @Override
+    public DataAsset getByIdForProperties(UUID id, Map<String, String> partnerProperties) {
+
         if (aasIdsToUuidMapping.containsKey(id)) {
             var aasOptional = aasBackend.findById(aasIdsToUuidMapping.get(id));
             if (aasOptional.isPresent()) {
@@ -57,21 +76,25 @@ public class BaSyxAccessManagementService implements DataAssetManagementService 
     }
 
     @Override
-    public List<? extends DataAsset> getAll() {
-        // TODO: we should modify the dsp-protocol-lib so that this method also gets credential
-        // information (passed on from the DspValidationService) as a parameter in order to allow us here
-        // implement a mapping from these credential findings to the roles
+    public List<? extends DataAsset> getAll(Map<String, String> partnerProperties) {
         ArrayList<DataAsset> dataAssets = new ArrayList<>();
         aasBackend.findAll().forEach(asset -> {
             UUID uuid = basyxIdsToUuidMapping.computeIfAbsent(asset.getId(), any -> UUID.randomUUID());
             aasIdsToUuidMapping.put(uuid, asset.getId());
-            dataAssets.add(new AasDataAsset(asset, uuid));
+            DataAsset dataAsset = new AasDataAsset(asset, uuid);
+            if (rbacDCPValidationService.validateReadAccessForDataAssetAndPartnerProperties(dataAsset, partnerProperties)) {
+                dataAssets.add(dataAsset);
+            }
+
         });
 
         submodelBackend.findAll().forEach(submodel -> {
             UUID uuid = basyxIdsToUuidMapping.computeIfAbsent(submodel.getId(), any -> UUID.randomUUID());
             submodelIdsToUuidMapping.put(uuid, submodel.getId());
-            dataAssets.add(new SubmodelDataAsset(submodel, uuid));
+            DataAsset dataAsset = new SubmodelDataAsset(submodel, uuid);
+            if (rbacDCPValidationService.validateReadAccessForDataAssetAndPartnerProperties(dataAsset, partnerProperties)) {
+                dataAssets.add(dataAsset);
+            }
         });
         return dataAssets;
 
