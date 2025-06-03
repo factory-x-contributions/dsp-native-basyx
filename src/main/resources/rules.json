@@ -30,7 +30,7 @@
     "targetInformation": {
       "@type": "submodel",
       "submodelIds": "*",
-      "submodelElementIdShortPaths": "*"
+      "submodelElementIdShortPaths": ["vehicles","MetaInformation"]
     }
   }
 ]

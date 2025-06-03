@@ -1,11 +1,14 @@
 package org.factoryx.dspnativebasyx.model;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.eclipse.digitaltwin.aas4j.v3.model.Referable;
 import org.eclipse.digitaltwin.aas4j.v3.model.Submodel;
 import org.factoryx.library.connector.embedded.provider.interfaces.DataAsset;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static org.factoryx.dspnativebasyx.model.AasDataAsset.MAPPER;
 
@@ -48,6 +51,10 @@ public class SubmodelDataAsset implements DataAsset {
 
     public String getSubmodelId() {
         return submodel.getId();
+    }
+
+    public List<String> getSubmodelElements(){
+        return submodel.getSubmodelElements().stream().map(Referable::getIdShort).toList();
     }
 
 }

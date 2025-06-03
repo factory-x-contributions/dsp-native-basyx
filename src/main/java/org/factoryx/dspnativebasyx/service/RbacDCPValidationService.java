@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -93,7 +94,9 @@ public class RbacDCPValidationService {
         for (RbacRule rule : submodelReadAccessRulesList) {
             if(rule.getRole().equals(mappedRole)) {
                 if (rule.getTargetInformation() instanceof SubmodelTargetInformation submodelTargetInformation) {
-                    if (submodelTargetInformation.getSubmodelIds().contains("*") || submodelTargetInformation.getSubmodelIds().contains(targetId)) {
+                    if ((submodelTargetInformation.getSubmodelIds().contains("*") || submodelTargetInformation.getSubmodelIds().contains(targetId))
+                            && (submodelTargetInformation.getSubmodelElementIdShortPaths().contains("*")
+                            || new HashSet<>(submodelTargetInformation.getSubmodelElementIdShortPaths()).containsAll(submodelDataAsset.getSubmodelElements()))) {
                         log.info("Granted access to Submodel {} for role {}", targetId, mappedRole);
                         return true;
                     }
