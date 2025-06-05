@@ -49,4 +49,8 @@ public class AasDataAsset implements DataAsset {
             throw new RuntimeException(e);
         }
     }
+
+    public String getAssetId() {
+        return asset.getAssetInformation().getGlobalAssetId();
+    }
 }
