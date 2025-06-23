@@ -6,9 +6,8 @@ import org.factoryx.library.connector.embedded.provider.service.helpers.EnvServi
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 
 /**
@@ -21,9 +20,10 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
  */
 @SpringBootApplication
 @Slf4j
-@EntityScan(basePackages = {"org.factoryx.library"})
-@EnableJpaRepositories(basePackages = {"org.factoryx.library"})
+//@EntityScan(basePackages = {"org.factoryx.library"})
+//@EnableJpaRepositories(basePackages = {"org.factoryx.library"})
 @ComponentScan(basePackages = {"org.factoryx.dspnativebasyx", "org.factoryx.library", "org.eclipse.digitaltwin.basyx"})
+@EnableMongoRepositories(basePackages = {"org.factoryx.library"})
 public class BaSyxStarterApplication implements CommandLineRunner {
 
     private final RbacStorage rbacStorage;
