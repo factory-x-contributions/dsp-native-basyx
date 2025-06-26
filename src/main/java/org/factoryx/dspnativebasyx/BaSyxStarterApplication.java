@@ -20,8 +20,6 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
  */
 @SpringBootApplication
 @Slf4j
-//@EntityScan(basePackages = {"org.factoryx.library"})
-//@EnableJpaRepositories(basePackages = {"org.factoryx.library"})
 @ComponentScan(basePackages = {"org.factoryx.dspnativebasyx", "org.factoryx.library", "org.eclipse.digitaltwin.basyx"})
 @EnableMongoRepositories(basePackages = {"org.factoryx.library"})
 public class BaSyxStarterApplication implements CommandLineRunner {
