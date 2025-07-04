@@ -7,19 +7,10 @@ services:
       - basyx.feature.authorization.rbac.file=file:/app/rules.json
       - spring.security.oauth2.resourceserver.jwt.issuer-uri=http://keycloak:8080/realms/BaSyx
       - org.factoryx.library.hostname=basyx-starter-app
-#      - logging.level.org.springframework=TRACE
-#      - mongo.initdb.root.username=mongoAdmin
-#      - MONGO_INITDB_ROOT_USERNAME: mongoAdmin
-#      - mongo.initdb.root.password=mongoPassword
-#      MONGO_INITDB_ROOT_PASSWORD: mongoPassword
-#    SPRING_DATA_MONGODB_PORT: 27017
       - spring.data.mongodb.uri=mongodb://mongoAdmin:mongoPassword@mongo
       - spring.data.mongodb.port=27017
-#    SPRING_DATA_MONGODB_DATABASE: factoryx-mongo-db
       - spring.data.mongodb.database=factoryx-mongo-db
-#    SPRING_DATA_MONGODB_USERNAME: user
       - spring.data.mongodb.username=mongoAdmin
-#    SPRING_DATA_MONGODB_PASSWORD: password
       - spring.data.mongodb.password=mongoPassword
 
     depends_on:
