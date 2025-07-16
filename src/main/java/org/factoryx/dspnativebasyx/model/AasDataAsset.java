@@ -1,10 +1,11 @@
 package org.factoryx.dspnativebasyx.model;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.eclipse.digitaltwin.aas4j.v3.model.AssetAdministrationShell;
 import org.factoryx.library.connector.embedded.provider.interfaces.DataAsset;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.UUID;
 
@@ -44,8 +45,10 @@ public class AasDataAsset implements DataAsset {
     @Override
     public byte[] getDtoRepresentation() {
         try {
-            return MAPPER.writeValueAsBytes(asset);
-        } catch (JsonProcessingException e) {
+            ObjectNode node = MAPPER.convertValue(asset, ObjectNode.class);
+            node.put("modelType", "AssetAdministrationShell");
+            return node.toString().getBytes(StandardCharsets.UTF_8);
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }

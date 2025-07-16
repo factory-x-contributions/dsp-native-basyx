@@ -7,7 +7,14 @@ services:
       - basyx.feature.authorization.rbac.file=file:/app/rules.json
       - spring.security.oauth2.resourceserver.jwt.issuer-uri=http://keycloak:8080/realms/BaSyx
       - org.factoryx.library.hostname=basyx-starter-app
-#      - logging.level.org.springframework=TRACE
+      - spring.data.mongodb.uri=mongodb://mongoAdmin:mongoPassword@mongo
+      - spring.data.mongodb.port=27017
+      - spring.data.mongodb.database=factoryx-mongo-db
+      - spring.data.mongodb.username=mongoAdmin
+      - spring.data.mongodb.password=mongoPassword
+
+    depends_on:
+      - mongo
     ports:
       - 8090:8090
       - 5005:5005
@@ -72,6 +79,22 @@ services:
     networks:
       - dsp-native-basyx
 
+  mongo:
+    image: mongo:5.0.10
+    ports:
+      - "27017:27017"
+    container_name: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mongoAdmin
+      MONGO_INITDB_ROOT_PASSWORD: mongoPassword
+    restart: always
+    healthcheck:
+      test: mongo
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - dsp-native-basyx
   dsp-native-basyx-dns-host-resolver:
     container_name: resolver
     image: dvdarias/docker-hoster:latest
