@@ -1,0 +1,127 @@
+# Default values for basyxstarterapplication.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: basyxstarterapp
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 8080
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+# Application specific configuration
+application:
+  jvm:
+    opts: "-Xms512m -Xmx1024m"
+  # Toggle for using embedded HSQLDB instead of PostgreSQL
+  useHsqldb: false
+  env:
+    - name: BASYX_FEATURE_AUTHORIZATION_RBAC_FILE
+      value: "/app/rules.json"
+    - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI
+      value: "http://keycloak:8080/realms/BaSyx"
+    - name: ORG_FACTORYX_LIBRARY_HOSTNAME
+      value: "basyx-starter-app"
+
+# Secret management
+secrets:
+  # -- Create secrets for MongoDB and PostgreSQL
+  create: true
+  mongodb:
+    uri: "mongodb://user:password@mongodb:27017/basyx"
+  postgresql:
+    uri: "jdbc:postgresql://postgresql:5432/basyx"
+    username: "user"
+    password: "password"
+
+# Dependency configurations
+mongodb:
+  enabled: true
+  auth:
+    rootUser: "root"
+    rootPassword: "rootpassword"
+    users:
+    - "user"
+    passwords:
+    - "password"
+    databases:
+    - "basyx"
+
+postgresql:
+  enabled: true
+  auth:
+    database: "basyx"
+    username: "user"
+    password: "password"

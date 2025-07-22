@@ -1,0 +1,15 @@
+apiVersion: v2
+name: basyxstarterapplication
+description: A Helm chart for the BasyxStarterApplication Spring Boot app
+type: application
+version: 0.1.0
+appVersion: "0.0.1-SNAPSHOT"
+dependencies:
+- name: mongodb
+  version: "14.7.0"
+  repository: "https://charts.bitnami.com/bitnami"
+  condition: mongodb.enabled
+- name: postgresql
+  version: "14.0.5"
+  repository: "https://charts.bitnami.com/bitnami"
+  condition: postgresql.enabled
