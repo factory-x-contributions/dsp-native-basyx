@@ -5,10 +5,10 @@
 replicaCount: 1
 
 image:
-  repository: basyxstarterapp
+  repository: ghcr.io/factory-x-contributions/basyx-starter-application
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: ""
+  tag: "0.0.1"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -50,7 +50,8 @@ ingress:
     - host: chart-example.local
       paths:
         - path: /
-          pathType: ImplementationSpecific
+          pathType: Prefix
+          servicePort: 8090
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:
@@ -94,34 +95,25 @@ application:
       value: "http://keycloak:8080/realms/BaSyx"
     - name: ORG_FACTORYX_LIBRARY_HOSTNAME
       value: "basyx-starter-app"
+    - name: SPRING_DATA_MONGODB_URI
+      value: "mongodb://mongoAdmin:mongoPassword@mongo"
+    - name: SPRING_DATA_MONGODB_PORT
+      value: 27017
+    - name: SPRING_DATA_MONGODB_DATABASE
+      value: "factoryx-mongo-db"
+    - name: SPRING_DATA_MONGODB_USERNAME
+      value: "mongoAdmin"
+    - name: SPRING_DATA_MONGODB_PASSWORD
+      value: "mongoPassword"
+
 
 # Secret management
 secrets:
-  # -- Create secrets for MongoDB and PostgreSQL
+  # -- Create secrets for MongoDB
   create: true
   mongodb:
-    uri: "mongodb://user:password@mongodb:27017/basyx"
-  postgresql:
-    uri: "jdbc:postgresql://postgresql:5432/basyx"
-    username: "user"
-    password: "password"
-
-# Dependency configurations
-mongodb:
-  enabled: true
-  auth:
-    rootUser: "root"
-    rootPassword: "rootpassword"
-    users:
-    - "user"
-    passwords:
-    - "password"
-    databases:
-    - "basyx"
-
-postgresql:
-  enabled: true
-  auth:
-    database: "basyx"
-    username: "user"
-    password: "password"
+    hostname: mongodb
+    port: "27017"
+    database: "factoryx-mongo-db"
+    username: "mongoAdmin"
+    password: "mongoPassword"

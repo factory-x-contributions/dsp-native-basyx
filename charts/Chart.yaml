@@ -1,0 +1,18 @@
+apiVersion: v2
+name: dsp-basyx
+description: A Helm chart for the BasyxStarterApplication Spring Boot app
+type: application
+version: 0.1.0
+appVersion: "0.0.1"
+
+dependencies:
+  - name: basyxstarterapplication
+    version: 0.1.0
+    repository: file://basyxstarterapplication
+    condition: basyxstarterapplication.enabled
+  - name: keycloak
+    version: 24.5.8
+    repository: https://charts.bitnami.com/bitnami
+  - name: mongodb
+    version: 12.1.31
+    repository: https://charts.bitnami.com/bitnami

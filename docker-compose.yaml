@@ -2,7 +2,7 @@ services:
 
   basyx-starter-app:
     container_name: basyx-starter-app
-    image: dsp-native-basyx:latest
+    image: ghcr.io/factory-x-contributions/dsp-native-basyx:0.0.1
     environment:
       - basyx.feature.authorization.rbac.file=file:/app/rules.json
       - spring.security.oauth2.resourceserver.jwt.issuer-uri=http://keycloak:8080/realms/dsp-native-basyx

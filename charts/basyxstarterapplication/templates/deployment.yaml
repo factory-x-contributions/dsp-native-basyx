@@ -37,27 +37,33 @@ spec:
             - name: JAVA_OPTS
               value: {{ .Values.application.jvm.opts }}
             {{- if not .Values.application.useHsqldb }}
+            # secret fields via SecretKeyRef
+            - name: SPRING_DATA_MONGODB_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "basyxstarterapplication.fullname" . }}-secrets
+                  key: mongodb-port
+            - name: SPRING_DATA_MONGODB_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "basyxstarterapplication.fullname" . }}-secrets
+                  key: mongodb-database
+            - name: SPRING_DATA_MONGODB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "basyxstarterapplication.fullname" . }}-secrets
+                  key: mongodb-username
+            - name: SPRING_DATA_MONGODB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "basyxstarterapplication.fullname" . }}-secrets
+                  key: mongodb-password
             - name: SPRING_DATA_MONGODB_URI
               valueFrom:
                 secretKeyRef:
                   name: {{ include "basyxstarterapplication.fullname" . }}-secrets
                   key: mongodb-uri
-            - name: SPRING_DATASOURCE_URL
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "basyxstarterapplication.fullname" . }}-secrets
-                  key: postgresql-uri
-            - name: SPRING_DATASOURCE_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "basyxstarterapplication.fullname" . }}-secrets
-                  key: postgresql-username
-            - name: SPRING_DATASOURCE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "basyxstarterapplication.fullname" . }}-secrets
-                  key: postgresql-password
-            {{- end }}
+              {{- end }}
           envFrom:
             - configMapRef:
                 name: {{ include "basyxstarterapplication.fullname" . }}-config

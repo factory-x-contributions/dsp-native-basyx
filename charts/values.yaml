@@ -1,0 +1,142 @@
+
+basyxstarterapplication:
+  enabled: true
+  
+  
+
+## MongoDB parameters
+##
+mongodb:
+  ## @param mongodb.enabled Enable MongoDB
+  ##
+  enabled: true
+  ## MongoDB auth parameters
+  ##
+  auth:
+    ## @param mongodb.auth.enabled Enable authentication
+    ## ref: https://docs.mongodb.com/manual/tutorial/enable-authentication/
+    ##
+    enabled: true
+    ## @param mongodb.rootUser MongoDB root user
+    ##
+    rootUser: adminUser
+    ## @param mongodb.rootPassword MongoDB root password
+    ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mongodb#setting-the-root-user-and-password-on-first-run
+    ##
+    rootPassword: adminPassword
+  ## @param mongodb.architecture MongoDB architecture (`standalone` or `replicaset`)
+  ##
+  architecture: standalone
+  ## MongoDB persistence parameters
+  ##
+  persistence:
+    ## @param mongodb.persistence.size PVC Storage Request for MongoDB data volume
+    ##
+    size: 10Gi
+  ## MongoDB service parameters
+  ##
+  service:
+    ## @param mongodb.service.nameOverride MongoDB service name
+    ##
+    nameOverride: mongodb
+
+## Keycloak parameters
+##
+keycloak:
+  ## @param keycloak.enabled Enable Keycloak
+  ##
+  enabled: true
+  ## Keycloak PostgreSQL parameters
+  ##
+  postgresql:
+    ## @param keycloak.postgresql.enabled Enable PostgreSQL
+    ##
+    enabled: true
+    ## PostgreSQL Auth parameters
+    ##
+    auth:
+      ## @param keycloak.postgresql.auth.username PostgreSQL user
+      ##
+      username: keycloak
+      ## @param keycloak.postgresql.auth.password PostgreSQL password
+      ##
+      password: password
+      ## @param keycloak.postgresql.auth.database PostgreSQL database
+      ##
+      database: keycloak
+  ## Keycloak ingress parameters
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
+  ##
+  ingress:
+    ## @param keycloak.ingress.enabled Enable ingress for Keycloak
+    ##
+    enabled: false
+    ## @param keycloak.ingress.ingressClassName IngressClass for the ingress
+    ##
+    ingressClassName: ""
+    ## @param keycloak.ingress.hostname Ingress hostname for Keycloak
+    ##
+    hostname: keycloak.basyx.local
+    ## @param keycloak.ingress.tls Enable tls
+    ##
+    tls: false
+  ## Keycloak apirule parameters
+  ## ref: https://kyma-project.io/#/api-gateway/user/custom-resources/apirule/04-10-apirule-custom-resource
+  ##
+  apirule:
+    ## @param keycloak.apirule.enabled Enable apirule for Keycloak
+    ##
+    enabled: false
+    ## @param keycloak.apirule.hostname Apirule hostname for Keycloak
+    ##
+    host: keycloak.basyx.local
+    ## @param keycloak.apirule.methods HTTP methods allowed for CORS header
+    ##
+    methods:
+      - "GET"
+      - "HEAD"
+      - "POST"
+      - "PUT"
+      - "DELETE"
+      - "CONNECT"
+      - "OPTIONS"
+      - "TRACE"
+      - "PATCH"
+  ## Keycloak auth parameters
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/keycloak#admin-credentials
+  ##
+  auth:
+    ## @param keycloak.auth.adminUser Keycloak administrator user
+    ##
+    adminUser: user
+    ## @param keycloak.auth.adminPassword Keycloak administrator password for the new user
+    ##
+    adminPassword: password
+  ## Keycloak service parameters
+  ##
+  service:
+    ## @param keycloak.service.type Kubernetes service type
+    ##
+    type: ClusterIP
+  ## @param keycloak.fullnameOverride Overrides the release name for Keycloak
+  ##
+  fullnameOverride: basyx-keycloak
+  ## @param keycloak.extraVolumes Adds volumes to the Keycloak deployment
+  ##
+  extraVolumes:
+    - name: basyx-keycloak-realm
+      configMap:
+        name: basyx-keycloak-realm
+  ## @param keycloak.extraVolumes Mounts volumes to the Keycloak pod
+  ##
+  extraVolumeMounts:
+    - mountPath: /opt/keycloak/data/import/BaSyx-realm.json
+      subPath: BaSyx-realm.json
+      name: basyx-keycloak-realm
+  ## @param keycloak.command Overrides container command
+  command: ["/bin/sh", "-c"]
+  ## @param keycloak.args Overrides container command args
+  ## Depends on: @param keycloak.apirule.hostname or keycloak.ingress.hostname (see flag hostname)
+  ##
+  args: ["kc.sh import --file /opt/keycloak/data/import/BaSyx-realm.json; kc.sh start-dev --hostname=https://keycloak.basyx.local --hostname-strict=false --hostname-debug=true"]
+
