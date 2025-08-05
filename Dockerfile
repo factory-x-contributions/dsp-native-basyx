@@ -25,4 +25,3 @@ COPY src/main/resources/rules.json /app/rules.json
 ENTRYPOINT ["java", "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005", "-jar", "app.jar"]
 
 LABEL org.opencontainers.image.source=https://github.com/factory-x-contributions/dsp-native-basyx
-
