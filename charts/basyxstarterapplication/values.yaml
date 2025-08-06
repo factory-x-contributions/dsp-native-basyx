@@ -95,16 +95,6 @@ application:
       value: "http://keycloak:8080/realms/BaSyx"
     - name: ORG_FACTORYX_LIBRARY_HOSTNAME
       value: "basyx-starter-app"
-    - name: SPRING_DATA_MONGODB_URI
-      value: "mongodb://mongoAdmin:mongoPassword@mongo"
-    - name: SPRING_DATA_MONGODB_PORT
-      value: 27017
-    - name: SPRING_DATA_MONGODB_DATABASE
-      value: "factoryx-mongo-db"
-    - name: SPRING_DATA_MONGODB_USERNAME
-      value: "mongoAdmin"
-    - name: SPRING_DATA_MONGODB_PASSWORD
-      value: "mongoPassword"
 
 
 # Secret management
