@@ -1,11 +1,25 @@
+/*
+ * Copyright (c) 2025. Fraunhofer-Gesellschaft zur Foerderung der angewandten Forschung e.V. (represented by Fraunhofer ISST)
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Apache License, Version 2.0 which is available at
+ * https://www.apache.org/licenses/LICENSE-2.0.
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 package org.factoryx.dspnativebasyx.model;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.eclipse.digitaltwin.aas4j.v3.model.AssetAdministrationShell;
 import org.factoryx.library.connector.embedded.provider.interfaces.DataAsset;
 
-import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.UUID;
 
@@ -15,13 +29,15 @@ import java.util.UUID;
  *
  */
 public class AasDataAsset implements DataAsset {
-    static final ObjectMapper MAPPER = new ObjectMapper();
 
-    private final AssetAdministrationShell asset;
+    private final AssetAdministrationShell shell;
     private final UUID uuid;
-    public AasDataAsset(AssetAdministrationShell asset, UUID uuid) {
-        this.asset = asset;
+    private final ObjectMapper objectMapper;
+
+    public AasDataAsset(AssetAdministrationShell shell, UUID uuid, ObjectMapper objectMapper) {
+        this.shell = shell;
         this.uuid = uuid;
+        this.objectMapper = objectMapper;
     }
 
     @Override
@@ -32,8 +48,8 @@ public class AasDataAsset implements DataAsset {
     @Override
     public Map<String, String> getProperties() {
         return Map.of("modelType", "AssetAdministrationShell",
-                "globalAssetId", asset.getAssetInformation().getGlobalAssetId(),
-                "idShort", asset.getIdShort(),
+                "globalAssetId", shell.getAssetInformation().getGlobalAssetId(),
+                "idShort", shell.getIdShort(),
                 "dto-type", getContentType());
     }
 
@@ -45,15 +61,13 @@ public class AasDataAsset implements DataAsset {
     @Override
     public byte[] getDtoRepresentation() {
         try {
-            ObjectNode node = MAPPER.convertValue(asset, ObjectNode.class);
-            node.put("modelType", "AssetAdministrationShell");
-            return node.toString().getBytes(StandardCharsets.UTF_8);
+            return objectMapper.writeValueAsBytes(shell);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
     public String getAssetId() {
-        return asset.getAssetInformation().getGlobalAssetId();
+        return shell.getAssetInformation().getGlobalAssetId();
     }
 }
