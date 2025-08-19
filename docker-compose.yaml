@@ -23,7 +23,7 @@ services:
 
   consumer-controlplane:
     container_name: consumer-controlplane
-    image: ghcr.io/factory-x-contributions/basicedc:0.11.1
+    image: ghcr.io/factory-x-contributions/basicedc:0.13.0
     pull_policy: missing
 
     env_file:
