@@ -20,10 +20,22 @@ services:
       - 5005:5005
     networks:
       - dsp-native-basyx
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  mqtt-broker:
+    container_name: mqtt-broker
+    image: eclipse-mosquitto:2
+    volumes:
+      - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
+    ports:
+      - 1883:1883
+    networks:
+      - dsp-native-basyx
 
   consumer-controlplane:
     container_name: consumer-controlplane
-    image: ghcr.io/factory-x-contributions/basicedc:0.11.1
+    image: ghcr.io/factory-x-contributions/basicedc:0.13.0
     pull_policy: missing
 
     env_file:

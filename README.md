@@ -38,7 +38,7 @@ docker login ghcr.io -u <your-github-username> -p <your-personal-access-token>
 
 #### 3. Pull it
 ```
-docker pull ghcr.io/factory-x-contributions/basicedc:0.11.1
+docker pull ghcr.io/factory-x-contributions/basicedc:0.13.0
 ```
 
 #### 4. Start it
