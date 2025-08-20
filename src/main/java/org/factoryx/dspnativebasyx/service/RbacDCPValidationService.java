@@ -21,7 +21,7 @@ import org.eclipse.digitaltwin.basyx.aasrepository.feature.authorization.AasTarg
 import org.eclipse.digitaltwin.basyx.authorization.rbac.Action;
 import org.eclipse.digitaltwin.basyx.authorization.rbac.RbacRule;
 import org.eclipse.digitaltwin.basyx.authorization.rbac.RbacStorage;
-import org.eclipse.digitaltwin.basyx.submodelrepository.feature.authorization.SubmodelTargetInformation;
+import org.eclipse.digitaltwin.basyx.submodelservice.feature.authorization.SubmodelTargetInformation;
 import org.factoryx.dspnativebasyx.model.AasDataAsset;
 import org.factoryx.dspnativebasyx.model.SubmodelDataAsset;
 import org.factoryx.library.connector.embedded.provider.interfaces.DataAsset;
@@ -29,10 +29,7 @@ import org.factoryx.library.connector.embedded.provider.interfaces.DspTokenValid
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
