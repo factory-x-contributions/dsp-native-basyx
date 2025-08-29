@@ -65,3 +65,8 @@ node_modules/
 
 # Generated files
 *.generated
+
+/.secret
+
+vault/secrets/*
+!vault/secrets/dontreadme

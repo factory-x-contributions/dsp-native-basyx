@@ -25,23 +25,9 @@ docker build -t basyxstarterapp .
 
 ### Deploy it via docker compose
 
-Run a small testing environment that includes a very basic EDC Controlplane as a customer partner. 
-We are using the EDC Controlplane image, that is also used in the embedded-connector-testbed repository, 
-so you will need to fetch it from there. 
+Run a small testing environment that includes FX EDC Controlplane as a customer partner.
 
-#### 1. Create a PAT on your GitHub account with "read:packages" privilege. 
-
-#### 2. Login with that PAT
-```
-docker login ghcr.io -u <your-github-username> -p <your-personal-access-token>
-```
-
-#### 3. Pull it
-```
-docker pull ghcr.io/factory-x-contributions/basicedc:0.13.0
-```
-
-#### 4. Start it
+#### Start it
 
 ```
 docker compose up
@@ -50,12 +36,14 @@ docker compose up
 Or use the shell script 
 
 ```
-sh rundocker.sh
+bash rundocker.sh
 ```
 
-That script builds a .jar file from this project, creates a docker image from it and then launches the docker compose setup. 
+Hint: You may need to obtain the necessary identity configuration, see the docker-compose.yaml and 
+consumer-controlplane.env files.  
 
-#### 5. Inspect it
+
+#### Inspect it
 
 Visit
 
@@ -64,7 +52,7 @@ http://basyx-starter-app:8090/swagger-ui/index.html
 Then, you should see not only the endpoints of the dsp-protocol-library but also the endpoints that are provided by BaSyx, 
 which allow you to store, retrieve, update and delete Asset Administration Shells and/or Submodels. 
 
-#### 6. Use the DSP/DCP stack
+#### Use the DSP/DCP stack
 
 Import the attached Postman Collection, then you can
 
