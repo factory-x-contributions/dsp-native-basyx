@@ -54,10 +54,12 @@ which allow you to store, retrieve, update and delete Asset Administration Shell
 
 #### Use the DSP/DCP stack
 
-Import the attached Postman Collection, then you can
+Import the attached Bruno Collection, then you can
 
 - create an Asset Administration Shells and a Submodel on BaSyx
 - have the consumer control plane negotiate and transfer it. 
+
+Please note that the Postman collection is deprecated, will no longer be updated and may be removed in the future. 
 
 
 

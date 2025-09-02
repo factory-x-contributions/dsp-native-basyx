@@ -1,0 +1,25 @@
+meta {
+  name: Pull other asset data should fail
+  type: http
+  seq: 8
+}
+
+get {
+  url: {{basyx-dsp-base-url}}/data-assets/ea0ceaa8-0c7f-4c64-8166-9cc3d542bfc7
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{asset-auth-token}}
+}
+
+script:post-response {
+  test("Data GET request for other asset-id denied", function() {
+     expect(res.getStatus()>400).to.equal(true)
+  });
+}
+
+settings {
+  encodeUrl: true
+}

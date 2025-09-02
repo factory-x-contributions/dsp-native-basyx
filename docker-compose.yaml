@@ -22,6 +22,7 @@ services:
       - org.factoryx.library.fxv01.dimclientid=${PROVIDER_DIM_CLIENT_ID}
       - org.factoryx.library.fxv01.dimurl=${PROVIDER_DIM_URL}
       - org.factoryx.library.fxv01.trustedissuer=${TRUSTED_ISSUER}
+#      - org.factoryx.library.policyservice=fxv0_1
 
 
     depends_on:
