@@ -1,0 +1,27 @@
+meta {
+  name: Obtain Admin Token
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://keycloak:8080/realms/BaSyx/protocol/openid-connect/token
+  body: formUrlEncoded
+  auth: inherit
+}
+
+body:form-urlencoded {
+  client_id: basyx-web-ui
+  grant_type: password
+  username: john.doe
+  password: johndoe
+}
+
+script:post-response {
+  const adminToken = res.getBody()["access_token"];
+  bru.setVar("basyx_admin_token", adminToken);
+}
+
+settings {
+  encodeUrl: true
+}

@@ -1,0 +1,43 @@
+meta {
+  name: Initiate negotiation
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{cons-cplane-management}}/v3/contractnegotiations
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+      "@context": {
+          "edc": "https://w3id.org/edc/v0.0.1/ns/"
+      },
+      "@type": "ContractRequest",
+      "connectorId": "{{basyx-dsp-id}}",
+      "counterPartyAddress": "{{basyx-dsp-protocol-url}}",
+      "protocol": "dataspace-protocol-http",
+      "policy": {
+          "@context" : "http://www.w3.org/ns/odrl.jsonld",
+          "@id": "some-id",
+          "@type": "Offer",
+          "assigner": "{{basyx-dsp-id}}",
+          "assignee": "consumer",
+          "target": "{{target-asset}}"
+      }
+  }
+}
+
+script:post-response {
+  bru.setVar("negotiation-id", res.getBody()['@id']);
+}
+
+settings {
+  encodeUrl: true
+}

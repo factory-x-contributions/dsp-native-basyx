@@ -1,0 +1,27 @@
+meta {
+  name: Fetch EDR token
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{cons-cplane-management}}/v3/edrs/{{transfer-id}}/dataaddress
+  body: none
+  auth: inherit
+}
+
+headers {
+  x-api-key: mypw
+}
+
+script:post-response {
+  const response = res.getBody()
+  const endpoint = response["endpoint"]
+  const auth = response["authorization"]
+  bru.setVar("asset-endpoint", endpoint)
+  bru.setVar("asset-auth-token", "Bearer " + auth)
+}
+
+settings {
+  encodeUrl: true
+}

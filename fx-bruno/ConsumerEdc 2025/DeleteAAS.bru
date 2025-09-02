@@ -1,0 +1,30 @@
+meta {
+  name: DeleteAAS
+  type: http
+  seq: 10
+}
+
+delete {
+  url: {{asset-endpoint}}/shells/ZTM4YTBmOTItNGVlOC00MzZjLWE1MzUtMGY5Y2RhZDRjM2M4?param1=123&param2=234
+  body: none
+  auth: bearer
+}
+
+params:query {
+  param1: 123
+  param2: 234
+}
+
+auth:bearer {
+  token: {{asset-auth-token}}
+}
+
+script:post-response {
+  test("Data GET request successful", function() {
+     expect(res.getStatus()).to.equal(204);
+  });
+}
+
+settings {
+  encodeUrl: true
+}

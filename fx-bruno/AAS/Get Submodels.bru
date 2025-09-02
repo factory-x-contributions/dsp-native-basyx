@@ -1,0 +1,32 @@
+meta {
+  name: Get Submodels
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{basyx-dsp-base-url}}/submodels
+  body: none
+  auth: oauth2
+}
+
+auth:oauth2 {
+  grant_type: password
+  access_token_url: http://keycloak:8080/realms/BaSyx/protocol/openid-connect/token
+  refresh_token_url: 
+  username: john.doe
+  password: johndoe
+  client_id: basyx-web-ui
+  client_secret: 
+  scope: 
+  credentials_placement: body
+  credentials_id: credentials
+  token_placement: header
+  token_header_prefix: Bearer
+  auto_fetch_token: true
+  auto_refresh_token: false
+}
+
+settings {
+  encodeUrl: true
+}

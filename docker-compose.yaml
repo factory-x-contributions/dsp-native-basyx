@@ -12,6 +12,18 @@ services:
       - spring.data.mongodb.database=factoryx-mongo-db
       - spring.data.mongodb.username=mongoAdmin
       - spring.data.mongodb.password=mongoPassword
+      - org.factoryx.library.id=did:web:dim-static-prod.dis-cloud-prod.cfapps.eu10-004.hana.ondemand.com:dim-hosted:94bcce8e-0ea6-4975-9a7c-3f75b1f71d96:fraunhofer-isst-02
+      - org.factoryx.library.validationservice=fxv0_1
+      - org.factoryx.library.validationservice.stsapi=dim-wallet
+      - org.factoryx.library.fxv01.vaultroottoken=vaultsecret0123456789
+      - org.factoryx.library.fxv01.vaulturl=http://vault:8200
+      - org.factoryx.library.fxv01.vaultsecretalias=providerdimsecret
+      - org.factoryx.library.fxv01.dimtokenurl=${PROVIDER_DIM_TOKEN_URL}
+      - org.factoryx.library.fxv01.dimclientid=${PROVIDER_DIM_CLIENT_ID}
+      - org.factoryx.library.fxv01.dimurl=${PROVIDER_DIM_URL}
+      - org.factoryx.library.fxv01.trustedissuer=${TRUSTED_ISSUER}
+#      - org.factoryx.library.policyservice=fxv0_1
+
 
     depends_on:
       - mongo
@@ -35,13 +47,14 @@ services:
 
   consumer-controlplane:
     container_name: consumer-controlplane
-    image: ghcr.io/factory-x-contributions/basicedc:0.13.0
+    image: ghcr.io/factory-x-contributions/edc-controlplane-postgresql-hashicorp-vault:0.1.0
     pull_policy: missing
-
     env_file:
       - consumer-controlplane.env
     depends_on:
       - consumer-postgres-controlplane
+    entrypoint:  ["java", "-Dedc.fs.config=/app/configuration.properties","-jar", "edc-runtime.jar" ]
+
     ports:
       - 9000:9000 # Default port
       - 9010:9010 # Data management API
@@ -50,6 +63,28 @@ services:
       - 9040:9040 # API for data plane registration
       - 9050:9050 # Control API
       - 9060:9060 # Information API
+    networks:
+      - dsp-native-basyx
+
+  vault:
+    build: ./vault
+    container_name: vault
+    healthcheck:
+      test: [ "CMD-SHELL", "wget -q --spider http://localhost:8200/v1/sys/health" ]
+      interval: 4s
+      timeout: 3s
+      retries: 20
+    ports:
+      - "127.0.0.1:8200:8200"
+    environment:
+      VAULT_DEV_ROOT_TOKEN_ID: vaultsecret0123456789
+      VAULT_ADDR: http://vault:8200
+      VAULT_API_ADDR: http://vault:8200
+      VAULT_PUT_SECRETS_DIR: /vault/secrets/
+      SKIP_SETCAP: true
+      SKIP_CHOWN: true
+    volumes:
+      - ./vault/secrets:/vault/secrets/
     networks:
       - dsp-native-basyx
 

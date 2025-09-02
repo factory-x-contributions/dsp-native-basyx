@@ -1,0 +1,25 @@
+meta {
+  name: Pull asset data
+  type: http
+  seq: 7
+}
+
+get {
+  url: {{asset-endpoint}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{asset-auth-token}}
+}
+
+script:post-response {
+  test("Data GET request successful", function() {
+     expect(res.getStatus()).to.equal(200);
+  });
+}
+
+settings {
+  encodeUrl: true
+}

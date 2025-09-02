@@ -1,0 +1,30 @@
+meta {
+  name: DeleteSubmodel
+  type: http
+  seq: 11
+}
+
+delete {
+  url: {{asset-endpoint}}/submodels/ZmU2MjI5ZTYtYWJjZC00YzZlLTgwOWItZGI1OWU3MGY3YzZl?param1=123&param2=234
+  body: none
+  auth: bearer
+}
+
+params:query {
+  param1: 123
+  param2: 234
+}
+
+auth:bearer {
+  token: {{asset-auth-token}}
+}
+
+script:post-response {
+  test("Data GET request successful", function() {
+     expect(res.getStatus()).to.equal(204);
+  });
+}
+
+settings {
+  encodeUrl: true
+}

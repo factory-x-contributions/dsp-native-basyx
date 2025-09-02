@@ -1,0 +1,47 @@
+meta {
+  name: Get provider catalog
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{cons-cplane-management}}/v3/catalog/request
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+  x-api-key: mypw
+}
+
+body:json {
+  {
+      "@context": {
+          "edc": "https://w3id.org/edc/v0.0.1/ns/"
+      },
+      "@type": "CatalogRequest",
+      "protocol": "dataspace-protocol-http",
+      "counterPartyAddress": "{{basyx-dsp-protocol-url}}", 
+      "counterPartyId": "did:web:dim-static-prod.dis-cloud-prod.cfapps.eu10-004.hana.ondemand.com:dim-hosted:94bcce8e-0ea6-4975-9a7c-3f75b1f71d96:fraunhofer-isst-02"
+  }
+}
+
+script:post-response {
+  const dcat = res.getBody()["dcat:dataset"];
+  
+  // use first asset found in the catalog, fails if catalog is empty
+  let assetId = dcat["@id"];
+  if (typeof(assetId) == "undefined") {
+      assetId = dcat[0]["@id"];
+  }
+  
+  bru.setVar("target-asset", assetId);
+  
+  
+  
+}
+
+settings {
+  encodeUrl: true
+}

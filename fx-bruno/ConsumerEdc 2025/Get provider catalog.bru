@@ -1,0 +1,46 @@
+meta {
+  name: Get provider catalog
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{cons-cplane-management}}/v3/catalog/request
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+      "@context": {
+          "edc": "https://w3id.org/edc/v0.0.1/ns/"
+      },
+      "@type": "CatalogRequest",
+      "protocol": "dataspace-protocol-http:2025/1",
+      "counterPartyAddress": "{{basyx-dsp-protocol-url}}/2025/1", 
+      "counterPartyId": "{{basyx-dsp-id}}"
+  }
+}
+
+script:post-response {
+  const dcat = res.getBody()["dataset"];
+  
+  // use first asset found in the catalog, fails if catalog is empty
+  let assetId = dcat["@id"];
+  if (typeof(assetId) == "undefined") {
+      assetId = dcat[0]["@id"];
+  }
+  
+  bru.setVar("target-asset", assetId);
+  
+  
+  
+}
+
+settings {
+  encodeUrl: true
+}

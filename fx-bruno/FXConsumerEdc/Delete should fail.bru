@@ -1,0 +1,25 @@
+meta {
+  name: Delete should fail
+  type: http
+  seq: 9
+}
+
+delete {
+  url: {{asset-endpoint}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{asset-auth-token}}
+}
+
+script:post-response {
+  test("DELETE request denied", function() {
+      expect(res.getStatus()>400).to.equal(true)
+  });
+}
+
+settings {
+  encodeUrl: true
+}
