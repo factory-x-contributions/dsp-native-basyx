@@ -1,5 +1,5 @@
 meta {
-  name: FX Policy Negotiation
+  name: Initiate negotiation
   type: http
   seq: 3
 }
@@ -29,7 +29,7 @@ body:json {
       "@type": "odrl:Offer",
       "@id": "my_offer",
       "odrl:target": {
-        "@id": "fd3fbda0-e9b2-41b3-8bc5-cd5d582a0c43"
+        "@id": "{{target-asset}}"
       },
       "odrl:assigner": {
         "@id": "did:web:dim-static-prod.dis-cloud-prod.cfapps.eu10-004.hana.ondemand.com:dim-hosted:94bcce8e-0ea6-4975-9a7c-3f75b1f71d96:fraunhofer-isst-02"
@@ -38,22 +38,7 @@ body:json {
         "@id": "did:web:dim-static-prod.dis-cloud-prod.cfapps.eu10-004.hana.ondemand.com:dim-hosted:e38dae84-e155-44e5-8566-87e0374c4d03:fraunhofer-isst-01"
       },
       "odrl:permission": [
-        {
-          "odrl:action": {
-            "@id": "odrl:use"
-          },
-          "odrl:constraint": [
-            {
-              "odrl:leftOperand": {
-                "@id": "https://w3id.org/factoryx/policy/v1.0/Membership"
-              },
-              "odrl:operator": {
-                "@id": "odrl:eq"
-              },
-              "odrl:rightOperand": "active"
-            }
-          ]
-        }
+        
       ],
       "odrl:prohibition": [],
       "odrl:obligation": []
