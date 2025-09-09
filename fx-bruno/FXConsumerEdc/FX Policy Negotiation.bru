@@ -1,5 +1,5 @@
 meta {
-  name: Initiate negotiation
+  name: FX Policy Negotiation
   type: http
   seq: 2
 }
@@ -38,7 +38,22 @@ body:json {
         "@id": "did:web:dim-static-prod.dis-cloud-prod.cfapps.eu10-004.hana.ondemand.com:dim-hosted:e38dae84-e155-44e5-8566-87e0374c4d03:fraunhofer-isst-01"
       },
       "odrl:permission": [
-        
+        {
+          "odrl:action": {
+            "@id": "odrl:use"
+          },
+          "odrl:constraint": [
+            {
+              "odrl:leftOperand": {
+                "@id": "https://w3id.org/factoryx/policy/v1.0/Membership"
+              },
+              "odrl:operator": {
+                "@id": "odrl:eq"
+              },
+              "odrl:rightOperand": "active"
+            }
+          ]
+        }
       ],
       "odrl:prohibition": [],
       "odrl:obligation": []
