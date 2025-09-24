@@ -1,0 +1,19 @@
+meta {
+  name: pull copy
+  type: http
+  seq: 3
+}
+
+get {
+  url: http://localhost:8080/dsp/data-access/fe015510-1ea7-4169-b904-aa4a119ab837
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{asset-auth-token}}
+}
+
+settings {
+  encodeUrl: true
+}

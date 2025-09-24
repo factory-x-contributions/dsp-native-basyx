@@ -1,7 +1,7 @@
 meta {
-  name: Initiate Consumer Pull transfer
+  name: Initiate Consumer Pull transfer copy
   type: http
-  seq: 5
+  seq: 14
 }
 
 post {
@@ -24,7 +24,7 @@ body:json {
       "protocol": "dataspace-protocol-http",
       "assetId": "{{target-asset}}",
       "contractId": "{{agreement-id}}",
-      "counterPartyAddress": "{{basyx-dsp-protocol-url}}",
+      "counterPartyAddress": "http://host.docker.internal:8080/dsp",
       "connectorId": "provider",
       "transferType": "HttpData-PULL"
   }

@@ -1,7 +1,7 @@
 meta {
-  name: FX Policy Negotiation
+  name: FX Policy Negotiation copy
   type: http
-  seq: 3
+  seq: 13
 }
 
 post {
@@ -22,8 +22,8 @@ body:json {
       "odrl": "http://www.w3.org/ns/odrl/2/"
     },
     "@type": "ContractRequest",
-    "connectorId": "{{basyx-dsp-id}}",
-    "counterPartyAddress": "{{basyx-dsp-protocol-url}}",
+    "connectorId": "did:web:dim-static-prod.dis-cloud-prod.cfapps.eu10-004.hana.ondemand.com:dim-hosted:94bcce8e-0ea6-4975-9a7c-3f75b1f71d96:fraunhofer-isst-02",
+    "counterPartyAddress": "http://host.docker.internal:8080/dsp",
     "protocol": "dataspace-protocol-http",
     "policy": {
       "@type": "odrl:Offer",

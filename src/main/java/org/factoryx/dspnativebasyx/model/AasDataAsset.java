@@ -21,7 +21,6 @@ import org.eclipse.digitaltwin.aas4j.v3.model.AssetAdministrationShell;
 import org.factoryx.library.connector.embedded.provider.interfaces.DataAsset;
 
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * This class wraps an AssetAdministrationShell object from the BaSyx world
@@ -31,18 +30,22 @@ import java.util.UUID;
 public class AasDataAsset implements DataAsset {
 
     private final AssetAdministrationShell shell;
-    private final UUID uuid;
-    private final ObjectMapper objectMapper;
+    public static ObjectMapper objectMapper;
 
-    public AasDataAsset(AssetAdministrationShell shell, UUID uuid, ObjectMapper objectMapper) {
+    public static final String DSP_ID_PREFIX = "AAS--";
+
+    public AasDataAsset(AssetAdministrationShell shell) {
         this.shell = shell;
-        this.uuid = uuid;
         this.objectMapper = objectMapper;
     }
 
     @Override
-    public UUID getId() {
-        return uuid;
+    public String getDspId() {
+        return DSP_ID_PREFIX + shell.getId();
+    }
+
+    public String getNativeId() {
+        return shell.getId();
     }
 
     @Override

@@ -23,9 +23,9 @@ import java.util.UUID;
 
 public class BaSyxApiAsset implements ApiAsset {
 
-    private final UUID apiAssetId = UUID.randomUUID();
+    private final String apiAssetId = UUID.randomUUID().toString();
     @Override
-    public UUID getId() {
+    public String getDspId() {
         return apiAssetId;
     }
 

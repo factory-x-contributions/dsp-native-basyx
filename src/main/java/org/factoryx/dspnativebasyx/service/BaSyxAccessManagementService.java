@@ -65,100 +65,69 @@ import java.util.concurrent.Executors;
 @Slf4j
 public class BaSyxAccessManagementService implements DataAssetManagementService {
 
-    private final ExecutorService executorService = Executors.newVirtualThreadPerTaskExecutor();
     private final AasBackend aasBackend;
     private final SubmodelBackend submodelBackend;
     private final RbacDCPValidationService rbacDCPValidationService;
     private final ObjectMapper objectMapper;
     private final Base64.Decoder B64_DECODER = Base64.getUrlDecoder();
-
-    private final SubmodelEventHandler submodelEventHandler;
-    private final AasEventHandler aasEventHandler;
-
-    private final IMqttClient mqttClient;
-    private final MqttSubmodelRepositoryTopicFactory submodelTopicFactory = new MqttSubmodelRepositoryTopicFactory(new Base64URLEncoder());
-    private final MqttAasRepositoryTopicFactory aasTopicFactory = new MqttAasRepositoryTopicFactory(new Base64URLEncoder());
-    private final String aasRepoName;
-    private final String submodelRepoName;
-
-    private final AasRepositoryRegistryLink aasRepositoryRegistryLink;
-    private final AasDescriptorFactory aasDescriptorFactory;
-
-    private final SubmodelRepositoryRegistryLink submodelRepositoryRegistryLink;
-    private final SubmodelDescriptorFactory submodelDescriptorFactory;
+    private final MessagingSupportService messagingSupportService;
 
     private final BaSyxApiAsset SHELLS_API_ASSET = new BaSyxApiAsset() {
         @Override
-        public Map<String, String> getProperties() {
-            return Map.of("modelType", "ShellsApiAsset",
-                    "dto-type", getContentType());
+        public String getDspId() {
+            return "ShellsApiAsset";
         }
-    };
-    private final UUID SHELLS_API_ASSET_ID = SHELLS_API_ASSET.getId();
-    private final BaSyxApiAsset SUBMODELS_API_ASSET = new BaSyxApiAsset() {
         @Override
         public Map<String, String> getProperties() {
-            return Map.of("modelType", "SubmodelsApiAsset",
+            return Map.of("modelType", getDspId(),
                     "dto-type", getContentType());
         }
     };
-    private final UUID SUBMODELS_API_ASSET_ID = SUBMODELS_API_ASSET.getId();
-
-    // provisional mapping helpers in order to cope with the fact that the dsp-protocol-lib
-    // currently works with UUID typed identifiers and BaSyx with Strings.
-    private Map<String, UUID> basyxIdsToUuidMapping = new ConcurrentHashMap<>();
-    private Map<UUID, String> submodelIdsToUuidMapping = new ConcurrentHashMap<>();
-    private Map<UUID, String> aasIdsToUuidMapping = new ConcurrentHashMap<>();
-
+    private final String SHELLS_API_ASSET_ID = SHELLS_API_ASSET.getDspId();
+    private final BaSyxApiAsset SUBMODELS_API_ASSET = new BaSyxApiAsset() {
+        @Override
+        public String getDspId() {
+            return "SubmodelsApiAsset";
+        }
+        @Override
+        public Map<String, String> getProperties() {
+            return Map.of("modelType", getDspId(),
+                    "dto-type", getContentType());
+        }
+    };
+    private final String SUBMODELS_API_ASSET_ID = SUBMODELS_API_ASSET.getDspId();
 
     public BaSyxAccessManagementService(AasBackend aasBackend, SubmodelBackend submodelBackend,
                                         RbacDCPValidationService rbacDCPValidationService, ObjectMapper objectMapper,
-                                        Optional<SubmodelEventHandler> submodelEventHandler, Optional<AasEventHandler> aasEventHandler,
-                                        Optional<IMqttClient> iMqttClient, AasRepository aasRepository, SubmodelRepository submodelRepo,
-                                        Optional<AasRepositoryRegistryLink> aasRepositoryRegistryLink, Optional<AttributeMapper> attributeMapper,
-                                        Optional<SubmodelRepositoryRegistryLink> submodelRepositoryRegistryLink,
-                                        Optional<org.eclipse.digitaltwin.basyx.submodelregistry.client.mapper.AttributeMapper> submodelAttributeMapper) {
+                                        MessagingSupportService messagingSupportService) {
+        this.messagingSupportService = messagingSupportService;
+        AasDataAsset.objectMapper = objectMapper;
+        SubmodelDataAsset.objectMapper = objectMapper;
         this.aasBackend = aasBackend;
         this.submodelBackend = submodelBackend;
         this.rbacDCPValidationService = rbacDCPValidationService;
         this.objectMapper = objectMapper;
-        this.submodelEventHandler = submodelEventHandler.orElse(null);
-        this.aasEventHandler = aasEventHandler.orElse(null);
-        this.mqttClient = iMqttClient.orElse(null);
-        this.aasRepoName = aasRepository.getName();
-        this.submodelRepoName = submodelRepo.getName();
-        this.aasRepositoryRegistryLink = aasRepositoryRegistryLink.orElse(null);
-        if (this.aasRepositoryRegistryLink != null && attributeMapper.isPresent()) {
-            this.aasDescriptorFactory = new AasDescriptorFactory(this.aasRepositoryRegistryLink.getAasRepositoryBaseURLs(), attributeMapper.get());
-        } else {
-            this.aasDescriptorFactory = null;
-        }
-        this.submodelRepositoryRegistryLink = submodelRepositoryRegistryLink.orElse(null);
-        if (this.submodelRepositoryRegistryLink != null && submodelAttributeMapper.isPresent()) {
-            this.submodelDescriptorFactory = new SubmodelDescriptorFactory(this.submodelRepositoryRegistryLink.getSubmodelRepositoryBaseURLs(), submodelAttributeMapper.get());
-        } else {
-            this.submodelDescriptorFactory = null;
-        }
     }
 
 
     @Override
-    public DataAsset getById(UUID id) {
+    public DataAsset getById(String id) {
         if (SHELLS_API_ASSET_ID.equals(id)) {
             return SHELLS_API_ASSET;
         }
         if (SUBMODELS_API_ASSET_ID.equals(id)) {
             return SUBMODELS_API_ASSET;
         }
-        if (aasIdsToUuidMapping.containsKey(id)) {
-            var aasOptional = aasBackend.findById(aasIdsToUuidMapping.get(id));
-            if (aasOptional.isPresent()) {
-                return new AasDataAsset(aasOptional.get(), id, objectMapper);
+        if (id.startsWith(AasDataAsset.DSP_ID_PREFIX)) {
+            var aasOpt = aasBackend.findById(id.substring(AasDataAsset.DSP_ID_PREFIX.length()));
+            if (aasOpt.isPresent()) {
+                return new AasDataAsset(aasOpt.get());
             }
-        } else if (submodelIdsToUuidMapping.containsKey(id)) {
-            var submodelOptional = submodelBackend.findById(submodelIdsToUuidMapping.get(id));
-            if (submodelOptional.isPresent()) {
-                return new SubmodelDataAsset(submodelOptional.get(), id, objectMapper);
+        }
+        if (id.startsWith(SubmodelDataAsset.DSP_ID_PREFIX)) {
+            var submodelOpt = submodelBackend.findById(id.substring(SubmodelDataAsset.DSP_ID_PREFIX.length()));
+            if (submodelOpt.isPresent()) {
+                return new SubmodelDataAsset(submodelOpt.get());
             }
         }
         log.warn("No such id {}", id);
@@ -167,30 +136,17 @@ public class BaSyxAccessManagementService implements DataAssetManagementService 
 
 
     @Override
-    public DataAsset getByIdForProperties(UUID id, Map<String, String> partnerProperties) {
+    public DataAsset getByIdForProperties(String id, Map<String, String> partnerProperties) {
         if (SHELLS_API_ASSET_ID.equals(id)) {
             return SHELLS_API_ASSET;
         }
         if (SUBMODELS_API_ASSET_ID.equals(id)) {
             return SUBMODELS_API_ASSET;
         }
-        if (aasIdsToUuidMapping.containsKey(id)) {
-            var aasOptional = aasBackend.findById(aasIdsToUuidMapping.get(id));
-            if (aasOptional.isPresent()) {
-                DataAsset dataAsset = new AasDataAsset(aasOptional.get(), id, objectMapper);
-                if (rbacDCPValidationService.validateReadAccessForDataAssetAndPartnerProperties(dataAsset, partnerProperties)) {
-                    return dataAsset;
-                }
-                return null;
-            }
-        } else if (submodelIdsToUuidMapping.containsKey(id)) {
-            var submodelOptional = submodelBackend.findById(submodelIdsToUuidMapping.get(id));
-            if (submodelOptional.isPresent()) {
-                DataAsset dataAsset = new SubmodelDataAsset(submodelOptional.get(), id, objectMapper);
-                if (rbacDCPValidationService.validateReadAccessForDataAssetAndPartnerProperties(dataAsset, partnerProperties)) {
-                    return dataAsset;
-                }
-                return null;
+        DataAsset dataAsset = getById(id);
+        if (dataAsset != null) {
+            if (rbacDCPValidationService.validateReadAccessForDataAssetAndPartnerProperties(dataAsset, partnerProperties)) {
+                return dataAsset;
             }
         }
         log.warn("No such id {}", id);
@@ -198,33 +154,29 @@ public class BaSyxAccessManagementService implements DataAssetManagementService 
     }
 
     @Override
-    public List<? extends DataAsset> getAll(Map<String, String> partnerProperties) {
+    public List<DataAsset> getAll(Map<String, String> partnerProperties) {
         ArrayList<DataAsset> dataAssets = new ArrayList<>();
         dataAssets.add(SHELLS_API_ASSET);
         dataAssets.add(SUBMODELS_API_ASSET);
-        aasBackend.findAll().forEach(asset -> {
-            UUID uuid = basyxIdsToUuidMapping.computeIfAbsent(asset.getId(), any -> UUID.randomUUID());
-            aasIdsToUuidMapping.put(uuid, asset.getId());
-            DataAsset dataAsset = new AasDataAsset(asset, uuid, objectMapper);
+
+        for (AssetAdministrationShell shell : aasBackend.findAll()) {
+            DataAsset dataAsset = new AasDataAsset(shell);
             if (rbacDCPValidationService.validateReadAccessForDataAssetAndPartnerProperties(dataAsset, partnerProperties)) {
                 dataAssets.add(dataAsset);
             }
+        }
 
-        });
-
-        submodelBackend.findAll().forEach(submodel -> {
-            UUID uuid = basyxIdsToUuidMapping.computeIfAbsent(submodel.getId(), any -> UUID.randomUUID());
-            submodelIdsToUuidMapping.put(uuid, submodel.getId());
-            DataAsset dataAsset = new SubmodelDataAsset(submodel, uuid, objectMapper);
+        for (Submodel submodel : submodelBackend.findAll()) {
+            DataAsset dataAsset = new SubmodelDataAsset(submodel);
             if (rbacDCPValidationService.validateReadAccessForDataAssetAndPartnerProperties(dataAsset, partnerProperties)) {
                 dataAssets.add(dataAsset);
             }
-        });
+        }
         return dataAssets;
     }
 
     @Override
-    public ResponseEntity<byte[]> forwardToApiAsset(UUID apiAssetId, HttpMethod method, byte[] requestBody,
+    public ResponseEntity<byte[]> forwardToApiAsset(String apiAssetId, HttpMethod method, byte[] requestBody,
                                                     HttpHeaders headers, String path, MultiValueMap<String, String> incomingQueryParams) {
         if ((path.startsWith("/shells") && !SHELLS_API_ASSET_ID.equals(apiAssetId) ||
                 (path.startsWith("/submodels") && !SUBMODELS_API_ASSET_ID.equals(apiAssetId)))) {
@@ -242,17 +194,7 @@ public class BaSyxAccessManagementService implements DataAssetManagementService 
                         }
                         submodel = submodelBackend.save(submodel);
                         log.info("Created submodel {}", submodel.getId());
-                        if (submodelEventHandler != null) {
-                            final Submodel finalSubmodel = submodel;
-                            executorService.submit(() -> submodelEventHandler.onSubmodelCreated(finalSubmodel));
-                        }
-                        if (mqttClient != null) {
-                            executorService.submit(() -> sendMqttMessage(submodelTopicFactory.createCreateSubmodelTopic(submodelRepoName), new String(requestBody)));
-                        }
-                        if (submodelDescriptorFactory != null) {
-                            final Submodel finalSubmodel = submodel;
-                            executorService.submit(() -> registerSubmodel(finalSubmodel));
-                        }
+                        messagingSupportService.notifyNewSubmodel(submodel);
                         return ResponseEntity.status(HttpStatus.CREATED)
                                 .contentType(MediaType.parseMediaType("application/json; charset=UTF-8"))
                                 .body(objectMapper.writeValueAsBytes(submodel));
@@ -265,17 +207,7 @@ public class BaSyxAccessManagementService implements DataAssetManagementService 
                         }
                         shell = aasBackend.save(shell);
                         log.info("Created shell {}", shell.getId());
-                        if (aasEventHandler != null) {
-                            final AssetAdministrationShell finalShell = shell;
-                            executorService.submit(() -> aasEventHandler.onAasCreated(finalShell));
-                        }
-                        if (mqttClient != null) {
-                            executorService.submit(() -> sendMqttMessage(aasTopicFactory.createCreateAASTopic(aasRepoName), new String(requestBody)));
-                        }
-                        if (aasDescriptorFactory != null) {
-                            final AssetAdministrationShell finalShell = shell;
-                            executorService.submit(() -> registerAas(finalShell));
-                        }
+                        messagingSupportService.notifyNewShell(shell);
                         return ResponseEntity.status(HttpStatus.CREATED)
                                 .contentType(MediaType.valueOf("application/json; charset=UTF-8"))
                                 .body(objectMapper.writeValueAsBytes(shell));
@@ -290,13 +222,7 @@ public class BaSyxAccessManagementService implements DataAssetManagementService 
                         if (submodel.getId().equals(submodelId) && submodelBackend.findById(submodel.getId()).isPresent()) {
                             submodel = submodelBackend.save(submodel);
                             log.info("Updated submodel {}", submodel.getId());
-                            if (submodelEventHandler != null) {
-                                final Submodel finalSubmodel = submodel;
-                                executorService.submit(() -> submodelEventHandler.onSubmodelUpdated(finalSubmodel));
-                            }
-                            if (mqttClient != null) {
-                                executorService.submit(() -> sendMqttMessage(submodelTopicFactory.createUpdateSubmodelTopic(submodelRepoName), new String(requestBody)));
-                            }
+                            messagingSupportService.notifyUpdatedSubmodel(submodel);
                             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
                         }
                         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -309,13 +235,7 @@ public class BaSyxAccessManagementService implements DataAssetManagementService 
                         if (shell.getId().equals(shellId) && aasBackend.findById(shell.getId()).isPresent()) {
                             shell = aasBackend.save(shell);
                             log.info("Updated shell {}", shell.getId());
-                            if (aasEventHandler != null) {
-                                final AssetAdministrationShell finalShell = shell;
-                                executorService.submit(() -> aasEventHandler.onAasUpdated(shellId, finalShell));
-                            }
-                            if (mqttClient != null) {
-                                executorService.submit(() -> sendMqttMessage(aasTopicFactory.createUpdateAASTopic(aasRepoName), new String(requestBody)));
-                            }
+                            messagingSupportService.notifyUpdatedShell(shell);
                             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
                         }
                         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -331,22 +251,7 @@ public class BaSyxAccessManagementService implements DataAssetManagementService 
                             try {
                                 submodelBackend.delete(opt.get());
                                 log.info("Deleted submodel {}", submodelId);
-                                if (submodelEventHandler != null) {
-                                    executorService.submit(() -> submodelEventHandler.onSubmodelDeleted(submodelId));
-                                }
-                                if (mqttClient != null) {
-                                    String serializedSubmodel = objectMapper.writeValueAsString(opt.get());
-                                    executorService.submit(() -> sendMqttMessage(submodelTopicFactory.createDeleteSubmodelTopic(submodelRepoName), serializedSubmodel));
-                                }
-                                if (submodelRepositoryRegistryLink != null) {
-                                    executorService.submit(() -> {
-                                        try {
-                                            submodelRepositoryRegistryLink.getRegistryApi().deleteSubmodelDescriptorById(submodelId);
-                                        } catch (org.eclipse.digitaltwin.basyx.submodelregistry.client.ApiException e) {
-                                            log.error("Error registering submodel deletion {}", submodelId, e);
-                                        }
-                                    });
-                                }
+                                messagingSupportService.notifyDeletedSubmodel(opt.get());
                                 return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
                             } catch (Exception e) {
                                 log.error("Failed to delete submodel {}", submodelId, e);
@@ -363,22 +268,7 @@ public class BaSyxAccessManagementService implements DataAssetManagementService 
                             try {
                                 aasBackend.delete(opt.get());
                                 log.info("Deleted shell {}", shellId);
-                                if (aasEventHandler != null) {
-                                    executorService.submit(() -> aasEventHandler.onAasDeleted(shellId));
-                                }
-                                if (mqttClient != null) {
-                                    String serializedShell = objectMapper.writeValueAsString(opt.get());
-                                    executorService.submit(() -> sendMqttMessage(aasTopicFactory.createDeleteAASTopic(aasRepoName), serializedShell));
-                                }
-                                if (aasRepositoryRegistryLink != null) {
-                                    executorService.submit(() -> {
-                                        try {
-                                            aasRepositoryRegistryLink.getRegistryApi().deleteAssetAdministrationShellDescriptorById(shellId);
-                                        } catch (ApiException e) {
-                                            log.error("Error registering shell deletion {}", shellId, e);
-                                        }
-                                    });
-                                }
+                                messagingSupportService.notifyDeletedShell(opt.get());
                                 return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
                             } catch (Exception e) {
                                 log.error("Failed to delete shell {}", shellId, e);
@@ -393,41 +283,7 @@ public class BaSyxAccessManagementService implements DataAssetManagementService 
             log.error("Failed to forward to api asset {}", apiAssetId, e);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-    }
-
-
-    private void sendMqttMessage(String topic, String payload) {
-        try {
-            MqttMessage msg = payload == null ? new MqttMessage() : new MqttMessage(payload.getBytes());
-            mqttClient.publish(topic, msg);
-            log.info("Sent MQTT message about topic {} with payload: {}", topic, payload);
-        } catch (MqttPersistenceException e) {
-            log.error("Could not persist mqtt message", e);
-        } catch (MqttException e) {
-            log.error("Could not send mqtt message", e);
-        }
-    }
-
-    private void registerAas(AssetAdministrationShell shell) {
-        try {
-            AssetAdministrationShellDescriptor descriptor = aasDescriptorFactory.create(shell);
-            aasRepositoryRegistryLink.getRegistryApi().postAssetAdministrationShellDescriptor(descriptor);
-            log.info("Shell '{}' has been automatically linked with the Registry", descriptor.getId());
-        } catch (ApiException e) {
-            log.error("Failed to automatically link shell descriptor", e);
-        }
-    }
-
-    private void registerSubmodel(Submodel submodel) {
-        try {
-            SubmodelDescriptor descriptor = submodelDescriptorFactory.create(submodel);
-            submodelRepositoryRegistryLink.getRegistryApi().postSubmodelDescriptor(descriptor);
-            log.info("Submodel '{}' has been automatically linked with the Registry", descriptor.getId());
-        } catch (Exception e) {
-            log.error("Failed to automatically link submodel", e);
-        }
     }
 
 }

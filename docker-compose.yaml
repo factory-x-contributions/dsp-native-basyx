@@ -143,6 +143,7 @@ services:
       retries: 5
     networks:
       - dsp-native-basyx
+
   dsp-native-basyx-dns-host-resolver:
     container_name: resolver
     image: dvdarias/docker-hoster:latest
