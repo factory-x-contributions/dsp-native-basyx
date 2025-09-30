@@ -29,7 +29,7 @@ public class SubmodelDataAsset implements DataAsset {
     private final Submodel submodel;
     public static ObjectMapper objectMapper;
 
-    public static String DSP_ID_PREFIX = "Submodel--";
+    public static String DSP_ID_PREFIX = "";
 
     public SubmodelDataAsset(Submodel submodel) {
         this.submodel = submodel;

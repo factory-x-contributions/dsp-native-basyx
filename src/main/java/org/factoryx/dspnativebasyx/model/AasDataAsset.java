@@ -32,7 +32,7 @@ public class AasDataAsset implements DataAsset {
     private final AssetAdministrationShell shell;
     public static ObjectMapper objectMapper;
 
-    public static final String DSP_ID_PREFIX = "AAS--";
+    public static String DSP_ID_PREFIX = "";
 
     public AasDataAsset(AssetAdministrationShell shell) {
         this.shell = shell;

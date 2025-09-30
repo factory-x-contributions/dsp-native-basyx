@@ -48,6 +48,7 @@ import org.factoryx.dspnativebasyx.model.BaSyxApiAsset;
 import org.factoryx.dspnativebasyx.model.SubmodelDataAsset;
 import org.factoryx.library.connector.embedded.provider.interfaces.DataAsset;
 import org.factoryx.library.connector.embedded.provider.interfaces.DataAssetManagementService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
@@ -99,10 +100,14 @@ public class BaSyxAccessManagementService implements DataAssetManagementService 
 
     public BaSyxAccessManagementService(AasBackend aasBackend, SubmodelBackend submodelBackend,
                                         RbacDCPValidationService rbacDCPValidationService, ObjectMapper objectMapper,
-                                        MessagingSupportService messagingSupportService) {
+                                        MessagingSupportService messagingSupportService,
+                                        @Value("${org.factoryx.dspnativebasyx.aasidprefix:}") String aasIdPrefix,
+                                        @Value("${org.factoryx.dspnativebasyx.submodelidprefix:}") String submodelIdPrefix) {
         this.messagingSupportService = messagingSupportService;
         AasDataAsset.objectMapper = objectMapper;
         SubmodelDataAsset.objectMapper = objectMapper;
+        AasDataAsset.DSP_ID_PREFIX = aasIdPrefix;
+        SubmodelDataAsset.DSP_ID_PREFIX = submodelIdPrefix;
         this.aasBackend = aasBackend;
         this.submodelBackend = submodelBackend;
         this.rbacDCPValidationService = rbacDCPValidationService;
