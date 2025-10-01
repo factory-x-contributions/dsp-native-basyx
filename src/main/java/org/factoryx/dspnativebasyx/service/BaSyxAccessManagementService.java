@@ -22,27 +22,8 @@ import org.eclipse.digitaltwin.aas4j.v3.model.AssetAdministrationShell;
 import org.eclipse.digitaltwin.aas4j.v3.model.Submodel;
 import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultAssetAdministrationShell;
 import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultSubmodel;
-import org.eclipse.digitaltwin.basyx.aasregistry.client.ApiException;
-import org.eclipse.digitaltwin.basyx.aasregistry.client.model.AssetAdministrationShellDescriptor;
-import org.eclipse.digitaltwin.basyx.aasregistry.main.client.factory.AasDescriptorFactory;
-import org.eclipse.digitaltwin.basyx.aasregistry.main.client.mapper.AttributeMapper;
-import org.eclipse.digitaltwin.basyx.aasrepository.AasRepository;
-import org.eclipse.digitaltwin.basyx.aasrepository.feature.kafka.events.AasEventHandler;
-import org.eclipse.digitaltwin.basyx.aasrepository.feature.mqtt.MqttAasRepositoryTopicFactory;
-import org.eclipse.digitaltwin.basyx.aasrepository.feature.registry.integration.AasRepositoryRegistryLink;
 import org.eclipse.digitaltwin.basyx.aasservice.backend.AasBackend;
-import org.eclipse.digitaltwin.basyx.common.mqttcore.encoding.Base64URLEncoder;
-import org.eclipse.digitaltwin.basyx.submodelregistry.client.factory.SubmodelDescriptorFactory;
-import org.eclipse.digitaltwin.basyx.submodelregistry.client.model.SubmodelDescriptor;
-import org.eclipse.digitaltwin.basyx.submodelrepository.SubmodelRepository;
-import org.eclipse.digitaltwin.basyx.submodelrepository.feature.mqtt.MqttSubmodelRepositoryTopicFactory;
-import org.eclipse.digitaltwin.basyx.submodelrepository.feature.registry.integration.SubmodelRepositoryRegistryLink;
 import org.eclipse.digitaltwin.basyx.submodelservice.backend.SubmodelBackend;
-import org.eclipse.digitaltwin.basyx.submodelservice.feature.kafka.events.SubmodelEventHandler;
-import org.eclipse.paho.client.mqttv3.IMqttClient;
-import org.eclipse.paho.client.mqttv3.MqttException;
-import org.eclipse.paho.client.mqttv3.MqttMessage;
-import org.eclipse.paho.client.mqttv3.MqttPersistenceException;
 import org.factoryx.dspnativebasyx.model.AasDataAsset;
 import org.factoryx.dspnativebasyx.model.BaSyxApiAsset;
 import org.factoryx.dspnativebasyx.model.SubmodelDataAsset;
@@ -53,10 +34,10 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
 
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Implementation that provides access for the dsp-protocol-lib to the contents of
