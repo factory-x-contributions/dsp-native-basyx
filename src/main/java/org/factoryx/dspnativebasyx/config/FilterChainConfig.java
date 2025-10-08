@@ -35,7 +35,7 @@ public class FilterChainConfig {
     @Bean
     public SecurityFilterChain openSecurityFilterchain(HttpSecurity http, EnvService envService) throws Exception {
         String dspPath = URI.create(envService.getOwnDspUrl()).getPath() + "/**";
-        String[] openPaths = {dspPath, "/all_rules", "/all_aas", "/all_submodels"};
+        String[] openPaths = {dspPath};
 
         log.info("Initializing Open SecurityFilterChain for dsp-protocol-lib: {}", Arrays.toString(openPaths));
 

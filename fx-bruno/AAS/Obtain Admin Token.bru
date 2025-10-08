@@ -5,16 +5,16 @@ meta {
 }
 
 post {
-  url: http://keycloak:8080/realms/BaSyx/protocol/openid-connect/token
+  url: http://keycloak:8080/realms/dsp-native-basyx/protocol/openid-connect/token
   body: formUrlEncoded
   auth: inherit
 }
 
 body:form-urlencoded {
-  client_id: basyx-web-ui
+  client_id: dsp-native-basyx-client
   grant_type: password
-  username: john.doe
-  password: johndoe
+  username: the.admin
+  password: adminPassword
 }
 
 script:post-response {

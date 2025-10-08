@@ -27,19 +27,22 @@ import java.util.UUID;
 
 public class SubmodelDataAsset implements DataAsset {
     private final Submodel submodel;
-    private final UUID uuid;
-    private final ObjectMapper objectMapper;
+    public static ObjectMapper objectMapper;
 
-    public SubmodelDataAsset(Submodel submodel, UUID uuid, ObjectMapper objectMapper) {
+    public static String DSP_ID_PREFIX = "";
+
+    public SubmodelDataAsset(Submodel submodel) {
         this.submodel = submodel;
-        this.uuid = uuid;
-        this.objectMapper = objectMapper;
     }
 
 
     @Override
-    public UUID getId() {
-        return uuid;
+    public String getDspId() {
+        return DSP_ID_PREFIX + submodel.getId();
+    }
+
+    public String getNativeId() {
+        return submodel.getId();
     }
 
     @Override

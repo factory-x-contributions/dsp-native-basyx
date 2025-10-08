@@ -5,7 +5,7 @@ services:
     image: basyxstarterapp:latest
     environment:
       - basyx.feature.authorization.rbac.file=file:/app/rules.json
-      - spring.security.oauth2.resourceserver.jwt.issuer-uri=http://keycloak:8080/realms/BaSyx
+      - spring.security.oauth2.resourceserver.jwt.issuer-uri=http://keycloak:8080/realms/dsp-native-basyx
       - org.factoryx.library.hostname=basyx-starter-app
       - spring.data.mongodb.uri=mongodb://mongoAdmin:mongoPassword@mongo
       - spring.data.mongodb.port=27017
@@ -24,7 +24,6 @@ services:
       - org.factoryx.library.fxv01.trustedissuer=${TRUSTED_ISSUER}
       - org.factoryx.library.policyservice=fxv0_1
       - org.factoryx.library.fxv01.bearer=false
-
 
     depends_on:
       - mongo
@@ -55,7 +54,6 @@ services:
     depends_on:
       - consumer-postgres-controlplane
     entrypoint:  ["java", "-Dedc.fs.config=/app/configuration.properties","-jar", "edc-runtime.jar" ]
-
     ports:
       - 9000:9000 # Default port
       - 9010:9010 # Data management API
@@ -114,7 +112,6 @@ services:
     command: ["start-dev", "--import-realm"]
     ports:
       - 8080:8080
-
     volumes:
       - keycloak_data:/opt/jboss/keycloak/standalone/data
       - ./keycloak/realm:/opt/keycloak/data/import
@@ -143,6 +140,7 @@ services:
       retries: 5
     networks:
       - dsp-native-basyx
+
   dsp-native-basyx-dns-host-resolver:
     container_name: resolver
     image: dvdarias/docker-hoster:latest
