@@ -85,7 +85,7 @@
         <dependency>
             <groupId>org.factoryx.library.connector.embedded</groupId>
             <artifactId>dataspace-protocol-lib-mongodb</artifactId>
-            <version>0.0.1</version>
+            <version>0.1.0</version>
         </dependency>
     </dependencies>
 
