@@ -11,8 +11,16 @@ dependencies:
     repository: file://basyxstarterapplication
     condition: basyxstarterapplication.enabled
   - name: keycloak
-    version: 24.5.8
+    version: 24.7.4
     repository: https://charts.bitnami.com/bitnami
   - name: mongodb
     version: 12.1.31
     repository: https://charts.bitnami.com/bitnami
+  - name: postgresql-controlplane
+    version: "14.0.5"
+    repository: "https://charts.bitnami.com/bitnami"
+    alias: postgresql-controlplane
+  - name: tractusx-connector
+    version: "3.0.2"
+    repository: "https://eclipse-tractusx.github.io/charts/dev"
+    alias: consumer-controlplane
