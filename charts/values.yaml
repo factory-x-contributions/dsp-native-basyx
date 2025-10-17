@@ -3,15 +3,15 @@ basyxstarterapplication:
   enabled: true
   ingress:
     enabled: true
-    annotations: 
+    annotations:
       cert-manager.io/cluster-issuer: "letsencrypt-prod"
       kubernetes.io/tls-acme: "true"
     hosts:
-    - host: dsp-basyx.factory-x.catena-x.net
-  tls:
-    - secretName: basyxstarterapplication-tls
-      hosts:
-        - dsp-basyx.factory-x.catena-x.net
+      - host: dsp-basyx.factory-x.catena-x.net
+    tls:
+      - secretName: basyxstarterapplication-tls
+        hosts:
+          - dsp-basyx.factory-x.catena-x.net
   application:
     env:
       - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI
