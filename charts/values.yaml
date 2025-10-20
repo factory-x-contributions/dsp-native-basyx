@@ -8,6 +8,10 @@ basyxstarterapplication:
       kubernetes.io/tls-acme: "true"
     hosts:
       - host: dsp-basyx.factory-x.catena-x.net
+        paths:
+          - path: /
+            pathType: Prefix
+            servicePort: 8090
     tls:
       - secretName: basyxstarterapplication-tls
         hosts:
@@ -15,7 +19,7 @@ basyxstarterapplication:
   application:
     env:
       - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI
-        value: "https://keycloak-basyx.factory-x.catena-x.net"
+        value: "https://keycloak-basyx.factory-x.catena-x.net/realms/dsp-native-basyx"
 
   
   
@@ -26,6 +30,12 @@ mongodb:
   ## @param mongodb.enabled Enable MongoDB
   ##
   enabled: true
+  ## MongoDB image parameters
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/mongodb
+    tag: "6.0"
   ## MongoDB auth parameters
   ##
   auth:
@@ -42,6 +52,9 @@ mongodb:
     rootPassword: adminPassword
   ## @param mongodb.architecture MongoDB architecture (`standalone` or `replicaset`)
   ##
+    username: mongoAdmin
+    password: mongoPassword
+    database: factoryx-mongo-db
   architecture: standalone
   ## MongoDB persistence parameters
   ##
@@ -62,12 +75,24 @@ keycloak:
   ## @param keycloak.enabled Enable Keycloak
   ##
   enabled: true
+  ## Keycloak image parameters
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/keycloak
+    tag: "26"
   ## Keycloak PostgreSQL parameters
   ##
   postgresql:
     ## @param keycloak.postgresql.enabled Enable PostgreSQL
     ##
     enabled: true
+    ## @param keycloak.postgresql.image PostgreSQL image
+    ##
+    image:
+      registry: docker.io
+      repository: bitnami/postgresql
+      tag: "17"
     ## PostgreSQL Auth parameters
     ##
     auth:
@@ -155,4 +180,48 @@ keycloak:
   ## Depends on: @param keycloak.apirule.hostname or keycloak.ingress.hostname (see flag hostname)
   ##
   args: ["kc.sh import --file /opt/keycloak/data/import/BaSyx-realm.json; kc.sh start-dev --hostname=https://keycloak-basyx.factory-x.catena-x.net --hostname-strict=false --hostname-debug=true"]
+
+## Eclipse Mosquitto MQTT Broker parameters
+##
+mosquitto:
+  ## @param mosquitto.enabled Enable Eclipse Mosquitto MQTT broker
+  ##
+  enabled: true
+  ## @param mosquitto.image Eclipse Mosquitto image
+  ##
+  image:
+    registry: docker.io
+    repository: eclipse-mosquitto
+    tag: "2"
+  ## @param mosquitto.service Eclipse Mosquitto service configuration
+  ##
+  service:
+    ## @param mosquitto.service.type Kubernetes service type
+    ##
+    type: ClusterIP
+    ## @param mosquitto.service.ports Service ports
+    ##
+    ports:
+      mqtt:
+        port: 1883
+        targetPort: 1883
+        protocol: TCP
+  ## @param mosquitto.persistence Eclipse Mosquitto persistence
+  ##
+  persistence:
+    ## @param mosquitto.persistence.enabled Enable persistence
+    ##
+    enabled: false
+  ## @param mosquitto.auth Eclipse Mosquitto authentication
+  ##
+  auth:
+    ## @param mosquitto.auth.enabled Enable authentication
+    ##
+    enabled: false
+    ## @param mosquitto.auth.username MQTT username
+    ##
+    username: user
+    ## @param mosquitto.auth.password MQTT password
+    ##
+    password: pw
 

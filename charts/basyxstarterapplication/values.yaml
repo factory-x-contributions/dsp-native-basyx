@@ -38,10 +38,10 @@ securityContext: {}
 
 service:
   type: ClusterIP
-  port: 8080
+  port: 8090
 
 ingress:
-  enabled: false
+  enabled: true
   className: ""
   annotations: {}
     # kubernetes.io/ingress.class: nginx
@@ -89,12 +89,59 @@ application:
   # Toggle for using embedded HSQLDB instead of PostgreSQL
   useHsqldb: false
   env:
-    - name: BASYX_FEATURE_AUTHORIZATION_RBAC_FILE
-      value: "/app/rules.json"
-    - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI
-      value: "http://keycloak:8080/realms/BaSyx"
-    - name: ORG_FACTORYX_LIBRARY_HOSTNAME
-      value: "basyx-starter-app"
+    # Server configuration
+    - name: spring.application.name
+      value: "BasyxStarterApp"
+    - name: server.port
+      value: "8090"
+    
+    # BaSyx Backend Configuration
+    - name: basyx.backend
+      value: "MongoDB"
+    
+    # BaSyx Features
+    - name: basyx.feature.kafka.enabled
+      value: "false"
+    - name: basyx.feature.mqtt.enabled
+      value: "true"
+    
+    # MQTT Configuration - using the correct service name
+    - name: mqtt.clientId
+      value: "dsp-native-basyx"
+    - name: mqtt.hostname
+      value: "dsp-basyx-mosquitto"
+    - name: mqtt.port
+      value: "1883"
+    - name: mqtt.protocol
+      value: "tcp"
+    - name: mqtt.username
+      value: "user"
+    - name: mqtt.password
+      value: "pw"
+    
+    # BaSyx Authorization
+    - name: basyx.feature.authorization.enabled
+      value: "true"
+    - name: basyx.feature.authorization.type
+      value: "rbac"
+    - name: basyx.feature.authorization.rules.backend
+      value: "InMemory"
+    - name: basyx.feature.authorization.rbac.file
+      value: "file:/app/rules.json"
+    - name: basyx.feature.authorization.jwtBearerTokenProvider
+      value: "keycloak"
+    
+    # OAuth2 Configuration
+    - name: spring.security.oauth2.resourceserver.jwt.issuer-uri
+      value: "http://basyx-keycloak:8080/realms/dsp-native-basyx"
+    
+    # DSP Library Configuration
+    - name: org.factoryx.library.hostname
+      value: "basyxstarterapplication"
+    - name: org.factoryx.library.dspapiprefix
+      value: "/dsp"
+    - name: org.factoryx.dspnativebasyx.credentialtorolemappings
+      value: "dataspacemember=trusted_business_partner, foo=bar"
 
 
 # Secret management
@@ -102,8 +149,12 @@ secrets:
   # -- Create secrets for MongoDB
   create: true
   mongodb:
-    hostname: mongodb
+    hostname: dsp-basyx-mongodb
     port: "27017"
     database: "factoryx-mongo-db"
     username: "mongoAdmin"
     password: "mongoPassword"
+    uri: "mongodb://mongoAdmin:mongoPassword@dsp-basyx-mongodb:27017/factoryx-mongo-db?authSource=admin"
+
+# Note: In Docker Compose, Vault is used for secret management.
+# For Kubernetes deployment, we use Kubernetes secrets for simplicity.
