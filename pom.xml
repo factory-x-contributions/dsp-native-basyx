@@ -2,17 +2,19 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    <groupId>org.factoryx.dspnativebasyx</groupId>
+    <artifactId>DSP-Native-BaSyx</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>DSP-Native-BaSyx</name>
+    <description>A BaSyx instance with native DSP Support</description>
+    
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>3.5.6</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>org.factoryx.aas</groupId>
-    <artifactId>BasyxStarterApplication</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>BasyxStarterApplication</name>
-    <description>BasyxStarterApplication</description>
+    
     <url/>
     <licenses>
         <license/>
@@ -79,6 +81,9 @@
             <version>2.0.0-milestone-08</version>
         </dependency>
 
+        
+
+
 
         <!--DSP-Library-->
         <dependency>
@@ -87,6 +92,14 @@
             <version>0.1.0</version>
         </dependency>
     </dependencies>
+    <repositories>
+        <repository>
+            <id>github</id>
+            <name>DSP Lib GitHub Packages</name>
+            <url>https://maven.pkg.github.com/factory-x-contributions/dataspace-protocol-lib</url>
+        </repository>
+    </repositories>
+
 
     <build>
         <plugins>
@@ -122,5 +135,7 @@
         </resources>
 
     </build>
+
+    
 
 </project>

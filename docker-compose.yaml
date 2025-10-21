@@ -2,7 +2,7 @@ services:
 
   basyx-starter-app:
     container_name: basyx-starter-app
-    image: basyxstarterapp:latest
+    image: dsp-native-basyx:latest
     environment:
       - basyx.feature.authorization.rbac.file=file:/app/rules.json
       - spring.security.oauth2.resourceserver.jwt.issuer-uri=http://keycloak:8080/realms/dsp-native-basyx
@@ -47,7 +47,7 @@ services:
 
   consumer-controlplane:
     container_name: consumer-controlplane
-    image: ghcr.io/factory-x-contributions/edc-controlplane-postgresql-hashicorp-vault:0.1.3
+    image: ghcr.io/factory-x-contributions/edc-controlplane-postgresql-hashicorp-vault:0.1.2
     pull_policy: missing
     env_file:
       - consumer-controlplane.env
@@ -90,7 +90,7 @@ services:
 
   consumer-postgres-controlplane:
     container_name: consumer-postgres-controlplane
-    image: postgres:18-alpine
+    image: postgres:16.4-alpine
     ports:
       - 5433:5432
     environment:
@@ -125,7 +125,7 @@ services:
       - dsp-native-basyx
 
   mongo:
-    image: mongo:8.0
+    image: mongo:5.0.10
     ports:
       - "27017:27017"
     container_name: mongo
