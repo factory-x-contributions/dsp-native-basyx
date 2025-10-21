@@ -63,7 +63,7 @@ public class MessagingSupportService {
                                    Optional<IMqttClient> iMqttClient, AasRepository aasRepository, SubmodelRepository submodelRepo,
                                    Optional<AasRepositoryRegistryLink> aasRepositoryRegistryLink, Optional<AttributeMapper> attributeMapper,
                                    Optional<SubmodelRepositoryRegistryLink> submodelRepositoryRegistryLink,
-                                   Optional<org.eclipse.digitaltwin.basyx.submodelregistry.client.mapper.AttributeMapper> submodelAttributeMapper, SubmodelRepository submodelRepository, ObjectMapper objectMapper) {
+                                   Optional<org.eclipse.digitaltwin.basyx.submodelregistry.client.mapper.AttributeMapper> submodelAttributeMapper, ObjectMapper objectMapper) {
         this.submodelEventHandler = submodelEventHandler.orElse(null);
         this.aasEventHandler = aasEventHandler.orElse(null);
         this.mqttClient = iMqttClient.orElse(null);
