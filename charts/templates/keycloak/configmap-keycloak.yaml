@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: basyx-keycloak-realm
+  name: dsp-basyx-keycloak-realm
 data:
   BaSyx-realm.json: |-
 {{ .Files.Get "files/BaSyx-realm.json" | indent 4 }}

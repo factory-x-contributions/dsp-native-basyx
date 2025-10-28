@@ -19,7 +19,7 @@ basyxstarterapplication:
   application:
     env:
       - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI
-        value: "https://keycloak-basyx.factory-x.catena-x.net/realms/dsp-native-basyx"
+        value: "https://keycloak-dsp-basyx.factory-x.catena-x.net/realms/dsp-native-basyx"
 
   
   
@@ -35,7 +35,8 @@ mongodb:
   image:
     registry: docker.io
     repository: bitnami/mongodb
-    tag: "6.0"
+    tag: "8.2.1" 
+    digest: "sha256:3a822a270ebc55bc49cac61afebce3ede0c68eb9b08b1e9d4b2d57ad29f78997"
   ## MongoDB auth parameters
   ##
   auth:
@@ -50,11 +51,11 @@ mongodb:
     ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mongodb#setting-the-root-user-and-password-on-first-run
     ##
     rootPassword: adminPassword
-  ## @param mongodb.architecture MongoDB architecture (`standalone` or `replicaset`)
-  ##
     username: mongoAdmin
     password: mongoPassword
     database: factoryx-mongo-db
+  ## @param mongodb.architecture MongoDB architecture (`standalone` or `replicaset`)
+  ##
   architecture: standalone
   ## MongoDB persistence parameters
   ##
@@ -79,8 +80,8 @@ keycloak:
   ##
   image:
     registry: docker.io
-    repository: bitnami/keycloak
-    tag: "26"
+    repository: bitnamilegacy/keycloak
+    tag: "26.3.3-debian-12-r0"
   ## Keycloak PostgreSQL parameters
   ##
   postgresql:
@@ -91,8 +92,8 @@ keycloak:
     ##
     image:
       registry: docker.io
-      repository: bitnami/postgresql
-      tag: "17"
+      repository: bitnamilegacy/postgresql
+      tag: "17.6.0-debian-12-r4"
     ## PostgreSQL Auth parameters
     ##
     auth:
@@ -117,7 +118,7 @@ keycloak:
     ingressClassName: ""
     ## @param keycloak.ingress.hostname Ingress hostname for Keycloak
     ##
-    hostname: keycloak-basyx.factory-x.catena-x.net
+    hostname: keycloak-dsp-basyx.factory-x.catena-x.net
     ## @param keycloak.ingress.tls Enable tls
     ##
     tls: true
@@ -130,7 +131,7 @@ keycloak:
     enabled: false
     ## @param keycloak.apirule.hostname Apirule hostname for Keycloak
     ##
-    host: keycloak-basyx.factory-x.catena-x.net
+    host: keycloak-dsp-basyx.factory-x.catena-x.net
     ## @param keycloak.apirule.methods HTTP methods allowed for CORS header
     ##
     methods:
@@ -161,25 +162,25 @@ keycloak:
     type: ClusterIP
   ## @param keycloak.fullnameOverride Overrides the release name for Keycloak
   ##
-  fullnameOverride: basyx-keycloak
+  fullnameOverride: dsp-basyx-keycloak
   ## @param keycloak.extraVolumes Adds volumes to the Keycloak deployment
   ##
   extraVolumes:
-    - name: basyx-keycloak-realm
+    - name: dsp-basyx-keycloak-realm
       configMap:
-        name: basyx-keycloak-realm
+        name: dsp-basyx-keycloak-realm
   ## @param keycloak.extraVolumes Mounts volumes to the Keycloak pod
   ##
   extraVolumeMounts:
     - mountPath: /opt/keycloak/data/import/BaSyx-realm.json
       subPath: BaSyx-realm.json
-      name: basyx-keycloak-realm
+      name: dsp-basyx-keycloak-realm
   ## @param keycloak.command Overrides container command
   command: ["/bin/sh", "-c"]
   ## @param keycloak.args Overrides container command args
   ## Depends on: @param keycloak.apirule.hostname or keycloak.ingress.hostname (see flag hostname)
   ##
-  args: ["kc.sh import --file /opt/keycloak/data/import/BaSyx-realm.json; kc.sh start-dev --hostname=https://keycloak-basyx.factory-x.catena-x.net --hostname-strict=false --hostname-debug=true"]
+  args: ["kc.sh import --file /opt/keycloak/data/import/BaSyx-realm.json; kc.sh start-dev --hostname=https://keycloak-dsp-basyx.factory-x.catena-x.net --hostname-strict=false --hostname-debug=true"]
 
 ## Eclipse Mosquitto MQTT Broker parameters
 ##
