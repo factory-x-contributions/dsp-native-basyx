@@ -46,13 +46,13 @@ mongodb:
     enabled: true
     ## @param mongodb.rootUser MongoDB root user
     ##
-    rootUser: adminUser
+    rootUser: "<path:factory-x-ci-cd/data/dsp-native-basyx#mongodb-root-user>"
     ## @param mongodb.rootPassword MongoDB root password
     ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mongodb#setting-the-root-user-and-password-on-first-run
     ##
-    rootPassword: adminPassword
-    username: mongoAdmin
-    password: mongoPassword
+    rootPassword: "<path:factory-x-ci-cd/data/dsp-native-basyx#mongodb-root-password>"
+    username: "<path:factory-x-ci-cd/data/dsp-native-basyx#mongodb-username>"
+    password: "<path:factory-x-ci-cd/data/dsp-native-basyx#mongodb-password>"
     database: factoryx-mongo-db
   ## @param mongodb.architecture MongoDB architecture (`standalone` or `replicaset`)
   ##
@@ -99,13 +99,13 @@ keycloak:
     auth:
       ## @param keycloak.postgresql.auth.username PostgreSQL user
       ##
-      username: keycloak
+      username: "<path:factory-x-ci-cd/data/dsp-native-basyx#postgresql-username>"
       ## @param keycloak.postgresql.auth.password PostgreSQL password
       ##
-      password: password
+      password: "<path:factory-x-ci-cd/data/dsp-native-basyx#postgresql-password>"
       ## @param keycloak.postgresql.auth.database PostgreSQL database
       ##
-      database: keycloak
+      database: "<path:factory-x-ci-cd/data/dsp-native-basyx#postgresql-database>"
   ## Keycloak ingress parameters
   ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
@@ -150,10 +150,10 @@ keycloak:
   auth:
     ## @param keycloak.auth.adminUser Keycloak administrator user
     ##
-    adminUser: user
+    adminUser: "<path:factory-x-ci-cd/data/dsp-native-basyx#keycloak-admin-user>"
     ## @param keycloak.auth.adminPassword Keycloak administrator password for the new user
     ##
-    adminPassword: password
+    adminPassword: "<path:factory-x-ci-cd/data/dsp-native-basyx#keycloak-admin-password>"
   ## Keycloak service parameters
   ##
   service:
@@ -221,8 +221,8 @@ mosquitto:
     enabled: false
     ## @param mosquitto.auth.username MQTT username
     ##
-    username: user
+    username: "<path:factory-x-ci-cd/data/dsp-native-basyx#mosquitto-username>"
     ## @param mosquitto.auth.password MQTT password
     ##
-    password: pw
+    password: "<path:factory-x-ci-cd/data/dsp-native-basyx#mosquitto-password>"
 
