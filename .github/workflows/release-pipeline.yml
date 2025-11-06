@@ -87,8 +87,8 @@ jobs:
         with:
           context: .
           secrets: |
-            "github_token=${{ secrets.GITHUB_TOKEN }}"
-            "github_actor=${{ github.actor }}"
+            "github-token=${{ secrets.GITHUB_TOKEN }}"
+            "github-actor=${{ github.actor }}"
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
