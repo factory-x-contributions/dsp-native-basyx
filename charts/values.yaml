@@ -34,9 +34,9 @@ mongodb:
   ##
   image:
     registry: docker.io
-    repository: bitnami/mongodb
+    repository: mongo
     tag: "8.2.1" 
-    digest: "sha256:3a822a270ebc55bc49cac61afebce3ede0c68eb9b08b1e9d4b2d57ad29f78997"
+    digest: "sha256:86835e8da0f94efd61334decb320fa43e8a60027688cbd856bf29d065b470338"
   ## MongoDB auth parameters
   ##
   auth:
@@ -80,8 +80,8 @@ keycloak:
   ##
   image:
     registry: docker.io
-    repository: bitnamilegacy/keycloak
-    tag: "26.3.3-debian-12-r0"
+    repository: keycloak/keycloak
+    tag: "26.3.3"
   ## Keycloak PostgreSQL parameters
   ##
   postgresql:
@@ -92,8 +92,8 @@ keycloak:
     ##
     image:
       registry: docker.io
-      repository: bitnamilegacy/postgresql
-      tag: "17.6.0-debian-12-r4"
+      repository: postgres
+      tag: "17.6"
     ## PostgreSQL Auth parameters
     ##
     auth:
