@@ -165,6 +165,31 @@ keycloak:
   ## @param keycloak.fullnameOverride Overrides the release name for Keycloak
   ##
   fullnameOverride: dsp-basyx-keycloak
+  ## @param keycloak.extraEnvVars Extra environment variables
+  ##
+  extraEnvVars:
+    - name: KEYCLOAK_DATABASE_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: dsp-basyx-keycloak-postgresql
+          key: password
+    - name: KC_DB
+      value: "postgres"
+    - name: KC_DB_URL_HOST
+      value: "dsp-basyx-keycloak-postgresql"
+    - name: KC_DB_URL_DATABASE
+      value: "keycloak"
+    - name: KC_DB_USERNAME
+      value: "keycloak"
+    - name: KC_DB_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: dsp-basyx-keycloak-postgresql
+          key: password
+    - name: KC_CACHE
+      value: "local"
+    - name: KC_CACHE_STACK
+      value: "local"
   ## @param keycloak.extraVolumes Adds volumes to the Keycloak deployment
   ##
   extraVolumes:
@@ -182,13 +207,13 @@ keycloak:
   production: false
   ## @param keycloak.extraStartupArgs Extra startup arguments
   ##
-  extraStartupArgs: "--import-realm"
+  extraStartupArgs: "--import-realm --db=postgres"
   ## @param keycloak.command Overrides container command
   command: ["/bin/sh", "-c"]
   ## @param keycloak.args Overrides container command args
   ## Depends on: @param keycloak.apirule.hostname or keycloak.ingress.hostname (see flag hostname)
   ##
-  args: ["kc.sh import --file /opt/keycloak/data/import/BaSyx-realm.json; kc.sh start-dev --hostname=https://keycloak-dsp-basyx.factory-x.catena-x.net --hostname-strict=false --hostname-debug=true --db=postgres"]
+  args: ["kc.sh import --file /opt/keycloak/data/import/BaSyx-realm.json; kc.sh start-dev --hostname=https://keycloak-dsp-basyx.factory-x.catena-x.net --hostname-strict=false --db=postgres"]
 
 ## Eclipse Mosquitto MQTT Broker parameters
 ##

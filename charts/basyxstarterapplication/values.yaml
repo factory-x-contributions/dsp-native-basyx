@@ -127,7 +127,7 @@ application:
     - name: basyx.feature.authorization.rules.backend
       value: "InMemory"
     - name: basyx.feature.authorization.rbac.file
-      value: "file:/app/rules.json"
+      value: "classpath:rules.json"
     - name: basyx.feature.authorization.jwtBearerTokenProvider
       value: "keycloak"
     
