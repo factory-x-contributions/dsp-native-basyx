@@ -101,7 +101,7 @@ application:
     
     # MongoDB Configuration - using Spring Boot environment variable name
     - name: SPRING_DATA_MONGODB_URI
-      value: "mongodb://mongoAdmin:mongoPassword@dsp-basyx-mongodb:27017/factoryx-mongo-db?authSource=admin"
+      value: "mongodb://mongoAdmin:mongoPassword@dsp-native-basyx-mongodb:27017/factoryx-mongo-db?authSource=admin"
     
     # BaSyx Features
     - name: basyx.feature.kafka.enabled
@@ -113,7 +113,7 @@ application:
     - name: MQTT_CLIENTID
       value: "dsp-native-basyx"
     - name: MQTT_HOSTNAME
-      value: "dsp-basyx-mosquitto"
+      value: "dsp-native-basyx-mosquitto"
     - name: MQTT_PORT
       value: "1883"
     - name: MQTT_PROTOCOL
