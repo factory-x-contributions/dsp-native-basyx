@@ -44,7 +44,7 @@ jobs:
       packages: write
   
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Extract version from Gradle (strip -SNAPSHOT)
         id: extract_version
