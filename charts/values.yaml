@@ -146,16 +146,16 @@ keycloak:
       - "OPTIONS"
       - "TRACE"
       - "PATCH"
-  ## Keycloak auth parameters
+  ## Keycloak auth parameters - Using environment variables instead
   ## ref: https://github.com/bitnami/containers/tree/main/bitnami/keycloak#admin-credentials
   ##
-  auth:
-    ## @param keycloak.auth.adminUser Keycloak administrator user
-    ##
-    adminUser: "<path:factory-x-ci-cd/data/dsp-native-basyx#keycloak-admin-user>"
-    ## @param keycloak.auth.adminPassword Keycloak administrator password for the new user
-    ##
-    adminPassword: "<path:factory-x-ci-cd/data/dsp-native-basyx#keycloak-admin-password>"
+  # auth:
+  #   ## @param keycloak.auth.adminUser Keycloak administrator user
+  #   ##
+  #   adminUser: "<path:factory-x-ci-cd/data/dsp-native-basyx#keycloak-admin-user>"
+  #   ## @param keycloak.auth.adminPassword Keycloak administrator password for the new user
+  #   ##
+  #   adminPassword: "<path:factory-x-ci-cd/data/dsp-native-basyx#keycloak-admin-password>"
   ## Keycloak service parameters
   ##
   service:
@@ -169,9 +169,9 @@ keycloak:
   ##
   extraEnvVars:
     - name: KC_DB
-      value: "<path:factory-x-ci-cd/data/dsp-native-basyx#keycloak-db-type>"
+      value: "postgres"
     - name: KC_DB_URL_HOST
-      value: "<path:factory-x-ci-cd/data/dsp-native-basyx#keycloak-db-host>"
+      value: "dsp-basyx-keycloak-postgresql"
     - name: KC_DB_URL_DATABASE
       value: "<path:factory-x-ci-cd/data/dsp-native-basyx#postgresql-database>"
     - name: KC_DB_USERNAME
@@ -179,9 +179,17 @@ keycloak:
     - name: KC_DB_PASSWORD
       value: "<path:factory-x-ci-cd/data/dsp-native-basyx#postgresql-password>"
     - name: KC_CACHE
-      value: "<path:factory-x-ci-cd/data/dsp-native-basyx#keycloak-cache-type>"
+      value: "local"
     - name: KC_CACHE_STACK
-      value: "<path:factory-x-ci-cd/data/dsp-native-basyx#keycloak-cache-stack>"
+      value: "local"
+    - name: KC_LOG_LEVEL
+      value: "INFO"
+    - name: KC_HEALTH_ENABLED
+      value: "true"
+    - name: KEYCLOAK_ADMIN
+      value: "<path:factory-x-ci-cd/data/dsp-native-basyx#keycloak-admin-user>"
+    - name: KEYCLOAK_ADMIN_PASSWORD
+      value: "<path:factory-x-ci-cd/data/dsp-native-basyx#keycloak-admin-password>"
   ## @param keycloak.extraVolumes Adds volumes to the Keycloak deployment
   ##
   extraVolumes:
@@ -199,13 +207,13 @@ keycloak:
   production: false
   ## @param keycloak.extraStartupArgs Extra startup arguments
   ##
-  extraStartupArgs: "--import-realm --db=postgres"
+  extraStartupArgs: "--import-realm --cache=local --cache-stack=local"
   ## @param keycloak.command Overrides container command
   command: ["/bin/sh", "-c"]
-  ## @param keycloak.args Overrides container command args
+  ## @param keycloak.args Overrides container command args  
   ## Depends on: @param keycloak.apirule.hostname or keycloak.ingress.hostname (see flag hostname)
   ##
-  args: ["kc.sh import --file /opt/keycloak/data/import/BaSyx-realm.json; kc.sh start-dev --hostname=https://keycloak-dsp-basyx.factory-x.catena-x.net --hostname-strict=false --db=postgres"]
+  args: ["kc.sh import --file /opt/keycloak/data/import/BaSyx-realm.json; kc.sh start-dev --hostname-strict=false --cache=local"]
 
 ## Eclipse Mosquitto MQTT Broker parameters
 ##
