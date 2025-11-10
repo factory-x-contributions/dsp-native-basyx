@@ -99,6 +99,10 @@ application:
     - name: basyx.backend
       value: "MongoDB"
     
+    # MongoDB Configuration - using Spring Boot environment variable name
+    - name: SPRING_DATA_MONGODB_URI
+      value: "mongodb://mongoAdmin:mongoPassword@dsp-basyx-mongodb:27017/factoryx-mongo-db?authSource=admin"
+    
     # BaSyx Features
     - name: basyx.feature.kafka.enabled
       value: "false"
