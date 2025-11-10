@@ -109,18 +109,18 @@ application:
     - name: basyx.feature.mqtt.enabled
       value: "true"
     
-    # MQTT Configuration - using exact property names as environment variables
-    - name: mqtt.clientId
+    # MQTT Configuration - using Spring Boot environment variable naming convention
+    - name: MQTT_CLIENTID
       value: "dsp-native-basyx"
-    - name: mqtt.hostname
+    - name: MQTT_HOSTNAME
       value: "dsp-basyx-mosquitto"
-    - name: mqtt.port
+    - name: MQTT_PORT
       value: "1883"
-    - name: mqtt.protocol
-      value: "tcp"  
-    - name: mqtt.username
+    - name: MQTT_PROTOCOL
+      value: "tcp"
+    - name: MQTT_USERNAME
       value: "user"
-    - name: mqtt.password
+    - name: MQTT_PASSWORD
       value: "pw"
     
     # BaSyx Authorization
