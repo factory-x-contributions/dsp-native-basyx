@@ -109,7 +109,7 @@ application:
     - name: basyx.feature.mqtt.enabled
       value: "true"
     
-    # MQTT Configuration - using the correct service name
+    # MQTT Configuration - using exact property names as environment variables
     - name: mqtt.clientId
       value: "dsp-native-basyx"
     - name: mqtt.hostname
@@ -117,7 +117,7 @@ application:
     - name: mqtt.port
       value: "1883"
     - name: mqtt.protocol
-      value: "tcp"
+      value: "tcp"  
     - name: mqtt.username
       value: "user"
     - name: mqtt.password
