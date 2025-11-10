@@ -168,28 +168,20 @@ keycloak:
   ## @param keycloak.extraEnvVars Extra environment variables
   ##
   extraEnvVars:
-    - name: KEYCLOAK_DATABASE_PASSWORD
-      valueFrom:
-        secretKeyRef:
-          name: dsp-basyx-keycloak-postgresql
-          key: password
     - name: KC_DB
-      value: "postgres"
+      value: "<path:factory-x-ci-cd/data/dsp-native-basyx#keycloak-db-type>"
     - name: KC_DB_URL_HOST
-      value: "dsp-basyx-keycloak-postgresql"
+      value: "<path:factory-x-ci-cd/data/dsp-native-basyx#keycloak-db-host>"
     - name: KC_DB_URL_DATABASE
-      value: "keycloak"
+      value: "<path:factory-x-ci-cd/data/dsp-native-basyx#postgresql-database>"
     - name: KC_DB_USERNAME
-      value: "keycloak"
+      value: "<path:factory-x-ci-cd/data/dsp-native-basyx#postgresql-username>"
     - name: KC_DB_PASSWORD
-      valueFrom:
-        secretKeyRef:
-          name: dsp-basyx-keycloak-postgresql
-          key: password
+      value: "<path:factory-x-ci-cd/data/dsp-native-basyx#postgresql-password>"
     - name: KC_CACHE
-      value: "local"
+      value: "<path:factory-x-ci-cd/data/dsp-native-basyx#keycloak-cache-type>"
     - name: KC_CACHE_STACK
-      value: "local"
+      value: "<path:factory-x-ci-cd/data/dsp-native-basyx#keycloak-cache-stack>"
   ## @param keycloak.extraVolumes Adds volumes to the Keycloak deployment
   ##
   extraVolumes:
