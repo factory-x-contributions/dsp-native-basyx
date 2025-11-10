@@ -177,12 +177,18 @@ keycloak:
     - mountPath: /opt/keycloak/data/import/BaSyx-realm.json
       subPath: BaSyx-realm.json
       name: dsp-basyx-keycloak-realm
+  ## @param keycloak.production Use production profile for Keycloak
+  ##
+  production: false
+  ## @param keycloak.extraStartupArgs Extra startup arguments
+  ##
+  extraStartupArgs: "--import-realm"
   ## @param keycloak.command Overrides container command
   command: ["/bin/sh", "-c"]
   ## @param keycloak.args Overrides container command args
   ## Depends on: @param keycloak.apirule.hostname or keycloak.ingress.hostname (see flag hostname)
   ##
-  args: ["kc.sh import --file /opt/keycloak/data/import/BaSyx-realm.json; kc.sh start-dev --hostname=https://keycloak-dsp-basyx.factory-x.catena-x.net --hostname-strict=false --hostname-debug=true"]
+  args: ["kc.sh import --file /opt/keycloak/data/import/BaSyx-realm.json; kc.sh start-dev --hostname=https://keycloak-dsp-basyx.factory-x.catena-x.net --hostname-strict=false --hostname-debug=true --db=postgres"]
 
 ## Eclipse Mosquitto MQTT Broker parameters
 ##
