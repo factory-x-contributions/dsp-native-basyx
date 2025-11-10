@@ -176,6 +176,10 @@ keycloak:
       value: "false"
     - name: KC_HTTP_ENABLED
       value: "true"
+    - name: KC_CACHE
+      value: "local"
+    - name: KC_CACHE_STACK
+      value: "local"
   ## @param keycloak.extraVolumes Adds volumes to the Keycloak deployment
   ##
   extraVolumes:
