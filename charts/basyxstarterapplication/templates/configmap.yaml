@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "basyxstarterapplication.fullname" . }}-config
+  labels:
+    {{- include "basyxstarterapplication.labels" . | nindent 4 }}
+data:
+  {{- range .Values.application.env }}
+  {{ .name }}: {{ .value | quote }}
+  {{- end }}
+  SPRING_APPLICATION_JSON: '{
+    "spring.jpa.hibernate.ddl-auto": "update"
+    {{- if .Values.application.useHsqldb }},
+    "spring.datasource.url": "jdbc:hsqldb:mem:testdb",
+    "spring.datasource.driverClassName": "org.hsqldb.jdbc.JDBCDriver",
+    "spring.datasource.username": "sa",
+    "spring.datasource.password": ""
+    {{- end }}
+  }'

@@ -1,0 +1,9 @@
+{{- if .Values.keycloak.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dsp-basyx-keycloak-realm
+data:
+  BaSyx-realm.json: |-
+{{ .Files.Get "files/BaSyx-realm.json" | indent 4 }}
+{{- end }}
