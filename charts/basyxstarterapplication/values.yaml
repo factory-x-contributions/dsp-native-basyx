@@ -106,22 +106,9 @@ application:
     # BaSyx Features
     - name: basyx.feature.kafka.enabled
       value: "false"
+    # Temporary override until new Docker image is built with MQTT disabled in application.properties
     - name: basyx.feature.mqtt.enabled
-      value: "true"
-    
-    # MQTT Configuration - using Spring Boot environment variable naming convention
-    - name: MQTT_CLIENTID
-      value: "dsp-native-basyx"
-    - name: MQTT_HOSTNAME
-      value: "dsp-native-basyx-mosquitto"
-    - name: MQTT_PORT
-      value: "1883"
-    - name: MQTT_PROTOCOL
-      value: "tcp"
-    - name: MQTT_USERNAME
-      value: "user"
-    - name: MQTT_PASSWORD
-      value: "pw"
+      value: "false"
     
     # BaSyx Authorization
     - name: basyx.feature.authorization.enabled
@@ -153,12 +140,12 @@ secrets:
   # -- Create secrets for MongoDB
   create: true
   mongodb:
-    hostname: dsp-basyx-mongodb
+    hostname: dsp-native-basyx-mongodb
     port: "27017"
     database: "factoryx-mongo-db"
     username: "mongoAdmin"
     password: "mongoPassword"
-    uri: "mongodb://mongoAdmin:mongoPassword@dsp-basyx-mongodb:27017/factoryx-mongo-db?authSource=admin"
+    uri: "mongodb://mongoAdmin:mongoPassword@dsp-native-basyx-mongodb:27017/factoryx-mongo-db?authSource=admin"
 
 # Note: In Docker Compose, Vault is used for secret management.
 # For Kubernetes deployment, we use Kubernetes secrets for simplicity.
