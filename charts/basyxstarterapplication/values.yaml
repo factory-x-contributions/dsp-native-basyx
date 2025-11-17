@@ -134,7 +134,9 @@ application:
     - name: org.factoryx.dspnativebasyx.credentialtorolemappings
       value: "dataspacemember=trusted_business_partner, foo=bar"
 
-
+authorization:
+  rbac:
+    filepath: "file:/app/rules.json"
 # Secret management
 secrets:
   # -- Create secrets for MongoDB

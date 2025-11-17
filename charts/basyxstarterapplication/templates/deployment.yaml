@@ -67,6 +67,8 @@ spec:
                 secretKeyRef:
                   name: {{ include "basyxstarterapplication.fullname" . }}-secrets
                   key: mongodb-uri
+            - name: BASYX_FEATURE_AUTHORIZATION_RBAC_FILE
+              value: {{ .Values.authorization.rbac.filepath }}
               {{- end }}
           envFrom:
             - configMapRef:
@@ -81,15 +83,23 @@ spec:
               containerPort: 8090
               protocol: TCP
           livenessProbe:
-            httpGet:
-              path: /
-              port: http
+            exec:
+              command:
+                - sh
+                - -c
+                - |
+                  STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost/)
+                  [ "$STATUS" = "401" ] && exit 0 || exit 1
             initialDelaySeconds: 30
             periodSeconds: 10
           readinessProbe:
-            httpGet:
-              path: /
-              port: http
+            exec:
+              command:
+                - sh
+                - -c
+                - |
+                  STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost/)
+                  [ "$STATUS" = "401" ] && exit 0 || exit 1
             initialDelaySeconds: 5
             periodSeconds: 5
           resources:
