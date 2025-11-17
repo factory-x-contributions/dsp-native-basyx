@@ -1,12 +1,12 @@
 services:
 
-  basyx-starter-app:
-    container_name: basyx-starter-app
-    image: ghcr.io/factory-x-contributions/dsp-native-basyx:0.0.1
+  dsp-native-basyx:
+    container_name: dsp-native-basyx
+    image: ghcr.io/factory-x-contributions/dsp-native-basyx:0.0.2
     environment:
-      - basyx.feature.authorization.rbac.file=file:/app/rules.json
+      - basyx.feature.authorization.rbac.file=file:/app/resources/rules.json
       - spring.security.oauth2.resourceserver.jwt.issuer-uri=http://keycloak:8080/realms/dsp-native-basyx
-      - org.factoryx.library.hostname=basyx-starter-app
+      - org.factoryx.library.hostname=dsp-native-basyx
       - spring.data.mongodb.uri=mongodb://mongoAdmin:mongoPassword@mongo
       - spring.data.mongodb.port=27017
       - spring.data.mongodb.database=factoryx-mongo-db
@@ -24,7 +24,15 @@ services:
       - org.factoryx.library.fxv01.trustedissuer=${TRUSTED_ISSUER}
       - org.factoryx.library.policyservice=fxv0_1
       - org.factoryx.library.fxv01.bearer=false
-
+      - basyx.feature.mqtt.enabled=true
+      - mqtt.clientId=dsp-native-basyx
+      - mqtt.hostname=mqtt-broker
+      - mqtt.port=1883
+      - mqtt.protocol=tcp
+      - mqtt.username=user
+      - mqtt.password=pw
+    volumes:
+      - ./src/main/resources/rules.json:/app/resources/rules.json:ro
     depends_on:
       - mongo
     ports:

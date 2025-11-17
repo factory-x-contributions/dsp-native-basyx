@@ -67,6 +67,9 @@ node_modules/
 *.generated
 
 /.secret
+/DevDockerfile
+/dev-docker-compose.yaml
+/localdocker.sh
 
 vault/secrets/*
 !vault/secrets/dontreadme
