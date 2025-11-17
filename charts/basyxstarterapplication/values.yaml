@@ -8,7 +8,7 @@ image:
   repository: ghcr.io/factory-x-contributions/dsp-native-basyx
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "0.0.1"
+  tag: "0.0.2"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -149,3 +149,4 @@ secrets:
 
 # Note: In Docker Compose, Vault is used for secret management.
 # For Kubernetes deployment, we use Kubernetes secrets for simplicity.
+
