@@ -88,7 +88,7 @@ spec:
                 - sh
                 - -c
                 - |
-                  STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost/)
+                  STATUS=$(wget -q --server-response --spider http://localhost/ 2>&1 | awk '/HTTP/{print $2}')
                   [ "$STATUS" = "401" ] && exit 0 || exit 1
             initialDelaySeconds: 30
             periodSeconds: 10
@@ -98,7 +98,7 @@ spec:
                 - sh
                 - -c
                 - |
-                  STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost/)
+                  STATUS=$(wget -q --server-response --spider http://localhost/ 2>&1 | awk '/HTTP/{print $2}')
                   [ "$STATUS" = "401" ] && exit 0 || exit 1
             initialDelaySeconds: 5
             periodSeconds: 5
