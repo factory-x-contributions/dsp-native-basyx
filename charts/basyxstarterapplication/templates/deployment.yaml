@@ -82,26 +82,26 @@ spec:
             - name: http
               containerPort: 8090
               protocol: TCP
-          livenessProbe:
-            exec:
-              command:
-                - sh
-                - -c
-                - |
-                  STATUS=$(wget -q --server-response --spider http://localhost/ 2>&1 | awk '/HTTP/{print $2}')
-                  [ "$STATUS" = "401" ] && exit 0 || exit 1
-            initialDelaySeconds: 30
-            periodSeconds: 10
-          readinessProbe:
-            exec:
-              command:
-                - sh
-                - -c
-                - |
-                  STATUS=$(wget -q --server-response --spider http://localhost/ 2>&1 | awk '/HTTP/{print $2}')
-                  [ "$STATUS" = "401" ] && exit 0 || exit 1
-            initialDelaySeconds: 5
-            periodSeconds: 5
+          # livenessProbe:
+          #   exec:
+          #     command:
+          #       - sh
+          #       - -c
+          #       - |
+          #         STATUS=$(wget -q --server-response --spider http://localhost/ 2>&1 | awk '/HTTP/{print $2}')
+          #         [ "$STATUS" = "401" ] && exit 0 || exit 1
+          #   initialDelaySeconds: 30
+          #   periodSeconds: 10
+          # readinessProbe:
+          #   exec:
+          #     command:
+          #       - sh
+          #       - -c
+          #       - |
+          #         STATUS=$(wget -q --server-response --spider http://localhost/ 2>&1 | awk '/HTTP/{print $2}')
+          #         [ "$STATUS" = "401" ] && exit 0 || exit 1
+          #   initialDelaySeconds: 5
+          #   periodSeconds: 5
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
