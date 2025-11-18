@@ -2,9 +2,9 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ include "basyxstarterapplication.fullname" . }}
+  name: {{ include "dsp-native-basyx.fullname" . }}
   labels:
-    {{- include "basyxstarterapplication.labels" . | nindent 4 }}
+    {{- include "dsp-native-basyx.labels" . | nindent 4 }}
   {{- with .Values.ingress.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
@@ -33,7 +33,7 @@ spec:
             pathType: {{ .pathType }}
             backend:
               service:
-                name: {{ include "basyxstarterapplication.fullname" $ }}
+                name: {{ include "dsp-native-basyx.fullname" $ }}
                 port:
                   number: {{ .servicePort }}
           {{- end }}

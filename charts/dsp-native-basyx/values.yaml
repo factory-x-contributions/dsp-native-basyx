@@ -1,4 +1,4 @@
-# Default values for basyxstarterapplication.
+# Default values for dsp-native-basyx.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
@@ -128,7 +128,7 @@ application:
     
     # DSP Library Configuration
     - name: org.factoryx.library.hostname
-      value: "basyxstarterapplication"
+      value: "dsp-native-basyx"
     - name: org.factoryx.library.dspapiprefix
       value: "/dsp"
     - name: org.factoryx.dspnativebasyx.credentialtorolemappings

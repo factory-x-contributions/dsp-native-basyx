@@ -2,7 +2,7 @@ global:
   security:
     allowInsecureImages: true
 
-basyxstarterapplication:
+dsp-native-basyx:
   enabled: true
   ingress:
     enabled: true
@@ -16,7 +16,7 @@ basyxstarterapplication:
             pathType: Prefix
             servicePort: 8090
     tls:
-      - secretName: basyxstarterapplication-tls
+      - secretName: dsp-native-basyx-tls
         hosts:
           - dsp-basyx.factory-x.catena-x.net
   application:

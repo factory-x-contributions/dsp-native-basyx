@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "basyxstarterapplication.fullname" . }}
+  name: {{ include "dsp-native-basyx.fullname" . }}
   labels:
-    {{- include "basyxstarterapplication.labels" . | nindent 4 }}
+    {{- include "dsp-native-basyx.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "basyxstarterapplication.selectorLabels" . | nindent 6 }}
+      {{- include "dsp-native-basyx.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -18,19 +18,19 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "basyxstarterapplication.selectorLabels" . | nindent 8 }}
+        {{- include "dsp-native-basyx.selectorLabels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "basyxstarterapplication.serviceAccountName" . }}
+      serviceAccountName: {{ include "dsp-native-basyx.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       volumes:
         - name: rules-config
           configMap:
-            name: {{ include "basyxstarterapplication.fullname" . }}-rules
+            name: {{ include "dsp-native-basyx.fullname" . }}-rules
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
@@ -45,34 +45,34 @@ spec:
             - name: SPRING_DATA_MONGODB_PORT
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "basyxstarterapplication.fullname" . }}-secrets
+                  name: {{ include "dsp-native-basyx.fullname" . }}-secrets
                   key: mongodb-port
             - name: SPRING_DATA_MONGODB_DATABASE
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "basyxstarterapplication.fullname" . }}-secrets
+                  name: {{ include "dsp-native-basyx.fullname" . }}-secrets
                   key: mongodb-database
             - name: SPRING_DATA_MONGODB_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "basyxstarterapplication.fullname" . }}-secrets
+                  name: {{ include "dsp-native-basyx.fullname" . }}-secrets
                   key: mongodb-username
             - name: SPRING_DATA_MONGODB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "basyxstarterapplication.fullname" . }}-secrets
+                  name: {{ include "dsp-native-basyx.fullname" . }}-secrets
                   key: mongodb-password
             - name: SPRING_DATA_MONGODB_URI
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "basyxstarterapplication.fullname" . }}-secrets
+                  name: {{ include "dsp-native-basyx.fullname" . }}-secrets
                   key: mongodb-uri
             - name: BASYX_FEATURE_AUTHORIZATION_RBAC_FILE
               value: {{ .Values.authorization.rbac.filepath }}
               {{- end }}
           envFrom:
             - configMapRef:
-                name: {{ include "basyxstarterapplication.fullname" . }}-config
+                name: {{ include "dsp-native-basyx.fullname" . }}-config
           volumeMounts:
             - name: rules-config
               mountPath: /app/rules.json
