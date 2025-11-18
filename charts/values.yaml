@@ -1,0 +1,245 @@
+global:
+  security:
+    allowInsecureImages: true
+
+dsp-native-basyx:
+  enabled: true
+  ingress:
+    enabled: true
+    annotations:
+      cert-manager.io/cluster-issuer: "letsencrypt-prod"
+      kubernetes.io/tls-acme: "true"
+    hosts:
+      - host: dsp-basyx.factory-x.catena-x.net
+        paths:
+          - path: /
+            pathType: Prefix
+            servicePort: 8090
+    tls:
+      - secretName: dsp-native-basyx-tls
+        hosts:
+          - dsp-basyx.factory-x.catena-x.net
+  application:
+    env:
+      - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI
+        value: "https://keycloak-dsp-basyx.factory-x.catena-x.net/realms/dsp-native-basyx"
+
+  
+  
+
+## MongoDB parameters
+##
+mongodb:
+  ## @param mongodb.enabled Enable MongoDB
+  ##
+  enabled: true
+  ## MongoDB image parameters
+  ##
+  image:
+    registry: docker.io
+    repository: bitnamilegacy/mongodb
+    tag: "8.0.13" 
+  ## MongoDB auth parameters
+  ##
+  auth:
+    ## @param mongodb.auth.enabled Enable authentication
+    ## ref: https://docs.mongodb.com/manual/tutorial/enable-authentication/
+    ##
+    enabled: true
+    ## @param mongodb.rootUser MongoDB root user
+    ##
+    rootUser: "<path:factory-x-ci-cd/data/dsp-native-basyx#mongodb-root-user>"
+    ## @param mongodb.rootPassword MongoDB root password
+    ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mongodb#setting-the-root-user-and-password-on-first-run
+    ##
+    rootPassword: "<path:factory-x-ci-cd/data/dsp-native-basyx#mongodb-root-password>"
+    username: "<path:factory-x-ci-cd/data/dsp-native-basyx#mongodb-username>"
+    password: "<path:factory-x-ci-cd/data/dsp-native-basyx#mongodb-password>"
+    database: factoryx-mongo-db
+  ## @param mongodb.architecture MongoDB architecture (`standalone` or `replicaset`)
+  ##
+  architecture: standalone
+  ## MongoDB persistence parameters
+  ##
+  persistence:
+    ## @param mongodb.persistence.size PVC Storage Request for MongoDB data volume
+    ##
+    size: 10Gi
+  ## MongoDB service parameters
+  ##
+  service:
+    ## @param mongodb.service.nameOverride MongoDB service name
+    ##
+    nameOverride: mongodb
+
+## Keycloak parameters
+##
+keycloak:
+  ## @param keycloak.enabled Enable Keycloak
+  ##
+  enabled: true
+  ## Keycloak image parameters
+  ##
+  image:
+    registry: docker.io
+    repository: bitnamilegacy/keycloak
+    tag: "26.3.3"
+  ## Keycloak PostgreSQL parameters
+  ##
+  postgresql:
+    ## @param keycloak.postgresql.enabled Enable PostgreSQL
+    ##
+    enabled: true
+    ## @param keycloak.postgresql.image PostgreSQL image
+    ##
+    image:
+      registry: docker.io
+      repository: bitnamilegacy/postgresql
+      tag: "17.6.0"
+    ## PostgreSQL Auth parameters
+    ##
+    auth:
+      ## @param keycloak.postgresql.auth.username PostgreSQL user
+      ##
+      username: "<path:factory-x-ci-cd/data/dsp-native-basyx#postgresql-username>"
+      ## @param keycloak.postgresql.auth.password PostgreSQL password
+      ##
+      password: "<path:factory-x-ci-cd/data/dsp-native-basyx#postgresql-password>"
+      ## @param keycloak.postgresql.auth.database PostgreSQL database
+      ##
+      database: "<path:factory-x-ci-cd/data/dsp-native-basyx#postgresql-database>"
+  ## Keycloak ingress parameters
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
+  ##
+  ingress:
+    ## @param keycloak.ingress.enabled Enable ingress for Keycloak
+    ##
+    enabled: true
+    ## @param keycloak.ingress.ingressClassName IngressClass for the ingress
+    ##
+    ingressClassName: ""
+    ## @param keycloak.ingress.hostname Ingress hostname for Keycloak
+    ##
+    hostname: keycloak-dsp-basyx.factory-x.catena-x.net
+    ## @param keycloak.ingress.tls Enable tls
+    ##
+    tls: true
+  ## Keycloak apirule parameters
+  ## ref: https://kyma-project.io/#/api-gateway/user/custom-resources/apirule/04-10-apirule-custom-resource
+  ##
+  apirule:
+    ## @param keycloak.apirule.enabled Enable apirule for Keycloak
+    ##
+    enabled: false
+    ## @param keycloak.apirule.hostname Apirule hostname for Keycloak
+    ##
+    host: keycloak-dsp-basyx.factory-x.catena-x.net
+    ## @param keycloak.apirule.methods HTTP methods allowed for CORS header
+    ##
+    methods:
+      - "GET"
+      - "HEAD"
+      - "POST"
+      - "PUT"
+      - "DELETE"
+      - "CONNECT"
+      - "OPTIONS"
+      - "TRACE"
+      - "PATCH"
+  ## Keycloak auth parameters
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/keycloak#admin-credentials
+  ##
+  auth:
+    ## @param keycloak.auth.adminUser Keycloak administrator user
+    ##
+    adminUser: "<path:factory-x-ci-cd/data/dsp-native-basyx#keycloak-admin-user>"
+    ## @param keycloak.auth.adminPassword Keycloak administrator password for the new user
+    ##
+    adminPassword: "<path:factory-x-ci-cd/data/dsp-native-basyx#keycloak-admin-password>"
+  ## Keycloak service parameters
+  ##
+  service:
+    ## @param keycloak.service.type Kubernetes service type
+    ##
+    type: ClusterIP
+  ## @param keycloak.fullnameOverride Overrides the release name for Keycloak
+  ##
+  fullnameOverride: dsp-basyx-keycloak
+  ## @param keycloak.extraEnvVars Extra environment variables
+  ##
+  extraEnvVars:
+    - name: KEYCLOAK_ADMIN
+      value: "<path:factory-x-ci-cd/data/dsp-native-basyx#keycloak-admin-user>"
+    - name: KEYCLOAK_ADMIN_PASSWORD
+      value: "<path:factory-x-ci-cd/data/dsp-native-basyx#keycloak-admin-password>"
+    - name: KC_HOSTNAME_STRICT
+      value: "false"
+    - name: KC_HTTP_ENABLED
+      value: "true"
+    - name: KC_CACHE
+      value: "local"
+    - name: KC_CACHE_STACK
+      value: "local"
+  ## @param keycloak.extraVolumes Adds volumes to the Keycloak deployment
+  ##
+  extraVolumes:
+    - name: dsp-basyx-keycloak-realm
+      configMap:
+        name: dsp-basyx-keycloak-realm
+  ## @param keycloak.extraVolumes Mounts volumes to the Keycloak pod
+  ##
+  extraVolumeMounts:
+    - mountPath: /opt/keycloak/data/import/BaSyx-realm.json
+      subPath: BaSyx-realm.json
+      name: dsp-basyx-keycloak-realm
+  ## @param keycloak.production Use production profile for Keycloak
+  ##
+  production: false
+  ## @param keycloak.extraStartupArgs Extra startup arguments
+  ##
+  extraStartupArgs: "--import-realm"
+
+## Eclipse Mosquitto MQTT Broker parameters
+##
+mosquitto:
+  ## @param mosquitto.enabled Enable Eclipse Mosquitto MQTT broker
+  ##
+  enabled: true
+  ## @param mosquitto.image Eclipse Mosquitto image
+  ##
+  image:
+    registry: docker.io
+    repository: eclipse-mosquitto
+    tag: "2"
+  ## @param mosquitto.service Eclipse Mosquitto service configuration
+  ##
+  service:
+    ## @param mosquitto.service.type Kubernetes service type
+    ##
+    type: ClusterIP
+    ## @param mosquitto.service.ports Service ports
+    ##
+    ports:
+      mqtt:
+        port: 1883
+        targetPort: 1883
+        protocol: TCP
+  ## @param mosquitto.persistence Eclipse Mosquitto persistence
+  ##
+  persistence:
+    ## @param mosquitto.persistence.enabled Enable persistence
+    ##
+    enabled: false
+  ## @param mosquitto.auth Eclipse Mosquitto authentication
+  ##
+  auth:
+    ## @param mosquitto.auth.enabled Enable authentication
+    ##
+    enabled: false
+    ## @param mosquitto.auth.username MQTT username
+    ##
+    username: "<path:factory-x-ci-cd/data/dsp-native-basyx#mosquitto-username>"
+    ## @param mosquitto.auth.password MQTT password
+    ##
+    password: "<path:factory-x-ci-cd/data/dsp-native-basyx#mosquitto-password>"
+

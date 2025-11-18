@@ -1,0 +1,118 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "dsp-native-basyx.fullname" . }}
+  labels:
+    {{- include "dsp-native-basyx.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "dsp-native-basyx.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "dsp-native-basyx.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "dsp-native-basyx.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      volumes:
+        - name: rules-config
+          configMap:
+            name: {{ include "dsp-native-basyx.fullname" . }}-rules
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: JAVA_OPTS
+              value: {{ .Values.application.jvm.opts }}
+            {{- if not .Values.application.useHsqldb }}
+            # secret fields via SecretKeyRef
+            - name: SPRING_DATA_MONGODB_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "dsp-native-basyx.fullname" . }}-secrets
+                  key: mongodb-port
+            - name: SPRING_DATA_MONGODB_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "dsp-native-basyx.fullname" . }}-secrets
+                  key: mongodb-database
+            - name: SPRING_DATA_MONGODB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "dsp-native-basyx.fullname" . }}-secrets
+                  key: mongodb-username
+            - name: SPRING_DATA_MONGODB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "dsp-native-basyx.fullname" . }}-secrets
+                  key: mongodb-password
+            - name: SPRING_DATA_MONGODB_URI
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "dsp-native-basyx.fullname" . }}-secrets
+                  key: mongodb-uri
+            - name: BASYX_FEATURE_AUTHORIZATION_RBAC_FILE
+              value: {{ .Values.authorization.rbac.filepath }}
+              {{- end }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "dsp-native-basyx.fullname" . }}-config
+          volumeMounts:
+            - name: rules-config
+              mountPath: /app/rules.json
+              subPath: rules.json
+              readOnly: true
+          ports:
+            - name: http
+              containerPort: 8090
+              protocol: TCP
+          # livenessProbe:
+          #   exec:
+          #     command:
+          #       - sh
+          #       - -c
+          #       - |
+          #         STATUS=$(wget -q --server-response --spider http://localhost/ 2>&1 | awk '/HTTP/{print $2}')
+          #         [ "$STATUS" = "401" ] && exit 0 || exit 1
+          #   initialDelaySeconds: 30
+          #   periodSeconds: 10
+          # readinessProbe:
+          #   exec:
+          #     command:
+          #       - sh
+          #       - -c
+          #       - |
+          #         STATUS=$(wget -q --server-response --spider http://localhost/ 2>&1 | awk '/HTTP/{print $2}')
+          #         [ "$STATUS" = "401" ] && exit 0 || exit 1
+          #   initialDelaySeconds: 5
+          #   periodSeconds: 5
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

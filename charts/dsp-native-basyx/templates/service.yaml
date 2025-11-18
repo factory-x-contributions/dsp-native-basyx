@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "dsp-native-basyx.fullname" . }}
+  labels:
+    {{- include "dsp-native-basyx.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "dsp-native-basyx.selectorLabels" . | nindent 4 }}

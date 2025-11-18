@@ -1,0 +1,20 @@
+apiVersion: v2
+name: dsp-basyx
+description: A Helm chart for the DSP Native BaSyx Spring Boot app
+type: application
+version: 0.1.0
+appVersion: "0.0.1"
+
+dependencies:
+  - name: dsp-native-basyx
+    version: 0.1.0
+    repository: file://dsp-native-basyx
+    condition: dsp-native-basyx.enabled
+  - name: keycloak
+    version: 24.7.4
+    repository: https://charts.bitnami.com/bitnami
+    condition: keycloak.enabled
+  - name: mongodb
+    version: 12.1.31
+    repository: https://charts.bitnami.com/bitnami
+    condition: mongodb.enabled
