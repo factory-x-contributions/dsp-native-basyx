@@ -46,6 +46,16 @@ spec:
                 secretKeyRef:
                   name: iam-secrets
                   key: ORG_FACTORYX_LIBRARY_FXV01_VALIDATIONSERVICE_STSAPI
+            - name: ORG_FACTORYX_LIBRARY_FXV01_VALIDATIONSERVICE_BEARER
+              valueFrom:
+                secretKeyRef:
+                  name: iam-secrets
+                  key: ORG_FACTORYX_LIBRARY_FXV01_VALIDATIONSERVICE_BEARER
+            - name: ORG_FACTORYX_LIBRARY_FXV01_VALIDATIONSERVICE_VAULTROOTTOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: iam-secrets
+                  key: ORG_FACTORYX_LIBRARY_FXV01_VALIDATIONSERVICE_VAULTROOTTOKEN
             {{- if not .Values.application.useHsqldb }}
             # secret fields via SecretKeyRef
             - name: SPRING_DATA_MONGODB_PORT
