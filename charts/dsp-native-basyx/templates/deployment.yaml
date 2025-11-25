@@ -41,6 +41,11 @@ spec:
           env:
             - name: JAVA_OPTS
               value: {{ .Values.application.jvm.opts }}
+            - name: ORG_FACTORYX_LIBRARY_FXV01_VALIDATIONSERVICE_STSAPI
+              valueFrom:
+                secretKeyRef:
+                  name: iam-secrets
+                  key: ORG_FACTORYX_LIBRARY_FXV01_VALIDATIONSERVICE_STSAPI
             {{- if not .Values.application.useHsqldb }}
             # secret fields via SecretKeyRef
             - name: SPRING_DATA_MONGODB_PORT

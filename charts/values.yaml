@@ -27,9 +27,13 @@ dsp-native-basyx:
         value: "dsp-basyx.factory-x.catena-x.net"
       - name: ORG_FACTORYX_LIBRARY_USETLS
         value: "true"
+      - name: ORG_FACTORYX_LIBRARY_FXV01_VALIDATIONSERVICE
+        value: "mock"
 
   
-  
+  secrets:
+    iam:
+      stsapi: "dim-wallet"
 
 ## MongoDB parameters
 ##
