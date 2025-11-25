@@ -29,6 +29,8 @@ dsp-native-basyx:
         value: "true"
       - name: ORG_FACTORYX_LIBRARY_FXV01_VALIDATIONSERVICE
         value: "mock"
+      - name: ORG_FACTORYX_LIBRARY_FXV01_VALIDATIONSERVICE_VAULTURL
+        value: ""
 
   
   secrets:
