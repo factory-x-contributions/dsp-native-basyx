@@ -23,6 +23,10 @@ dsp-native-basyx:
     env:
       - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI
         value: "https://keycloak-dsp-basyx.factory-x.catena-x.net/realms/dsp-native-basyx"
+      - name: ORG_FACTORYX_LIBRARY_HOSTNAME
+        value: "dsp-basyx.factory-x.catena-x.net"
+      - name: ORG_FACTORYX_LIBRARY_USETLS
+        value: "true"
 
   
   
@@ -64,7 +68,7 @@ mongodb:
   persistence:
     ## @param mongodb.persistence.size PVC Storage Request for MongoDB data volume
     ##
-    size: 10Gi
+    size: 1Gi
   ## MongoDB service parameters
   ##
   service:
