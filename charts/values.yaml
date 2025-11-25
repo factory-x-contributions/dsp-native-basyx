@@ -68,7 +68,7 @@ mongodb:
   persistence:
     ## @param mongodb.persistence.size PVC Storage Request for MongoDB data volume
     ##
-    size: 1Gi
+    size: 10Gi
   ## MongoDB service parameters
   ##
   service:
