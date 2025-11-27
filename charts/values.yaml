@@ -28,9 +28,9 @@ dsp-native-basyx:
       - name: ORG_FACTORYX_LIBRARY_USETLS
         value: "true"
       - name: ORG_FACTORYX_LIBRARY_FXV01_VALIDATIONSERVICE
-        value: "mock"
+        value: "fxv0_1"
       - name: ORG_FACTORYX_LIBRARY_FXV01_VALIDATIONSERVICE_VAULTURL
-        value: ""
+        value: "http://dsp-native-basyx-vault:8200"
 
   
   secrets:
