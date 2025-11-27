@@ -29,7 +29,7 @@ dsp-native-basyx:
         value: "true"
       - name: ORG_FACTORYX_LIBRARY_VALIDATIONSERVICE
         value: "fxv0_1"
-      - name: ORG_FACTORYX_LIBRARY_FXV01_VALIDATIONSERVICE_VAULTURL
+      - name: ORG_FACTORYX_LIBRARY_FXV01_VAULTURL
         value: "http://dsp-native-basyx-vault:8200"
 
   
