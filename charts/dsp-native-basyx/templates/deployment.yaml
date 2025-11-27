@@ -46,6 +46,11 @@ spec:
                 secretKeyRef:
                   name: iam-secrets
                   key: ORG_FACTORYX_LIBRARY_VALIDATIONSERVICE_STSAPI
+            - name: ORG_FACTORYX_LIBRARY_FXV01_TRUSTEDISSUER
+              valueFrom:
+                secretKeyRef:
+                  name: iam-secrets
+                  key: ORG_FACTORYX_LIBRARY_FXV01_TRUSTEDISSUER
             - name: ORG_FACTORYX_LIBRARY_FXV01_BEARER
               valueFrom:
                 secretKeyRef:
