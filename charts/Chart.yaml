@@ -18,3 +18,7 @@ dependencies:
     version: 12.1.31
     repository: https://charts.bitnami.com/bitnami
     condition: mongodb.enabled
+  - name: vault
+    repository: https://helm.releases.hashicorp.com
+    version: 0.31.0
+    condition: vault.enabled

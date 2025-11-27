@@ -76,6 +76,11 @@ spec:
                 secretKeyRef:
                   name: iam-secrets
                   key: ORG_FACTORYX_LIBRARY_FXV01_VALIDATIONSERVICE_DIMURL
+            - name: ORG_FACTORYX_LIBRARY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: iam-secrets
+                  key: ORG_FACTORYX_LIBRARY_ID
             {{- if not .Values.application.useHsqldb }}
             # secret fields via SecretKeyRef
             - name: SPRING_DATA_MONGODB_PORT

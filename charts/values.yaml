@@ -37,6 +37,9 @@ dsp-native-basyx:
     iam:
       stsapi: "dim-wallet"
 
+vault:
+  enabled: true
+
 ## MongoDB parameters
 ##
 mongodb:
