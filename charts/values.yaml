@@ -31,6 +31,8 @@ dsp-native-basyx:
         value: "fxv0_1"
       - name: ORG_FACTORYX_LIBRARY_FXV01_VAULTURL
         value: "http://dsp-native-basyx-vault:8200"
+      - name: ORG_FACTORYX_LIBRARY_POLICYSERVICE
+        value: "fxv0_1"
 
   
   secrets:
