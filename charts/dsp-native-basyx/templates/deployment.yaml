@@ -46,36 +46,36 @@ spec:
                 secretKeyRef:
                   name: iam-secrets
                   key: ORG_FACTORYX_LIBRARY_VALIDATIONSERVICE_STSAPI
-            - name: ORG_FACTORYX_LIBRARY_FXV01_VALIDATIONSERVICE_BEARER
+            - name: ORG_FACTORYX_LIBRARY_FXV01_BEARER
               valueFrom:
                 secretKeyRef:
                   name: iam-secrets
-                  key: ORG_FACTORYX_LIBRARY_FXV01_VALIDATIONSERVICE_BEARER
-            - name: ORG_FACTORYX_LIBRARY_FXV01_VALIDATIONSERVICE_VAULTROOTTOKEN
+                  key: ORG_FACTORYX_LIBRARY_FXV01_BEARER
+            - name: ORG_FACTORYX_LIBRARY_FXV01_VAULTROOTTOKEN
               valueFrom:
                 secretKeyRef:
                   name: iam-secrets
-                  key: ORG_FACTORYX_LIBRARY_FXV01_VALIDATIONSERVICE_VAULTROOTTOKEN
-            - name: ORG_FACTORYX_LIBRARY_FXV01_VALIDATIONSERVICE_VAULTSECRETALIAS
+                  key: ORG_FACTORYX_LIBRARY_FXV01_VAULTROOTTOKEN
+            - name: ORG_FACTORYX_LIBRARY_FXV01_VAULTSECRETALIAS
               valueFrom:
                 secretKeyRef:
                   name: iam-secrets
-                  key: ORG_FACTORYX_LIBRARY_FXV01_VALIDATIONSERVICE_VAULTSECRETALIAS
-            - name: ORG_FACTORYX_LIBRARY_FXV01_VALIDATIONSERVICE_DIMTOKENURL
+                  key: ORG_FACTORYX_LIBRARY_FXV01_VAULTSECRETALIAS
+            - name: ORG_FACTORYX_LIBRARY_FXV01_DIMTOKENURL
               valueFrom:
                 secretKeyRef:
                   name: iam-secrets
-                  key: ORG_FACTORYX_LIBRARY_FXV01_VALIDATIONSERVICE_DIMTOKENURL
-            - name: ORG_FACTORYX_LIBRARY_FXV01_VALIDATIONSERVICE_DIMCLIENTID
+                  key: ORG_FACTORYX_LIBRARY_FXV01_DIMTOKENURL
+            - name: ORG_FACTORYX_LIBRARY_FXV01_DIMCLIENTID
               valueFrom:
                 secretKeyRef:
                   name: iam-secrets
-                  key: ORG_FACTORYX_LIBRARY_FXV01_VALIDATIONSERVICE_DIMCLIENTID
-            - name: ORG_FACTORYX_LIBRARY_FXV01_VALIDATIONSERVICE_DIMURL
+                  key: ORG_FACTORYX_LIBRARY_FXV01_DIMCLIENTID
+            - name: ORG_FACTORYX_LIBRARY_FXV01_DIMURL
               valueFrom:
                 secretKeyRef:
                   name: iam-secrets
-                  key: ORG_FACTORYX_LIBRARY_FXV01_VALIDATIONSERVICE_DIMURL
+                  key: ORG_FACTORYX_LIBRARY_FXV01_DIMURL
             - name: ORG_FACTORYX_LIBRARY_ID
               valueFrom:
                 secretKeyRef:
