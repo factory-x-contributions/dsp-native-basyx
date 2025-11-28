@@ -35,6 +35,8 @@ dsp-native-basyx:
         value: "fxv0_1"
       - name: ORG_FACTORYX_LIBRARY_ALTERNATIVEDATAACCESS
         value: "https://dsp-basyx.factory-x.catena-x.net/dsp/data-access"
+      - name: ORG_FACTORYX_LIBRARY_USEBUILTINDATAACCESS
+        value: "false"
 
   
   secrets:
