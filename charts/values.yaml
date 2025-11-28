@@ -33,10 +33,6 @@ dsp-native-basyx:
         value: "http://dsp-native-basyx-vault:8200"
       - name: ORG_FACTORYX_LIBRARY_POLICYSERVICE
         value: "fxv0_1"
-      - name: ORG_FACTORYX_LIBRARY_ALTERNATIVEDATAACCESS
-        value: "https://dsp-basyx.factory-x.catena-x.net/dsp/data-access/"
-      - name: ORG_FACTORYX_LIBRARY_USEBUILTINDATACCESS
-        value: "false"
 
   
   secrets:
