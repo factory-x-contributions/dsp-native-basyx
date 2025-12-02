@@ -1,0 +1,14 @@
+apiVersion: v1
+entries:
+  dsp-native-basyx:
+  - apiVersion: v2
+    appVersion: 0.0.2
+    created: "2025-12-02T21:00:29.109118154Z"
+    description: A Helm chart for the DSP Native BaSyx Spring Boot app
+    digest: f20b626cd810aaf4eaf2bfb97b080a1eb59b0740942cba3b069fce6f20c1e74e
+    name: dsp-native-basyx
+    type: application
+    urls:
+    - https://github.com/factory-x-contributions/dsp-native-basyx/releases/download/dsp-native-basyx-0.1.0/dsp-native-basyx-0.1.0.tgz
+    version: 0.1.0
+generated: "2025-12-02T21:00:29.10912682Z"
