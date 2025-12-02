@@ -3,7 +3,7 @@ name: dsp-basyx
 description: A Helm chart for the DSP Native BaSyx Spring Boot app
 type: application
 version: 0.1.0
-appVersion: "0.0.1"
+appVersion: "0.0.2"
 
 dependencies:
   - name: dsp-native-basyx
