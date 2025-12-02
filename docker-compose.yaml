@@ -117,6 +117,8 @@ services:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: keycloak-admin
       KC_HEALTH_ENABLED: true
+      KC_DB: dev-file
+      KC_CACHE: local
     command: ["start-dev", "--import-realm"]
     ports:
       - 8080:8080

@@ -1,0 +1,31 @@
+{{- if .Values.mosquitto.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-mosquitto-config
+  labels:
+    app.kubernetes.io/name: mosquitto
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/component: mqtt-broker
+data:
+  mosquitto.conf: |
+    # Basic Mosquitto configuration
+    listener 1883
+    allow_anonymous true
+    
+    # Logging
+    log_dest stdout
+    log_type error
+    log_type warning
+    log_type notice
+    log_type information
+    
+    # Persistence
+    persistence false
+    
+    {{- if .Values.mosquitto.auth.enabled }}
+    # Authentication (if enabled)
+    allow_anonymous false
+    password_file /mosquitto/config/passwordfile
+    {{- end }}
+{{- end }}
