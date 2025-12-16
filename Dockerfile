@@ -3,7 +3,7 @@
 # Copyright (c) 2025. Fraunhofer-Gesellschaft zur Foerderung der angewandten Forschung e.V. (represented by Fraunhofer ISST)
 
 # Build Stage
-FROM maven:3.9.6-eclipse-temurin-21 AS build
+FROM maven:3.9.11-eclipse-temurin-25 AS build
 
 WORKDIR /app
 
@@ -17,7 +17,7 @@ RUN --mount=type=secret,id=github-actor,env=GITHUB_ACTOR \
     mvn clean package -DskipTests --settings settings.xml
 
 # Runtime Stage
-FROM eclipse-temurin:21.0.5_11-jre-alpine
+FROM eclipse-temurin:25-jre-alpine
 WORKDIR /app
 
 COPY --from=build /app/target/DSP-Native-BaSyx-*.jar /app/app.jar
