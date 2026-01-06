@@ -4,6 +4,8 @@ services:
     container_name: dsp-native-basyx
     image: ghcr.io/factory-x-contributions/dsp-native-basyx:0.0.3
     environment:
+      - org.factoryx.library.fxv01.https=true
+      - org.factoryx.library.fxv01.vaultsecreturl=http://vault:8200/v1/secret/data/providerdimsecret
       - basyx.feature.authorization.rbac.file=file:/app/resources/rules.json
       - spring.security.oauth2.resourceserver.jwt.issuer-uri=http://keycloak:8080/realms/dsp-native-basyx
       - org.factoryx.library.hostname=dsp-native-basyx
@@ -16,8 +18,6 @@ services:
       - org.factoryx.library.validationservice=fxv0_1
       - org.factoryx.library.validationservice.stsapi=dim-wallet
       - org.factoryx.library.fxv01.vaultroottoken=vaultsecret0123456789
-      - org.factoryx.library.fxv01.vaulturl=http://vault:8200
-      - org.factoryx.library.fxv01.vaultsecretalias=providerdimsecret
       - org.factoryx.library.fxv01.dimtokenurl=${PROVIDER_DIM_TOKEN_URL}
       - org.factoryx.library.fxv01.dimclientid=${PROVIDER_DIM_CLIENT_ID}
       - org.factoryx.library.fxv01.dimurl=${PROVIDER_DIM_URL}

@@ -78,9 +78,9 @@ consumer-controlplane.env files.
 
 #### Use 
 
-After running the docker 
+After running the docker script, you may want to visit
 
-http://basyx-starter-app:8090/swagger-ui/index.html
+http://dsp-native-basyx:8090/swagger-ui/index.html
 
 Then, you should see not only the endpoints of the dsp-protocol-library but also the endpoints that are provided by BaSyx, 
 which allow you to store, retrieve, update and delete Asset Administration Shells and/or Submodels. 
