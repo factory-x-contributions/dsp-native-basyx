@@ -1,0 +1,28 @@
+version = 1
+SPDX-PackageName = "dsp-native-basyx"
+SPDX-PackageSupplier = "info@factory-x.org"
+SPDX-PackageDownloadLocation = "https://github.com/factory-x-contributions/dsp-native-basyx"
+
+[[annotations]]
+path = ["README.md", "CONTRIBUTING.md", "CODE_OF_CONDUCT.md", "SECURITY.md"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2024-2026 Contributors to the Factory-X project"
+SPDX-License-Identifier = "CC-BY-4.0"
+
+[[annotations]]
+path = ["src/**", "charts/**", "fx-bruno/**", "keycloak/**", "vault/**"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2024-2026 Contributors to the Factory-X project"
+SPDX-License-Identifier = "Apache-2.0"
+
+[[annotations]]
+path = [".github/**", ".gitignore", ".mvn/**", "pom.xml", "mvnw", "mvnw.cmd", "Dockerfile", "docker-compose.yaml", "builddocker.sh", "rundocker.sh", "settings.xml", "mosquitto.conf", "consumer-controlplane.env"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2024-2026 Contributors to the Factory-X project"
+SPDX-License-Identifier = "Apache-2.0"
+
+[[annotations]]
+path = ["LICENSE", "LICENSES/**", "NOTICE"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2024-2026 Contributors to the Factory-X project"
+SPDX-License-Identifier = "Apache-2.0"
